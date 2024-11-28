@@ -1,0 +1,12 @@
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\bin\Debug\net8.0\FitnessManagement.BL.deps.json
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\bin\Debug\net8.0\FitnessManagement.BL.dll
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\bin\Debug\net8.0\FitnessManagement.BL.pdb
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.AssemblyInfoInputs.cache
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.AssemblyInfo.cs
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.csproj.CoreCompileInputs.cache
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.sourcelink.json
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.dll
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\refint\FitnessManagement.BL.dll
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\FitnessManagement.BL.pdb
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\FitnessManagement.BL\obj\Debug\net8.0\ref\FitnessManagement.BL.dll

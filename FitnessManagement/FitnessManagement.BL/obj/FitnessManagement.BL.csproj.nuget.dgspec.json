@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj": {}
+    "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj": {
+    "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj",
+        "projectUniqueName": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj",
         "projectName": "FitnessManagement.BL",
-        "projectPath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj",
+        "projectPath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj",
         "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\FitnessManagement\\FitnessManagement.BL\\obj\\",
+        "outputPath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagement\\FitnessManagement.BL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\steve\\AppData\\Roaming\\NuGet\\NuGet.Config",

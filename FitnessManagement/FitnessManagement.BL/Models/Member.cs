@@ -23,7 +23,8 @@ namespace FitnessBL.Models {
 
         public Member() { }
 
-        public Member(string firstName, string lastName, string email, string address, DateTime birthday, List<string> interests, MemberType memberType, int memberId) {
+        public Member(int memberId, string firstName, string lastName, string email, string address, DateTime birthday, List<string> interests, MemberType memberType) {
+            MemberId = memberId;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
@@ -31,7 +32,7 @@ namespace FitnessBL.Models {
             Birthday = birthday;
             Interests = interests ?? new List<string>(); // Gebruik een lege lijst als fallback
             MemberType = memberType;
-            MemberId = memberId;
+           
         }
 
         public int MemberId { get; set; }

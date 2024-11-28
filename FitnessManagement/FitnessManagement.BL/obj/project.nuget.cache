@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NsbRRxb5vvUZX6kA2FoyfFsakVg0z8MSjOlnTDCFTrjmYZ0hBRSRQeeppBIxRMgKE8wt9bkgy0pO3ye1DW8ytQ==",
+  "dgSpecHash": "wa7sOotBWcFenr4R/NuF1wQ1+OQHkCnHu3Zxubf+EEYY1KuR6Xuvya/BUYZVpNuZm2qxv1XXiyb7UZIQliNkzA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj",
+  "projectFilePath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagement\\FitnessManagement.BL\\FitnessManagement.BL.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
