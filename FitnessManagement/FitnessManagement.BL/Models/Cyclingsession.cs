@@ -7,14 +7,6 @@ using FitnessManagement.BL.Exceptions;
 
 namespace FitnessManagement.BL.Models {
     public class Cyclingsession {
-        // Enum voor training types
-        public enum CyclingTrainingType {
-            Fun,
-            Endurance,
-            Interval,
-            Recovery
-        }
-
        
         private DateTime _date;
         private int _duration;
@@ -90,7 +82,12 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        
+        public enum CyclingTrainingType {
+            Fun,
+            Endurance,
+            Interval,
+            Recovery
+        }
         public override string ToString() {
             return $"CyclingSession ID: {CyclingSessionId}, Member ID: {MemberId}, Date: {Date.ToShortDateString()}, " +
                    $"Duration: {Duration} mins, AvgWatt: {AvgWatt}, MaxCadence: {MaxCadence}, Type: {Type}, Comment: {Comment}";

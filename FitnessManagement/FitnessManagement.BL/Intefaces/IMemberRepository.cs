@@ -11,16 +11,14 @@ namespace FitnessManagement.BL.Intefaces {
         IEnumerable<Member> GetMembers();
         Member GetMember(int id);
         bool IsMember(int id);
-        Member AddMember(Member member);
-        Member UpdateMember(Member member);
+        bool IsMember(string firstname,string adress, DateTime birthday);
+        void AddMember(Member member);
+        void UpdateMember(Member member);
 
         void DeleteMember(int id);
 
 
-        IEnumerable<Reservation> GetReservation(int memberId);
-        IEnumerable<Program> GetProgram(int memberId);
-        IEnumerable<Cyclingsession> GetCyclingSessionsForMember(int memberId);
-        IEnumerable<Runningsession> GetRunningSessionsForMember(int memberId);
+       
 
         
     }

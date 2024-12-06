@@ -15,7 +15,7 @@ namespace FitnessManagement.BL.Models
         }
 
         public Reservation(DateTime date, int reservationId, int equipmentId, int timeSlotId, int memberId) {
-            _date = date;
+            Date = date;
             ReservationId = reservationId;
             EquipmentId = equipmentId;
             TimeSlotId = timeSlotId;

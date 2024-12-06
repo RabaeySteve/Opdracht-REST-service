@@ -5,14 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static FitnessManagement.BL.Models.Equipment;
 
 namespace FitnessManagement.EF.Model {
     public class EquipmentEF {
         public EquipmentEF() { }
 
-        public EquipmentEF(int equipmentId, string deviceType) {
+        public EquipmentEF(int equipmentId, string equipmentType, bool isInMainenance) {
             EquipmentId = equipmentId;
-            DeviceType = deviceType;
+            Type = equipmentType;
+            IsInMaintenance = isInMainenance;
         }
 
         [Key]
@@ -20,7 +22,11 @@ namespace FitnessManagement.EF.Model {
 
         [Required]
         [Column(TypeName = "nvarchar(45)")]
-        public string DeviceType { get; set; }
+        public string Type { get; set; }
+
+        [Required]
+        [Column(TypeName = "bit")] 
+        public bool IsInMaintenance { get; set; } 
     }
 }
 

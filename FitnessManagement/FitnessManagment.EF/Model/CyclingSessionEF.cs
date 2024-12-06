@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FitnessBL.Models;
 
 namespace FitnessManagement.EF.Model {
     public class CyclingSessionEF {
         public CyclingSessionEF() { }
 
-        public CyclingSessionEF(int cyclingSessionId, DateTime date, int duration, float avgWatt, float maxWatt, float avgCadence, float maxCadence, string? trainingType, string? comment, int memberId) {
+        public CyclingSessionEF(int cyclingSessionId, DateTime date, int duration, float avgWatt, float maxWatt, float avgCadence, float maxCadence, string? trainingType, string? comment, MemberEF member) {
             CyclingSessionId = cyclingSessionId;
             Date = date;
             Duration = duration;
@@ -21,7 +22,7 @@ namespace FitnessManagement.EF.Model {
             MaxCadence = maxCadence;
             TrainingType = trainingType;
             Comment = comment;
-            MemberId = memberId;
+            Member = member;
         }
 
         [Key]
@@ -45,7 +46,7 @@ namespace FitnessManagement.EF.Model {
         public string? Comment { get; set; }
 
         // FK
-        public int MemberId { get; set; }
+        
         public MemberEF Member { get; set; }
     }
 }

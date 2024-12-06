@@ -6,11 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FitnessBL.Models {
-    public enum MemberType {
-        Bronze,
-        Silver,
-        Gold
-    }
+   
 
     public class Member {
         private string _firstName;
@@ -19,21 +15,33 @@ namespace FitnessBL.Models {
         private string _address;
         private DateTime _birthday;
         private List<string> _interests = new List<string>();
-        private MemberType _memberType;
+        
 
         public Member() { }
 
-        public Member(int memberId, string firstName, string lastName, string email, string address, DateTime birthday, List<string> interests, MemberType memberType) {
+        public Member(int memberId, string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? memberType) {
             MemberId = memberId;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Address = address;
-            Birthday = birthday;
-            Interests = interests ?? new List<string>(); // Gebruik een lege lijst als fallback
-            MemberType = memberType;
+            _firstName = firstName;
+            _lastName = lastName;
+            _email = email;
+            _address = address;
+            _birthday = birthday;
+            _interests = interests ?? new List<string>(); // Gebruik een lege lijst als fallback
+            Type = memberType;
            
         }
+
+        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type) {
+            _firstName = firstName;
+            _lastName = lastName;
+            _email = email;
+            _address = address;
+            _birthday = birthday;
+            _interests = interests;
+            Type = type;
+        }
+
+
 
         public int MemberId { get; set; }
 
@@ -59,7 +67,7 @@ namespace FitnessBL.Models {
             }
         }
 
-        public string Email {
+        public string? Email {
             get => _email;
             set {
                 if (string.IsNullOrWhiteSpace(value))
@@ -86,7 +94,7 @@ namespace FitnessBL.Models {
             }
         }
 
-        public List<string> Interests {
+        public List<string>? Interests {
             get => _interests;
             set {
                 if (value == null)
@@ -94,14 +102,16 @@ namespace FitnessBL.Models {
                 _interests = value;
             }
         }
-
-        public MemberType MemberType {
-            get => _memberType;
-            set => _memberType = value; // Geen extra validatie nodig omdat het een enum is
+        public MemberType? Type { get; set; }
+        public enum MemberType {
+            noType,
+            Bronze,
+            Silver,
+            Gold
         }
 
         public override string ToString() {
-            return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {MemberType}";
+            return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {Type}";
         }
 
 

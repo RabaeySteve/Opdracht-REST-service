@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FitnessBL.Models.Member;
 
 namespace FitnessManagement.EF.Mappers {
     public class MapMember {
@@ -19,7 +20,7 @@ namespace FitnessManagement.EF.Mappers {
                        db.Address,
                        db.Birthday,
                        MapInterestStringToList(db.Interests), 
-                       MapStringToMembertype(db.MemberType)
+                       MapStringToMembertype(db.Type)
                        
                     );
 			} catch (Exception ex) {
@@ -37,7 +38,7 @@ namespace FitnessManagement.EF.Mappers {
                         m.Address,
                         m.Birthday,
                         MapInterestToString(m.Interests),
-                        m.MemberType.ToString()
+                        m.Type.ToString()
 
                     ) ;
             } catch (Exception ex) {
@@ -46,11 +47,17 @@ namespace FitnessManagement.EF.Mappers {
             }
         }
         public static MemberType MapStringToMembertype(string memberType) {
-            if (Enum.TryParse(memberType, out MemberType result)) {
-                return result;
-            }else {
-                throw new MapException($"Invalid Enum Membertype: {memberType}");
+            if (!string.IsNullOrWhiteSpace(memberType)) {
+                if (Enum.TryParse(memberType, out MemberType result)) {
+                    return result;
+                } else {
+                    throw new MapException($"Invalid Enum Membertype: {memberType}");
+                }
+            } else {
+                return MemberType.noType;
             }
+
+           
         }
         public static List<string> MapInterestStringToList(string interest) {
             return !string.IsNullOrWhiteSpace(interest) ? new List<string>(interest.Split(',')) : new List<string>();

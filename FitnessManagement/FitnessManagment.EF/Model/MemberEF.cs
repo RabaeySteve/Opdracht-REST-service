@@ -11,16 +11,26 @@ namespace FitnessManagement.EF.Model {
         public MemberEF() {
         }
 
-        public MemberEF(int memberId, string firstName, string lastName, string address, string? email, DateTime birthday, string? interests, string? memberType) {
+        public MemberEF(string firstName, string lastName, string address, string? email, string? interests, string? type, DateTime birthday) {
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Address = address;
+            Interests = interests;
+            Type = type;
+            Birthday = birthday;
+        }
+
+        public MemberEF(int memberId, string firstName, string lastName, string? email,string address, DateTime birthday, string? interests, string? memberType) {
             MemberId = memberId;
             FirstName = firstName;
             LastName = lastName;
-            Address = address;
             Email = email;
+            Address = address;
             Birthday = birthday;
             Interests = interests;
-            MemberType = memberType;
-            
+            Type = memberType;
+
         }
 
         [Key]
@@ -33,18 +43,20 @@ namespace FitnessManagement.EF.Model {
         [Column(TypeName = "nvarchar(45)")]
         public string LastName { get; set; }
 
+        [Column(TypeName = "nvarchar(50)")]
+        public string? Email { get; set; }
+
         [Required]
         [Column(TypeName = "nvarchar(200)")]
         public string Address { get; set; }
 
-        [Column(TypeName = "nvarchar(50)")]
-        public string? Email { get; set; }
+
 
         [Column(TypeName = "nvarchar(500)")]
         public string? Interests { get; set; }
 
         [Column(TypeName = "nvarchar(20)")]
-        public string? MemberType { get; set; }
+        public string? Type { get; set; }
 
         [Required]
         public DateTime Birthday { get; set; }

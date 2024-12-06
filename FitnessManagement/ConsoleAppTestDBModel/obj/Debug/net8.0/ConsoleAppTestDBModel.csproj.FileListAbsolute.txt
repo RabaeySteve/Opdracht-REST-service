@@ -1,9 +1,3 @@
-C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.csproj.AssemblyReference.cache
-C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.AssemblyInfoInputs.cache
-C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.AssemblyInfo.cs
-C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.csproj.CoreCompileInputs.cache
-C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.sourcelink.json
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\bin\Debug\net8.0\ConsoleAppTestDBModel.exe
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\bin\Debug\net8.0\ConsoleAppTestDBModel.deps.json
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\bin\Debug\net8.0\ConsoleAppTestDBModel.runtimeconfig.json
@@ -67,6 +61,12 @@ C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\Con
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\bin\Debug\net8.0\FitnessManagement.EF.dll
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\bin\Debug\net8.0\FitnessManagement.EF.pdb
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\bin\Debug\net8.0\FitnessManagement.BL.pdb
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.csproj.AssemblyReference.cache
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.AssemblyInfoInputs.cache
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.AssemblyInfo.cs
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.csproj.CoreCompileInputs.cache
+C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.sourcelink.json
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.csproj.CopyComplete
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\ConsoleAppTestDBModel.dll
 C:\Users\steve\github\jaar2\ProgGev2\Opdracht-REST-service\FitnessManagement\ConsoleAppTestDBModel\obj\Debug\net8.0\refint\ConsoleAppTestDBModel.dll

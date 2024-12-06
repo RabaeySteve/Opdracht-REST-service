@@ -13,30 +13,21 @@ namespace FitnessManagement.BL.Models {
 
         public TimeSlot() {
         }
-
-        public TimeSlot(int startTime, int endTime, string partOfDay, int timeSlotId) {
+        public TimeSlot( int startTime) {
             _startTime = startTime;
+            EndTime = EndTimeFunc(startTime);
+            PartOfDay = PartOfDayFunc(startTime);
+        }
+        public TimeSlot(int timeSlotId, int startTime) {
             TimeSlotId = timeSlotId;
+            _startTime = startTime;
+            EndTime = EndTimeFunc(startTime);
+            PartOfDay = PartOfDayFunc(startTime);
         }
 
-        public string PartOfDay {
-			get {
-                if (StartTime < 12 && StartTime > 7) {
-					return "morning";
-                };
-                if (StartTime >= 12 && StartTime < 18) {
-                    return "afternoon";
-                };
-                if (StartTime >= 17 && StartTime <= 21) {
-                    return "evening";
-                };
-				return "unknown";
-            }
-			
-		}
+        public string PartOfDay { get; private set; }
 
-        public int EndTime => StartTime + 1;
-
+        public int EndTime { get; private set; }
 
         public int StartTime {
 			get { return _startTime; }
@@ -51,7 +42,26 @@ namespace FitnessManagement.BL.Models {
 		public int TimeSlotId { get; set; }
 
         public override string? ToString() {
-            return $"{PartOfDay} at {StartTime}:00";
+            return $"StartTime : {StartTime} EndTime : {EndTime} PartOfTheDay : {PartOfDay}";
         }
+
+        public int EndTimeFunc(int startTime) {
+           
+            if (startTime < 8 || startTime > 21)
+                throw new TimeSlotException("Start time must be between 8 and 21");
+
+            return startTime + 1;
+        }
+
+        public string PartOfDayFunc(int startTime) {
+            if (startTime < 8 || startTime > 21)
+                throw new TimeSlotException("Start time must be between 8 and 21");
+
+            if (startTime < 12) return "morning";
+            if (startTime < 18) return "afternoon";
+            if (startTime <= 21) return "evening";
+            return "unknown";
+        }
+
     }
 }

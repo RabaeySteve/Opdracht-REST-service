@@ -7,11 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessManagement.BL", "Fit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessManagement.EF", "FitnessManagment.EF\FitnessManagement.EF.csproj", "{8BCCDFFC-1043-4236-B120-73C49F62A35F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessManagement.API", "FitnessManagement.API\FitnessManagement.API.csproj", "{B1CC3D2A-C076-40CE-A745-F58EB1F74632}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessManagement.API", "FitnessManagement.API\FitnessManagement.API.csproj", "{B1CC3D2A-C076-40CE-A745-F58EB1F74632}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleTestProjects", "ConsoleTestProjects", "{7B5215EF-96BF-411F-8635-0E0B42DB5848}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppTestDBModel", "ConsoleAppTestDBModel\ConsoleAppTestDBModel.csproj", "{CFFFA4D2-D911-40A8-8F5D-E0AB34E1D31F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppTestDBModel", "ConsoleAppTestDBModel\ConsoleAppTestDBModel.csproj", "{CFFFA4D2-D911-40A8-8F5D-E0AB34E1D31F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessDataLayerProvider", "FitnessDataLayerProvider\FitnessDataLayerProvider.csproj", "{5B6A24CA-20A3-462B-889F-E90F0573A82B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppTestRepos", "ConsoleAppTestRepos\ConsoleAppTestRepos.csproj", "{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +39,21 @@ Global
 		{CFFFA4D2-D911-40A8-8F5D-E0AB34E1D31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFFFA4D2-D911-40A8-8F5D-E0AB34E1D31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFFFA4D2-D911-40A8-8F5D-E0AB34E1D31F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B6A24CA-20A3-462B-889F-E90F0573A82B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B6A24CA-20A3-462B-889F-E90F0573A82B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B6A24CA-20A3-462B-889F-E90F0573A82B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B6A24CA-20A3-462B-889F-E90F0573A82B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CFFFA4D2-D911-40A8-8F5D-E0AB34E1D31F} = {7B5215EF-96BF-411F-8635-0E0B42DB5848}
+		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793} = {7B5215EF-96BF-411F-8635-0E0B42DB5848}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D95E6900-DAC7-40B7-89BC-D59A3E9DEB32}

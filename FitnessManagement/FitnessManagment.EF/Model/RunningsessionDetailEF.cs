@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FitnessManagement.EF.Model {
-    public class RunningsessionDetailEF {
+    public class RunningSessionDetailsEF {
 
         [Key]
         public int SeqNr { get; set; } 
@@ -17,7 +17,7 @@ namespace FitnessManagement.EF.Model {
         public float IntervalSpeed { get; set; } 
 
         
-        public int RunningSessionId { get; set; }
+        
         public RunningSessionEF RunningSession { get; set; }
 
     }

@@ -7,29 +7,20 @@ using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Models {
     public class Program {
-		public enum ProgramTarget {
-			beginner,
-			advanced,
-			pro
-		}
-
 		private DateTime _startDate;
         private int _maxMembers;
-		
 		private string _name;
+		private string _programCode;
 
         public Program() {
         }
 
-        public Program(DateTime startDate, int maxMembers, string name, ProgramTarget programCode, string target) {
-            StartDate = startDate;
-            MaxMembers = maxMembers;
-            Name = name;
-            ProgramCode = programCode;
-            Target = target;
-        }
+        public string ProgramCode {
+			get { return _programCode; }
+			set { _programCode = value; }
+		}
 
-        public ProgramTarget ProgramCode { get; set; }
+        public ProgramTarget programTarget { get; set; }
         public string Name {
 			get { return _name; }
 			set {if (string.IsNullOrEmpty(value)) {
@@ -41,9 +32,7 @@ namespace FitnessManagement.BL.Models {
 				_name = value; }
 		}
 
-
 		public string Target { get; set; }
-
 
 		public DateTime StartDate {
 			get { return _startDate; }
@@ -63,7 +52,11 @@ namespace FitnessManagement.BL.Models {
 				
 				_maxMembers = value; }
 		}
-
+        public enum ProgramTarget {
+            beginner,
+            advanced,
+            pro
+        }
         public override string? ToString() {
 			return $"ProgramCode: {ProgramCode}, Name : {Name}, Target: {Target}, Startdate: {StartDate.ToShortDateString()}, MaxMembers: {MaxMembers}";
         }

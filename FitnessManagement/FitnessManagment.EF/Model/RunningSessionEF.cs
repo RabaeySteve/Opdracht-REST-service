@@ -11,12 +11,12 @@ namespace FitnessManagement.EF.Model {
     public class RunningSessionEF {
         public RunningSessionEF() { }
 
-        public RunningSessionEF(int runningSessionId, DateTime date, int duration, float avgSpeed, int memberId) {
+        public RunningSessionEF(int runningSessionId, DateTime date, int duration, float avgSpeed, MemberEF member) {
             RunningSessionId = runningSessionId;
             Date = date;
             Duration = duration;
             AvgSpeed = avgSpeed;
-            MemberId = memberId;
+            Member = member;
         }
 
         [Key]
@@ -31,10 +31,10 @@ namespace FitnessManagement.EF.Model {
         public float AvgSpeed { get; set; }
 
         // Foreign key
-        public int MemberId { get; set; }
+        
         public MemberEF Member { get; set; }
 
 
-        public List<RunningsessionDetailEF> Details { get; set; }
+        public List<RunningSessionDetailsEF> Details { get; set; }
     }
 }

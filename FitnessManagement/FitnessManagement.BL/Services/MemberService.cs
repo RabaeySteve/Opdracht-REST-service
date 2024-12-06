@@ -24,7 +24,7 @@ namespace FitnessManagement.BL.Services {
             } catch (Exception ex) {
 
                 throw new MemberException("GetMembers", ex);
-            } 
+            }
         }
         public Member GetMember(int id) {
             try {
@@ -42,23 +42,32 @@ namespace FitnessManagement.BL.Services {
                 throw new MemberException("IsMember", ex);
             }
         }
+        public bool IsMember(string firstname, string adress, DateTime birthday) {
+            try {
+                return repo.IsMember(firstname, adress, birthday);
+            } catch (Exception ex) {
+
+                throw new MemberException("IsMember", ex);
+            }
+        }
         public Member AddMember(Member member) {
             try {
-                if (IsMember(member.MemberId)) {
+                if (IsMember(member.MemberId) && IsMember(member.FirstName, member.Address, member.Birthday)) {
                     throw new MemberException("Member bestaat al");
                 } else {
-                    
-                    return repo.AddMember(member);
+                    repo.AddMember(member);
+                    return member;
                 }
             } catch (Exception ex) {
 
-                throw new MemberException("AddMember", ex); 
+                throw new MemberException("AddMember", ex);
             }
         }
         public Member UpdateMember(Member member) {
             try {
                 if (IsMember(member.MemberId)) {
-                    return repo.UpdateMember(member);
+                    repo.UpdateMember(member);
+                    return member;
                 } else {
                     throw new MemberException("Member bestaat niet");
                 }
@@ -73,43 +82,13 @@ namespace FitnessManagement.BL.Services {
                     repo.DeleteMember(id);
                 } else {
                     throw new MemberException("Member bestaat niet");
-                }  } catch (Exception ex) {
+                }
+            } catch (Exception ex) {
 
                 throw new MemberException("DeleteMember", ex);
-            
-            }
-        }
-        public IEnumerable<Reservation> GetReservation(int memberId) {
-            try {
-                return repo.GetReservation(memberId);
-            } catch (Exception ex) {
 
-                throw new MemberException("GetReservation", ex);
             }
         }
-        public IEnumerable<Program> GetProgram(int memberId) {
-            try {
-                return repo.GetProgram(memberId);
-            } catch (Exception ex) {
 
-                throw new MemberException("GetProgram", ex);
-            }
-        }
-        public IEnumerable<Cyclingsession> GetCyclingSessionsForMember(int memberId) {
-            try {
-                return repo.GetCyclingSessionsForMember(memberId);
-            } catch (Exception ex) {
-
-                throw new MemberException("GetCyclingSessionsForMember", ex);
-            }
-        }
-        public IEnumerable<Runningsession> GetRunningSessionsForMember(int memberId) {
-            try {
-                return repo.GetRunningSessionsForMember(memberId);
-            } catch (Exception ex) {
-
-                throw new MemberException("GetRunningSessionsForMember", ex);
-            }
-        }
     }
 }

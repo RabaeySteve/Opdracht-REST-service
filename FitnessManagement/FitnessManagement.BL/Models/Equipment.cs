@@ -13,17 +13,22 @@ namespace FitnessManagement.BL.Models {
         public Equipment() {
         }
 
-        public Equipment(int equipmentId, EquipmentType type) {
+        public Equipment(int equipmentId, EquipmentType type, bool isInMaintenance) {
             EquipmentId = equipmentId;
             Type = type;
+            IsInMaintenance = isInMaintenance;
         }
 
-        
+        public Equipment(EquipmentType type) {
+            Type = type;
+            IsInMaintenance = false;
+        }
+
         public int EquipmentId { get; set; }
         public EquipmentType Type { get; set; }
-
+        public bool IsInMaintenance { get; set; }
         public override string? ToString() {
-            return $"Equipment: {Type}";
+            return $"Equipment: {Type} InMaintenance? {IsInMaintenance}";
         }
     }
 }
