@@ -1,4 +1,5 @@
-﻿using FitnessManagement.EF.Model;
+﻿using FitnessManagement.BL.Models;
+using FitnessManagement.EF.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

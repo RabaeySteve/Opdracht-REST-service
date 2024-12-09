@@ -20,7 +20,7 @@ namespace FitnessManagement.EF.Model {
             Member = member;
         }
 
-        [Key]
+        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ReservationId { get; set; }
 
         [Required]

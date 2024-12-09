@@ -1,4 +1,5 @@
-﻿using FitnessManagement.BL.Exceptions;
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,19 @@ namespace FitnessManagement.BL.Models
         public Reservation() {
         }
 
-        public Reservation(DateTime date, int reservationId, int equipmentId, int timeSlotId, int memberId) {
-            Date = date;
+        public Reservation(DateTime date, Equipment equipment, TimeSlot timeSlot, Member member) {
+            _date = date;
+            Equipment = equipment;
+            TimeSlot = timeSlot;
+            Member = member;
+        }
+
+        public Reservation(DateTime date, int reservationId, Equipment equipment, TimeSlot timeSlot, Member member) {
+            _date = date;
             ReservationId = reservationId;
-            EquipmentId = equipmentId;
-            TimeSlotId = timeSlotId;
-            MemberId = memberId;
+            Equipment = equipment;
+            TimeSlot = timeSlot;
+            Member = member;
         }
 
         public DateTime Date {
@@ -37,14 +45,14 @@ namespace FitnessManagement.BL.Models
 
 
         public int ReservationId { get; set; }
-        public int EquipmentId { get; set; }
-        public int TimeSlotId { get; set; }
-        public int MemberId { get; set; }
+        public Equipment  Equipment { get; set; }
+        public TimeSlot TimeSlot { get; set; }
+        public Member Member { get; set; }
 
 
 
         public override string ToString() {
-            return $"Reservation ID: {ReservationId}, Member: {MemberId}, Equipment: {EquipmentId}, Date: {Date.ToString()}, TimeSlot: {TimeSlotId}";
+            return $"Reservation ID: {ReservationId}, Member: {Member.FirstName}, Equipment: {Equipment.Type}, Date: {Date.ToString()}, TimeSlot: {TimeSlot.StartTime}";
         }
     }
 }

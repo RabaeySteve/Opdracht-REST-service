@@ -37,5 +37,14 @@ namespace FitnessManagement.EF.Repositories {
                 throw new RepoException("TimeSlotRepo - GetAllTimeSlots", ex);
             }
         }
+
+        public TimeSlot GetTimeSlot(int startTime) {
+            try {
+                return MapTimeSlot.MapToDomain(ctx.time_slot.Where(x => x.StartTime == startTime).FirstOrDefault());
+            } catch (Exception ex) {
+
+                throw new RepoException("TimeSlotRepo - GetTimeSlot");
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace ConsoleAppTestRepos {
             Console.WriteLine("-------------------------------------------------------------------------------------\n");
             List<string> interessesSteve = new List<string> { "Lopen", "Fietsen" };
             DateTime dateSteve = new DateTime(2002, 02, 24);
-           
+
             DateTime dataGert = new DateTime(2004, 01, 20);
 
             Member memberSteve = new Member("Steve", "Rabaey", "steve@hotmail.com", "Gent", dateSteve, interessesSteve, Member.MemberType.Gold);
@@ -55,7 +55,7 @@ namespace ConsoleAppTestRepos {
             Console.WriteLine("-------------------------------------------------------------------------------------");
             Console.WriteLine("EquipmentTesten");
             Console.WriteLine("-------------------------------------------------------------------------------------\n");
-            
+
             Equipment bike1 = new Equipment(Equipment.EquipmentType.bike);
             Equipment bike2 = new Equipment(Equipment.EquipmentType.bike);
             Equipment treadmill1 = new Equipment(Equipment.EquipmentType.treadmill);
@@ -99,6 +99,73 @@ namespace ConsoleAppTestRepos {
             foreach (TimeSlot timeSlotDB in allTimeSlots) {
                 Console.WriteLine(timeSlotDB);
             }
+
+            TimeSlot timeSlot8 = repos.TimeSlotRepository.GetTimeSlot(8);
+            TimeSlot timeSlot9 = repos.TimeSlotRepository.GetTimeSlot(9);
+            TimeSlot timeSlot18 = repos.TimeSlotRepository.GetTimeSlot(18);
+            Console.WriteLine();
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Reservation");
+            Console.WriteLine("-------------------------------------------------------------------------------------\n");
+
+            Member memberJohn = new Member("John", "Doe", "john.doe@gmail.com", "Brugge", new DateTime(1990, 3, 22), new List<string> { "Swimming" }, Member.MemberType.Silver);
+   
+            repos.MemberRepository.AddMember(memberJohn);
+            Member gertDB = repos.MemberRepository.GetMember(2);
+            Member johnDB = repos.MemberRepository.GetMember(3);
+            
+            Reservation reservationGert1 = new Reservation(new DateTime(2024, 12, 13),1, bike2DB, timeSlot8, gertDB);
+            Reservation reservationGert2 = new Reservation(new DateTime(2024, 12, 14),2, bike2DB, timeSlot9, gertDB);
+            Reservation reservationjohn1 = new Reservation(new DateTime(2024, 12, 14),3, treadmill2DB, timeSlot18, johnDB);
+           
+
+            repos.ReservationRepository.AddReservation(reservationGert1);
+            repos.ReservationRepository.AddReservation(reservationGert2);
+            repos.ReservationRepository.AddReservation(reservationjohn1); 
+           
+
+            Console.WriteLine("\nAll Reservations:");
+            List<Reservation> allReservations = repos.ReservationRepository.GetAll();
+            foreach (var reservation in allReservations) {
+                Console.WriteLine(reservation);
+            }
+
+            
+            Console.WriteLine("\nReservations for Gert:");
+            List<Reservation> gertReservations = repos.ReservationRepository.GetReservationsMember(gertDB.MemberId);
+            foreach (var reservation in gertReservations) {
+                Console.WriteLine(reservation);
+            }
+
+            
+            Console.WriteLine("\nReservations for Gert on 13/12/2024:");
+            List<Reservation> gertReservationsDate = repos.ReservationRepository.GetReservationsMemberDate(gertDB.MemberId, new DateTime(2024, 12, 13));
+            foreach (var reservation in gertReservationsDate) {
+                Console.WriteLine(reservation);
+            }
+
+            
+            Console.WriteLine("\nGet Reservation by ID:");
+            Reservation specificReservation = repos.ReservationRepository.GetReservation(1);
+            Console.WriteLine(specificReservation);
+
+            
+            Console.WriteLine("\nDelete Reservation:");
+            Console.WriteLine("Id2 moet weg zijn");
+            Reservation Gert2 = repos.ReservationRepository.GetReservation(2);
+            repos.ReservationRepository.DeleteReservation(Gert2);
+            allReservations = repos.ReservationRepository.GetAll();
+            foreach (var reservation in allReservations) {
+                Console.WriteLine(reservation);
+            }
+
+            
+            Console.WriteLine("\nUpdate Reservation:");
+            Reservation jhonUpdate = repos.ReservationRepository.GetReservation(3);
+            jhonUpdate.Date = new DateTime(2024, 12, 15);
+            repos.ReservationRepository.UpdateReservation(jhonUpdate);
+            Console.WriteLine(repos.ReservationRepository.GetReservation(jhonUpdate.ReservationId));
+
 
         }
     }

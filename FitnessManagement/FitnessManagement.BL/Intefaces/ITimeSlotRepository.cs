@@ -9,5 +9,6 @@ namespace FitnessManagement.BL.Intefaces {
     public interface ITimeSlotRepository {
         void addTimeSlot(TimeSlot timeSlot);
         IEnumerable<TimeSlot> GetAllTimeSlots();
+        TimeSlot GetTimeSlot(int startTime);
     }
 }
