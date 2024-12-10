@@ -44,7 +44,7 @@ namespace ConsoleAppTestRepos {
                 Console.WriteLine(member);
             }
             Console.WriteLine();
-            repos.MemberRepository.DeleteMember(1);
+            //repos.MemberRepository.DeleteMember(1);
             allMembers = repos.MemberRepository.GetMembers();
             bool isMemberTest = repos.MemberRepository.IsMember(1);
             Console.WriteLine("Moet False zijn: " + isMemberTest);
@@ -117,12 +117,12 @@ namespace ConsoleAppTestRepos {
             Reservation reservationGert1 = new Reservation(new DateTime(2024, 12, 13),1, bike2DB, timeSlot8, gertDB);
             Reservation reservationGert2 = new Reservation(new DateTime(2024, 12, 14),2, bike2DB, timeSlot9, gertDB);
             Reservation reservationjohn1 = new Reservation(new DateTime(2024, 12, 14),3, treadmill2DB, timeSlot18, johnDB);
-           
+            Reservation reservationsteve = new Reservation(new DateTime(2024, 12, 11), 4, bike2DB, timeSlot18, steveDB);
 
             repos.ReservationRepository.AddReservation(reservationGert1);
             repos.ReservationRepository.AddReservation(reservationGert2);
-            repos.ReservationRepository.AddReservation(reservationjohn1); 
-           
+            repos.ReservationRepository.AddReservation(reservationjohn1);
+            repos.ReservationRepository.AddDubbleRes(reservationsteve);
 
             Console.WriteLine("\nAll Reservations:");
             List<Reservation> allReservations = repos.ReservationRepository.GetAll();
@@ -166,7 +166,20 @@ namespace ConsoleAppTestRepos {
             repos.ReservationRepository.UpdateReservation(jhonUpdate);
             Console.WriteLine(repos.ReservationRepository.GetReservation(jhonUpdate.ReservationId));
 
+            Console.WriteLine("\nUpdate DubbleReservation:");
+            Reservation reservationsteveUpdate = repos.ReservationRepository.GetReservation(4);
+            reservationsteveUpdate.Date = new DateTime(2024, 12, 16);
+            repos.ReservationRepository.UpdateDubbleRes(reservationsteveUpdate);
+            Console.WriteLine(repos.ReservationRepository.GetReservation(reservationsteveUpdate.ReservationId));
 
+            Console.WriteLine("\nDelete DubbleReservation:");
+            Console.WriteLine("Id4 en Id5 moet weg zijn");
+            Reservation reservationsteveDelete = repos.ReservationRepository.GetReservation(4);
+            repos.ReservationRepository.DeleteDubbleRes(reservationsteveDelete);
+            allReservations = repos.ReservationRepository.GetAll();
+            foreach (var reservation in allReservations) {
+                Console.WriteLine(reservation);
+            }
         }
     }
 }

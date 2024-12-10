@@ -14,7 +14,11 @@ namespace FitnessManagement.BL.Intefaces {
         bool IsReservation(int reservationId);
        
         void AddReservation(Reservation reservation);
+        void AddDubbleRes(Reservation reservation);
+       
         void DeleteReservation(Reservation reservation);
+        void DeleteDubbleRes(Reservation reservation);
         void UpdateReservation(Reservation reservation);
+        void UpdateDubbleRes(Reservation reservation);
     }
 }

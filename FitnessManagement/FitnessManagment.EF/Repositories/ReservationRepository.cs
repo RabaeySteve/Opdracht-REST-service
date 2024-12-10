@@ -39,15 +39,7 @@ namespace FitnessManagement.EF.Repositories {
         }
 
 
-        public void AddReservation(Reservation reservation) {
-            try {
-                ctx.reservation.Add(MapReservation.MapToDB(reservation, ctx));
-                SaveAndClear();
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - AddReservation", ex);
-            }
-        }
+       
 
         public void DeleteReservation(Reservation reservation) {
             try {
@@ -99,7 +91,30 @@ namespace FitnessManagement.EF.Repositories {
                 throw new RepoException("ReservationRepo - IsReservation", ex);
             }
         }
+        public void AddReservation(Reservation reservation) {
+            try {
+                ctx.reservation.Add(MapReservation.MapToDB(reservation, ctx));
+                SaveAndClear();
+            } catch (Exception ex) {
 
+                throw new RepoException("ReservationRepo - AddReservation", ex);
+            }
+        }
+        public void AddDubbleRes(Reservation reservation) {
+            try {
+                AddReservation(reservation);
+                int reservationId = reservation.ReservationId;
+                int timeslot = reservation.TimeSlot.TimeSlotId;
+                Reservation newReservation = reservation;
+                newReservation.ReservationId = reservationId + 1;
+                newReservation.TimeSlot.TimeSlotId = timeslot + 1;
+                AddReservation(newReservation);
+                SaveAndClear();
+            } catch (Exception ex) {
+
+                throw new RepoException("ReservationRepo - AddDubbleRes", ex);
+            }
+        }
         public void UpdateReservation(Reservation reservation) {
             try {
                 DeleteReservation(reservation);
@@ -111,8 +126,41 @@ namespace FitnessManagement.EF.Repositories {
             }
         }
 
-       
+      
 
-        
+        public void UpdateDubbleRes(Reservation reservation) {
+            try {
+                DeleteReservation(reservation);
+                AddReservation(reservation);
+                int reservationId = reservation.ReservationId;
+                int timeslot = reservation.TimeSlot.TimeSlotId;
+                Reservation newReservation = reservation;
+                newReservation.ReservationId = reservationId +1;
+                newReservation.TimeSlot.TimeSlotId = timeslot + 1;
+                DeleteReservation(newReservation);
+                
+                AddReservation(newReservation);
+            } catch (Exception ex) {
+
+                throw new RepoException("ReservationRepo - UpdateDubbleRes", ex);
+            }
+        }
+
+        public void DeleteDubbleRes(Reservation reservation) {
+            try {
+                DeleteReservation(reservation);
+                int reservationId = reservation.ReservationId;
+                int timeslot = reservation.TimeSlot.TimeSlotId;
+                Reservation newreservation = reservation;
+                newreservation.ReservationId = reservationId + 1;
+                newreservation.TimeSlot.TimeSlotId = timeslot + 1;
+
+                DeleteReservation(newreservation);
+                SaveAndClear();
+            } catch (Exception ex) {
+
+                throw new RepoException("ReservationRepo - DeleteDubbleRes", ex);
+            }
+        }
     }
 }

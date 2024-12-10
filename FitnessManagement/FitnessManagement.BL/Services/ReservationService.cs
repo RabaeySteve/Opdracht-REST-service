@@ -14,7 +14,8 @@ namespace FitnessManagement.BL.Services {
         public ReservationService(IReservationRepository repo) {
             this.repo = repo;
         }
-
+        // Je moet de getmethode zodanig aanpassen dit die kijkt of er al een reservatie voor of na is op die dag voor die member.
+        // je gaat een getreservation aanmaken. Daar ga je een meth hebben of het een dubble sessie is of een enkele. En dat op deze manier teruggeven
         public List<Reservation> GetAll() {
             try {
                 return repo.GetAll();
@@ -78,10 +79,10 @@ namespace FitnessManagement.BL.Services {
                             if (r.Equipment.EquipmentId == reservation.Equipment.EquipmentId) {
                                 if (reservation.TimeSlot.StartTime == r.TimeSlot.StartTime + 1 || reservation.TimeSlot.StartTime == r.TimeSlot.StartTime - 1) {
                                     if (reservation.TimeSlot.StartTime == r.TimeSlot.StartTime + 2 || reservation.TimeSlot.StartTime == r.TimeSlot.StartTime - 2) {
-                                        throw new ReservationException("Can't make 3 reservations in a row");
                                         Add = false;
-                                        break;
-                                    }
+                                        throw new ReservationException("Can't make 3 reservations in a row");
+
+                                    } 
                                 }
                             }
                            
@@ -98,6 +99,14 @@ namespace FitnessManagement.BL.Services {
                 throw new ReservationException("AddReservation");
             }
 
+        }
+        public void AddDubbleRes(Reservation reservation) {
+            try {
+                // Je gaat hier bij het testen van de service in de api 2 keer add moeten aanroepen en repo manier toepassen dan de repo verijderen
+            } catch (Exception) {
+
+                throw;
+            }
         }
         public void DeleteReservation(Reservation reservation) {
             try {

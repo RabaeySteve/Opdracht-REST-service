@@ -89,6 +89,39 @@ namespace FitnessManagement.BL.Services {
 
             }
         }
+        public bool IsProgram(int programCode) {
+            try {
+               return repo.IsProgram(programCode);
+            } catch (Exception ex) {
 
+                throw;
+            }
+        }
+        public void AddProgram(int memberId, Program program) {
+            try {
+                if (IsProgram(memberId)) {
+
+                }
+            } catch (Exception ex) {
+
+                throw;
+            }
+        }
+        public void DeleteProgram(int memberId, Program program) {
+            try {
+
+            } catch (Exception ex) {
+
+                throw;
+            }
+        }
+        public List<Program> GetProgramsByMemberId(Dictionary<int, Program> programs, int memberId) {
+            try {
+
+            } catch (Exception ex) {
+
+                throw;
+            }
+        }
     }
 }

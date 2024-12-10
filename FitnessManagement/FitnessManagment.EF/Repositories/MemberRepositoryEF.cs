@@ -98,9 +98,24 @@ namespace FitnessManagement.EF.Repositories {
         }
 
 
+        public bool IsProgram(string programCode) {
+            try {
+                return
+            } catch (Exception) {
 
+                throw;
+            }
+        }
+        public void AddProgram(int memberId, string programCode) {
+            throw new NotImplementedException();
+        }
 
+        public void DeleteProgram(int memberId, string programCode) {
+            throw new NotImplementedException();
+        }
 
-
+        public List<Program> GetProgramsByMemberId(Dictionary<int, Program> programs, int memberId) {
+            throw new NotImplementedException();
+        }
     }
 }

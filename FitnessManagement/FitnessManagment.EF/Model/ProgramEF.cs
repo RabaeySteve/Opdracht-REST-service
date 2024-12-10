@@ -26,13 +26,13 @@ namespace FitnessManagement.EF.Model {
         [Required]
         [Column(TypeName = "nvarchar(45)")]
         public string Name { get; set; }
-
+        [Required]
         [Column(TypeName = "nvarchar(25)")]
-        public string? Target { get; set; }
+        public string Target { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }
-
+        [Required]
         public int MaxMembers { get; set; }
     }
 }

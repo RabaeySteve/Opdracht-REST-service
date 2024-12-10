@@ -12,6 +12,7 @@ namespace FitnessManagement.EF.Mappers {
     public class MapMember {
         public static Member MapToDomain(MemberEF db) {
 			try {
+
                 return new Member(
                        db.MemberId,
                        db.FirstName,

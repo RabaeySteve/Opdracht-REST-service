@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FitnessManagement.EF")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bf6642255eb8898beea65b760eb5ade8caeeedf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba71581d568e8d0170895b8bf833a89c1720d42b")]
 [assembly: System.Reflection.AssemblyProductAttribute("FitnessManagement.EF")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FitnessManagement.EF")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

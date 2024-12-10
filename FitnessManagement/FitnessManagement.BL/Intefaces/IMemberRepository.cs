@@ -18,8 +18,12 @@ namespace FitnessManagement.BL.Intefaces {
         void DeleteMember(int id);
 
 
-       
+        bool IsProgram(string programCode);
+        void AddProgram(int memberId, string programCode);
+        void DeleteProgram(int memberId, string programCode);
+        List<Program> GetProgramsByMemberId(Dictionary<int, Program> programs, int memberId);
 
-        
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FitnessManagement.BL.Exceptions;
+using FitnessManagement.BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace FitnessBL.Models {
 
         public Member() { }
 
-        public Member(int memberId, string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? memberType) {
+        public Member(int memberId, string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? memberType, Dictionary<int, Program> programs) {
             MemberId = memberId;
             _firstName = firstName;
             _lastName = lastName;
@@ -28,10 +29,10 @@ namespace FitnessBL.Models {
             _birthday = birthday;
             _interests = interests ?? new List<string>(); // Gebruik een lege lijst als fallback
             Type = memberType;
-           
+            Programs = programs;
         }
 
-        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type) {
+        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type, Dictionary<int, Program> programs) {
             _firstName = firstName;
             _lastName = lastName;
             _email = email;
@@ -39,6 +40,7 @@ namespace FitnessBL.Models {
             _birthday = birthday;
             _interests = interests;
             Type = type;
+            Programs = programs;
         }
 
 
@@ -103,6 +105,8 @@ namespace FitnessBL.Models {
             }
         }
         public MemberType? Type { get; set; }
+
+        public Dictionary<int, Program> Programs { get; set; } = new Dictionary<int, Program>();
         public enum MemberType {
             noType,
             Bronze,

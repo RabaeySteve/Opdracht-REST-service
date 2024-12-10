@@ -15,12 +15,20 @@ namespace FitnessManagement.BL.Models {
         public Program() {
         }
 
+        public Program(string programCode, string name, DateTime startDate, ProgramTarget target, int maxMembers) {
+            _programCode = programCode;
+            _name = name;
+            _startDate = startDate;
+            Target = target;
+            _maxMembers = maxMembers;
+        }
+
         public string ProgramCode {
 			get { return _programCode; }
 			set { _programCode = value; }
 		}
 
-        public ProgramTarget programTarget { get; set; }
+        public ProgramTarget Target { get; set; }
         public string Name {
 			get { return _name; }
 			set {if (string.IsNullOrEmpty(value)) {
@@ -32,7 +40,7 @@ namespace FitnessManagement.BL.Models {
 				_name = value; }
 		}
 
-		public string Target { get; set; }
+		
 
 		public DateTime StartDate {
 			get { return _startDate; }
@@ -53,9 +61,11 @@ namespace FitnessManagement.BL.Models {
 				_maxMembers = value; }
 		}
         public enum ProgramTarget {
+			
             beginner,
             advanced,
-            pro
+            pro,
+            noType
         }
         public override string? ToString() {
 			return $"ProgramCode: {ProgramCode}, Name : {Name}, Target: {Target}, Startdate: {StartDate.ToShortDateString()}, MaxMembers: {MaxMembers}";

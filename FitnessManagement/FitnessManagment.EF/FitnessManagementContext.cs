@@ -15,7 +15,7 @@ namespace FitnessManagement.EF {
         
 
         public DbSet<MemberEF> members { get; set; }
-        public DbSet<ProgramEF> Programs { get; set; }
+        public DbSet<ProgramEF> programs { get; set; }
         public DbSet<RunningSessionEF> runningsession_main { get; set; }
         public DbSet<CyclingSessionEF> cyclingsession { get; set; }
         public DbSet<EquipmentEF> equipment { get; set; }
