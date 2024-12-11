@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 namespace FitnessManagement.EF.Mappers {
     public class MapReservation {
 
-        public static Reservation MapToDomain(ReservationEF db) {
+        public static Reservation MapToDomain(ReservationEF db, FitnessManagementContext ctx) {
             try {
                 return new Reservation(
                       db.Date,
                       db.ReservationId,
                       MapEquipment.MapToDomain(db.Equipment),
                       MapTimeSlot.MapToDomain(db.TimeSlot),
-                      MapMember.MapToDomain(db.Member)
+                      MapMember.MapToDomain(db.Member, ctx)
                     );
             } catch (Exception ex) {
 

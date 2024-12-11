@@ -2,6 +2,7 @@
 using FitnessManagement.BL.Models;
 using FitnessManagement.EF.Exceptions;
 using FitnessManagement.EF.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,12 @@ using System.Text;
 using System.Threading.Tasks;
 using static FitnessBL.Models.Member;
 using static FitnessManagement.EF.Mappers.MapProgram;
+using static FitnessManagement.EF.Repositories.MemberRepositoryEF;
 namespace FitnessManagement.EF.Mappers {
     public class MapMember {
-        public static Member MapToDomain(MemberEF db) {
+        public static Member MapToDomain(MemberEF db, FitnessManagementContext ctx) {
 			try {
-
+                
                 return new Member(
                        db.MemberId,
                        db.FirstName,
@@ -23,7 +25,8 @@ namespace FitnessManagement.EF.Mappers {
                        db.Birthday,
                        MapInterestStringToList(db.Interests), 
                        MapStringToMembertype(db.Type),
-                       MapMemberProgramsToList(db.MemberPrograms)
+                       GetProgramList(db.MemberId, ctx)
+
                     );
 			} catch (Exception ex) {
 
@@ -70,19 +73,19 @@ namespace FitnessManagement.EF.Mappers {
             return interest != null ? string.Join(", ", interest) : string.Empty;
         }
 
-        public static List<Program> MapMemberProgramsToList(List<ProgramMember> programMember) {
-            if (programMember == null ) {
-                return new List<Program>();
-            }
+        //public static List<Program> MapMemberProgramsToList() {
+        //    if (programMember == null ) {
+        //        return new List<Program>();
+        //    }
 
-            return programMember.Select(pm => new Program {
-                ProgramCode = pm.ProgramCode,
-                Name = pm.Program.Name,
-                StartDate = pm.Program.StartDate,
-                Target = MapStringToProgramTarget(pm.Program.Target),
-                MaxMembers = pm.Program.MaxMembers
-            }).ToList();
-        }
+        //    return programMember.Select(pm => new Program {
+        //        ProgramCode = pm.ProgramCode,
+        //        Name = pm.Program.Name,
+        //        StartDate = pm.Program.StartDate,
+        //        Target = MapStringToProgramTarget(pm.Program.Target),
+        //        MaxMembers = pm.Program.MaxMembers
+        //    }).ToList();
+        //}
 
         public static List<ProgramMember> MapListToMemberPrograms(List<Program> programs, int memberId) {
             return programs.Select(p => new ProgramMember {
@@ -96,6 +99,30 @@ namespace FitnessManagement.EF.Mappers {
                     MaxMembers = p.MaxMembers
                 }
             }).ToList();
+        }
+
+        public static List<Program> GetProgramList(int memberId, FitnessManagementContext ctx) {
+            try {
+                
+                List<ProgramEF> programEFs = ctx.programMember
+                    .Include(pm => pm.Program)
+                    .Where(pm => pm.MemberId == memberId)
+                    .Select(pm => pm.Program)
+                    .ToList();
+                if (programEFs.Count == 0) return new List<Program>();
+                List<Program> result = new List<Program>();
+                foreach (ProgramEF programEF in programEFs) {
+                    Program mapProgram = MapProgram.MapToDomain(programEF);
+                    result.Add(mapProgram);
+                }
+                return result;
+
+
+
+            } catch (Exception ex) {
+
+                throw;
+            }
         }
 
 

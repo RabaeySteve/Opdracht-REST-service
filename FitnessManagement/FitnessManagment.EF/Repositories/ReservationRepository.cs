@@ -57,7 +57,9 @@ namespace FitnessManagement.EF.Repositories {
 
         public List<Reservation> GetAll() {
             try {
-                return ctx.reservation.Include(x => x.Member).Include(x => x.Equipment).Include(x => x.TimeSlot).Select(x => MapReservation.MapToDomain(x)).ToList();
+                List<ReservationEF> reservationEFs =  ctx.reservation.Include(x => x.Member).Include(x => x.Equipment).Include(x => x.TimeSlot).ToList();
+                    
+                return  reservationEFs.Select(x => MapReservation.MapToDomain(x, ctx)).ToList();
             } catch (Exception ex) {
 
                 throw new RepoException("ReservationRepo - GetAll", ex);
@@ -66,7 +68,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public Reservation GetReservation(int reservationId) {
             try {
-                return MapReservation.MapToDomain(ctx.reservation.Where(x => x.ReservationId == reservationId).Include(x => x.Member).Include(x => x.Equipment).Include(x => x.TimeSlot).FirstOrDefault());
+                return MapReservation.MapToDomain(ctx.reservation.Where(x => x.ReservationId == reservationId).Include(x => x.Member).Include(x => x.Equipment).Include(x => x.TimeSlot).FirstOrDefault(), ctx);
             } catch (Exception ex) {
 
                 throw new RepoException("ReservationRepo - GetReservationsMember", ex);
@@ -75,8 +77,9 @@ namespace FitnessManagement.EF.Repositories {
 
         public List<Reservation> GetReservationsMember(int memberId) {
             try {
-                return ctx.reservation.Where(x => x.Member.MemberId == memberId)
-                    .Select(x=> MapReservation.MapToDomain(x)).ToList();
+                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.Member.MemberId == memberId).ToList();
+                return reservationEFs.Select(x => MapReservation.MapToDomain(x, ctx)).ToList();
+
             } catch (Exception ex) {
 
                 throw new RepoException("ReservationRepo - GetReservation", ex);

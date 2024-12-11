@@ -118,8 +118,8 @@ namespace FitnessBL.Models {
         }
 
         public override string ToString() {
-            string programstring = string.Join(", ", Programs);
-            return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {Type}, {programstring}";
+            string programstring = string.Join(",\n", Programs);
+            return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {Type}, \n{programstring}";
         }
 
 

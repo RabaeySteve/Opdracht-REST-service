@@ -198,11 +198,14 @@ namespace ConsoleAppTestRepos {
             }
 
 
-            repos.ProgramRepository.GetProgramByProgramCode("1");
+            FitnessManagement.BL.Models.Program run = repos.ProgramRepository.GetProgramByProgramCode("1");
 
             repos.MemberRepository.AddProgram(2, "1");
+            repos.MemberRepository.AddProgram(2, "2");
             Member gertMetProgram = repos.MemberRepository.GetMember(2);
             Console.WriteLine(gertMetProgram);
+
+           
         }
     }
 }

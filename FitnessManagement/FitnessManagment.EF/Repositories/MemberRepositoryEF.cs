@@ -52,7 +52,7 @@ namespace FitnessManagement.EF.Repositories {
         public Member GetMember(int id) {
             try {
 
-                return MapMember.MapToDomain(ctx.members.Where(m => m.MemberId == id).AsNoTracking().FirstOrDefault());
+                return MapMember.MapToDomain(ctx.members.Where(m => m.MemberId == id).AsNoTracking().FirstOrDefault(), ctx);
             } catch (Exception ex) {
 
                 throw new RepoException("MemberRepo - GetMember", ex);
@@ -61,12 +61,16 @@ namespace FitnessManagement.EF.Repositories {
 
         public IEnumerable<Member> GetMembers() {
             try {
-                return ctx.members.Select(x => MapMember.MapToDomain(x)).ToList();
-            } catch (Exception ex) {
+                // Haal alle MemberEF-records op (met AsNoTracking)
+                var memberEFs = ctx.members.AsNoTracking().ToList();
 
+                // Map elk record naar de Business Layer
+                return memberEFs.Select(x => MapMember.MapToDomain(x, ctx)).ToList();
+            } catch (Exception ex) {
                 throw new RepoException("MemberRepo - GetMembers", ex);
             }
         }
+
 
 
 
@@ -145,6 +149,6 @@ namespace FitnessManagement.EF.Repositories {
             throw new NotImplementedException();
         }
 
-        
+       
     }
 }
