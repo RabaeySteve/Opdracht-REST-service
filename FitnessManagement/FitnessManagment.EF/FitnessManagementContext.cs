@@ -22,27 +22,24 @@ namespace FitnessManagement.EF {
         public DbSet<ReservationEF> reservation { get; set; }
         public DbSet<TimeSlotEF> time_slot { get; set; }
         public DbSet<RunningSessionDetailsEF> runningsession_detail { get; set; }
-
+        public DbSet<ProgramMember> programMember { get; set; }
         public FitnessManagementContext(string connectionString) {
             this.connectionString = connectionString;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<ProgramEF>()
-               .HasMany<MemberEF>() 
-               .WithMany()          
-               .UsingEntity<Dictionary<string, object>>("programmembers", 
-           j => j.HasOne<MemberEF>() 
-                 .WithMany()
-                 .HasForeignKey("MemberId")
-                 .OnDelete(DeleteBehavior.Cascade), 
-           j => j.HasOne<ProgramEF>() 
-                 .WithMany()
-                 .HasForeignKey("ProgramCode")
-                 .OnDelete(DeleteBehavior.Cascade) 
-       );
+            modelBuilder.Entity<ProgramMember>()
+             .HasKey(mp => new { mp.MemberId, mp.ProgramCode }); // Composiete sleutel
 
+            modelBuilder.Entity<ProgramMember>()
+                .HasOne(mp => mp.Member)
+                .WithMany(m => m.MemberPrograms)
+                .HasForeignKey(mp => mp.MemberId);
 
+            modelBuilder.Entity<ProgramMember>()
+                .HasOne(mp => mp.Program)
+                .WithMany()
+                .HasForeignKey(mp => mp.ProgramCode); 
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

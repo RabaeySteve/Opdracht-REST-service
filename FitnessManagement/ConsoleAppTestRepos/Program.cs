@@ -5,6 +5,8 @@ using FitnessManagement.BL.Models;
 using FitnessManagement.EF;
 using System.Configuration;
 using System.Xml;
+using static FitnessManagement.BL.Models.Program;
+
 namespace ConsoleAppTestRepos {
     internal class Program {
         static void Main(string[] args) {
@@ -180,6 +182,27 @@ namespace ConsoleAppTestRepos {
             foreach (var reservation in allReservations) {
                 Console.WriteLine(reservation);
             }
+
+            Console.WriteLine("\n-------------------------------------------------------------------------------------");
+            Console.WriteLine("Reservation");
+            Console.WriteLine("-------------------------------------------------------------------------------------\n");
+
+            FitnessManagement.BL.Models.Program start2Run = new FitnessManagement.BL.Models.Program("1", "Start2Run", new DateTime(2024, 12, 13), ProgramTarget.beginner, 20);
+            FitnessManagement.BL.Models.Program FTPBoost = new FitnessManagement.BL.Models.Program("2", "FTPBoost", new DateTime(2024, 12, 16), ProgramTarget.advanced, 30);
+
+            repos.ProgramRepository.AddProgram(start2Run);
+            repos.ProgramRepository.AddProgram(FTPBoost);
+            IEnumerable<FitnessManagement.BL.Models.Program> programs = repos.ProgramRepository.GetAll();
+            foreach (FitnessManagement.BL.Models.Program program in programs) {
+                Console.WriteLine(program);
+            }
+
+
+            repos.ProgramRepository.GetProgramByProgramCode("1");
+
+            repos.MemberRepository.AddProgram(2, "1");
+            Member gertMetProgram = repos.MemberRepository.GetMember(2);
+            Console.WriteLine(gertMetProgram);
         }
     }
 }

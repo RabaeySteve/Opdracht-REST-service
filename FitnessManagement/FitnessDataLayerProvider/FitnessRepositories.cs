@@ -13,6 +13,8 @@ namespace FitnessDataLayerProvider {
         public ITimeSlotRepository TimeSlotRepository { get; }
         public IReservationRepository ReservationRepository { get; }
 
+        public IProgramRepository ProgramRepository { get; }
+
         public FitnessRepositories(string connectionString, RepositoryType repositoryType) {
 
 			try {
@@ -22,6 +24,7 @@ namespace FitnessDataLayerProvider {
                         EquipmentRepository = new EquipmentRepository(connectionString);
                         TimeSlotRepository = new TimeSlotRepository(connectionString);
                         ReservationRepository = new ReservationRepository(connectionString);
+                        ProgramRepository = new ProgramRepository(connectionString);
                         break;
                     
                     default: throw new Exception();

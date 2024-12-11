@@ -3,6 +3,7 @@ using FitnessManagement.BL.Models;
 using FitnessManagement.EF.Exceptions;
 using FitnessManagement.EF.Mappers;
 using FitnessManagement.EF.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,13 @@ namespace FitnessManagement.EF.Repositories {
             }
         }
 
-        
+        public Program GetProgramByProgramCode(string programCode) {
+            try {
+                return MapProgram.MapToDomain(ctx.programs.Where(p => p.ProgramCode == programCode).AsNoTracking().FirstOrDefault());
+            } catch (Exception ex) {
+
+                throw new RepoException("ProgramRepo - GetProgramByProgramCode", ex);
+            }
+        }
     }
 }

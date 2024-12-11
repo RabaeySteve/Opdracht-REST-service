@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FitnessBL.Models {
-   
+
 
     public class Member {
         private string _firstName;
@@ -16,11 +16,11 @@ namespace FitnessBL.Models {
         private string _address;
         private DateTime _birthday;
         private List<string> _interests = new List<string>();
-        
+
 
         public Member() { }
 
-        public Member(int memberId, string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? memberType, Dictionary<int, Program> programs) {
+        public Member(int memberId, string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? memberType, List<Program> programs) {
             MemberId = memberId;
             _firstName = firstName;
             _lastName = lastName;
@@ -32,7 +32,7 @@ namespace FitnessBL.Models {
             Programs = programs;
         }
 
-        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type, Dictionary<int, Program> programs) {
+        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type, List<Program> programs) {
             _firstName = firstName;
             _lastName = lastName;
             _email = email;
@@ -43,6 +43,9 @@ namespace FitnessBL.Models {
             Programs = programs;
         }
 
+        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type)
+        : this(firstName, lastName, email, address, birthday, interests, type, new List<Program>()) {
+        }
 
 
         public int MemberId { get; set; }
@@ -106,7 +109,7 @@ namespace FitnessBL.Models {
         }
         public MemberType? Type { get; set; }
 
-        public Dictionary<int, Program> Programs { get; set; } = new Dictionary<int, Program>();
+        public List<Program> Programs { get; set; } = new List<Program>();
         public enum MemberType {
             noType,
             Bronze,
@@ -115,7 +118,8 @@ namespace FitnessBL.Models {
         }
 
         public override string ToString() {
-            return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {Type}";
+            string programstring = string.Join(", ", Programs);
+            return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {Type}, {programstring}";
         }
 
 

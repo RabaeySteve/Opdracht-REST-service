@@ -89,7 +89,7 @@ namespace FitnessManagement.BL.Services {
 
             }
         }
-        public bool IsProgram(int programCode) {
+        public bool IsProgram(string programCode) {
             try {
                return repo.IsProgram(programCode);
             } catch (Exception ex) {
@@ -99,8 +99,8 @@ namespace FitnessManagement.BL.Services {
         }
         public void AddProgram(int memberId, Program program) {
             try {
-                if (IsProgram(memberId)) {
-
+                if (IsProgram(program.ProgramCode)) {
+                    
                 }
             } catch (Exception ex) {
 
@@ -117,7 +117,7 @@ namespace FitnessManagement.BL.Services {
         }
         public List<Program> GetProgramsByMemberId(Dictionary<int, Program> programs, int memberId) {
             try {
-
+                return new List<Program> { programs[memberId] };
             } catch (Exception ex) {
 
                 throw;

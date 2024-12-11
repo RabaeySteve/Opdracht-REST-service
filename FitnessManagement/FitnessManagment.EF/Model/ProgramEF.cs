@@ -19,7 +19,7 @@ namespace FitnessManagement.EF.Model {
             MaxMembers = maxMembers;
         }
 
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column(TypeName = "nvarchar(10)")]
         public string ProgramCode { get; set; }
 

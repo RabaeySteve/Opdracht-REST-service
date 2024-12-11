@@ -100,22 +100,51 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsProgram(string programCode) {
             try {
-                return
+                return ctx.members.Any(m => m.MemberPrograms.Any(p => p.ProgramCode == programCode));
             } catch (Exception) {
 
                 throw;
             }
         }
+        public bool ProgramMemberExist(string programCode, int memberId) {
+            try {
+                MemberEF memberEF = ctx.members.Include(m => m.MemberPrograms).FirstOrDefault(m => m.MemberId == memberId);
+                ProgramEF programEF = ctx.programs.FirstOrDefault(p => p.ProgramCode == programCode);
+
+                return memberEF.MemberPrograms.Any(mp => mp.ProgramCode == programCode);
+            } catch (Exception ex) {
+
+                throw;
+            }
+        }
         public void AddProgram(int memberId, string programCode) {
-            throw new NotImplementedException();
+            try {
+                MemberEF memberEF = ctx.members.Include(m => m.MemberPrograms).FirstOrDefault(m => m.MemberId == memberId);
+                ProgramEF programEF = ctx.programs.FirstOrDefault(p => p.ProgramCode == programCode);
+
+                bool exists = memberEF.MemberPrograms.Any(mp => mp.ProgramCode == programCode);
+
+                if (!exists) {
+                    ProgramMember programMember = new ProgramMember {
+                        ProgramCode = programCode,
+                        MemberId = memberId,
+                        Program = programEF,
+                        Member = memberEF
+                    };
+                    ctx.programMember.Add(programMember);
+                    
+                }
+                SaveAndClear();
+            } catch (Exception ex) {
+
+                throw;
+            }
         }
 
         public void DeleteProgram(int memberId, string programCode) {
             throw new NotImplementedException();
         }
 
-        public List<Program> GetProgramsByMemberId(Dictionary<int, Program> programs, int memberId) {
-            throw new NotImplementedException();
-        }
+        
     }
 }

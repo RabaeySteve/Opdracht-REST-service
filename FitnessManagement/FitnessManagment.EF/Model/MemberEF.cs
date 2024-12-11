@@ -21,7 +21,7 @@ namespace FitnessManagement.EF.Model {
             Birthday = birthday;
         }
 
-        public MemberEF(int memberId, string firstName, string lastName, string? email,string address, DateTime birthday, string? interests, string? memberType) {
+        public MemberEF(int memberId, string firstName, string lastName, string? email,string address, DateTime birthday, string? interests, string? memberType, List<ProgramMember> memberPrograms) {
             MemberId = memberId;
             FirstName = firstName;
             LastName = lastName;
@@ -30,8 +30,10 @@ namespace FitnessManagement.EF.Model {
             Birthday = birthday;
             Interests = interests;
             Type = memberType;
-
+            MemberPrograms = memberPrograms;
         }
+
+      
 
         [Key]
         public int MemberId { get; set; }
@@ -60,6 +62,8 @@ namespace FitnessManagement.EF.Model {
 
         [Required]
         public DateTime Birthday { get; set; }
+
+        public List<ProgramMember> MemberPrograms { get; set; } = new List<ProgramMember>();
 
     }
 }
