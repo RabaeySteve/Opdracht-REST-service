@@ -53,7 +53,7 @@ namespace FitnessManagement.BL.Services {
                 throw new EquipmentException("IsEquipment", ex);
             }
         }
-        void SetMaintenance(int equipmentId, bool IsInMaintenance) {
+        public void SetMaintenance(int equipmentId, bool IsInMaintenance) {
             try {
                 if (!repo.IsEquipment(equipmentId)) {
                     throw new EquipmentException($"Equipment with ID {equipmentId} does not exist.");

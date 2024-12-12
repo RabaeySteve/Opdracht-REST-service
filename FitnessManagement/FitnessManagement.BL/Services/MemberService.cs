@@ -28,6 +28,7 @@ namespace FitnessManagement.BL.Services {
         }
         public Member GetMember(int id) {
             try {
+                if (!repo.IsMember(id)) throw new MemberException("GetMember - Gebruiker bestaat niet");
                 return repo.GetMember(id);
             } catch (Exception ex) {
 

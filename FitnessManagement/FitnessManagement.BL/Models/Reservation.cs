@@ -15,19 +15,21 @@ namespace FitnessManagement.BL.Models
         public Reservation() {
         }
 
-        public Reservation(DateTime date, Equipment equipment, TimeSlot timeSlot, Member member) {
+        public Reservation(DateTime date, Equipment equipment, TimeSlot timeSlot, Member member, int groupsId) {
             _date = date;
             Equipment = equipment;
-            TimeSlot = timeSlot;
+            TimeSlotRes = timeSlot;
             Member = member;
+            GroepsId = groupsId;
         }
 
-        public Reservation(DateTime date, int reservationId, Equipment equipment, TimeSlot timeSlot, Member member) {
+        public Reservation(DateTime date, int reservationId, Equipment equipment, TimeSlot timeSlot, Member member, int groupsId) {
             _date = date;
             ReservationId = reservationId;
             Equipment = equipment;
-            TimeSlot = timeSlot;
+            TimeSlotRes = timeSlot;
             Member = member;
+            GroepsId = groupsId;
         }
 
         public DateTime Date {
@@ -43,16 +45,16 @@ namespace FitnessManagement.BL.Models
         }
 
 
-
+        public int GroepsId { get; set; }
         public int ReservationId { get; set; }
         public Equipment  Equipment { get; set; }
-        public TimeSlot TimeSlot { get; set; }
+        public TimeSlot TimeSlotRes { get; set; }
         public Member Member { get; set; }
 
 
 
         public override string ToString() {
-            return $"Reservation ID: {ReservationId}, Member: {Member.FirstName}, Equipment: {Equipment.Type}, Date: {Date.ToString()}, TimeSlot: {TimeSlot.StartTime}";
+            return $"Reservation ID: {ReservationId}, Member: {Member.FirstName}, Equipment: {Equipment.Type}, Date: {Date.ToString()}, TimeSlot: {TimeSlotRes.StartTime}";
         }
     }
 }

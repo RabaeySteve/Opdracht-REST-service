@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FitnessDataLayerProvider {
     public class FitnessDatalayerFactory {
-        public static FitnessRepositories GeefRepositories(string connectionString, RepositoryType repositoryType) {
+        public static FitnessRepositories GeefRepositories(string connectionString, string repositoryType) {
             return new FitnessRepositories(connectionString, repositoryType);
         }
     }

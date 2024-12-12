@@ -15,11 +15,11 @@ namespace FitnessDataLayerProvider {
 
         public IProgramRepository ProgramRepository { get; }
 
-        public FitnessRepositories(string connectionString, RepositoryType repositoryType) {
+        public FitnessRepositories(string connectionString, string repositoryType) {
 
 			try {
                 switch(repositoryType) {
-                    case RepositoryType.EFCore:
+                    case "EFCore":
                         MemberRepository = new MemberRepositoryEF(connectionString);
                         EquipmentRepository = new EquipmentRepository(connectionString);
                         TimeSlotRepository = new TimeSlotRepository(connectionString);

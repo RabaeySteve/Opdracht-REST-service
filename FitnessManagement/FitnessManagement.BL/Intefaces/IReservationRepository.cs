@@ -10,15 +10,16 @@ namespace FitnessManagement.BL.Intefaces {
         List<Reservation> GetAll();
         List<Reservation> GetReservationsMember(int memberId);
         List<Reservation> GetReservationsMemberDate(int memberId, DateTime date);
-        Reservation GetReservation(int reservationId);
+        
+        List<Equipment> GetAllEquipment();
+        Equipment GetEquipment(int EquipmentId);
+        List<Reservation> GetReservation(int groupsId);
         bool IsReservation(int reservationId);
-       
+        
         void AddReservation(Reservation reservation);
-        void AddDubbleRes(Reservation reservation);
+        
        
         void DeleteReservation(Reservation reservation);
-        void DeleteDubbleRes(Reservation reservation);
-        void UpdateReservation(Reservation reservation);
-        void UpdateDubbleRes(Reservation reservation);
+     
     }
 }

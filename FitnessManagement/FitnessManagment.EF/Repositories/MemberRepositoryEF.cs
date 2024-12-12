@@ -52,7 +52,9 @@ namespace FitnessManagement.EF.Repositories {
         public Member GetMember(int id) {
             try {
 
-                return MapMember.MapToDomain(ctx.members.Where(m => m.MemberId == id).AsNoTracking().FirstOrDefault(), ctx);
+               return MapMember.MapToDomain(ctx.members.Where(m => m.MemberId == id).AsNoTracking().FirstOrDefault(), ctx);
+                
+               
             } catch (Exception ex) {
 
                 throw new RepoException("MemberRepo - GetMember", ex);
@@ -128,7 +130,10 @@ namespace FitnessManagement.EF.Repositories {
 
                 bool exists = memberEF.MemberPrograms.Any(mp => mp.ProgramCode == programCode);
 
-                if (!exists) {
+                int currentMembers= ctx.programMember.Where(p => p.ProgramCode == programCode).Count();
+
+                
+                if (!exists && currentMembers < programEF.MaxMembers) {
                     ProgramMember programMember = new ProgramMember {
                         ProgramCode = programCode,
                         MemberId = memberId,

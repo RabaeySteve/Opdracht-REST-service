@@ -74,6 +74,10 @@ namespace FitnessManagement.EF.Repositories {
                 EquipmentEF equipmentEF = MapEquipment.MapToDB(GetEquipment(equipmentId));
                 equipmentEF.IsInMaintenance = isInMaintenance;
                 ctx.equipment.Update(equipmentEF);
+                List<ReservationEF>reservationEFs = ctx.reservation.Where(r => r.Equipment.EquipmentId == equipmentId).ToList();
+                foreach (ReservationEF reservation in reservationEFs) {
+                    ctx.reservation.Remove(reservation);
+                }
                 SaveAndClear();
             } catch (Exception ex) {
                 throw new RepoException("EquipmentRepo - SetMaintenance", ex);

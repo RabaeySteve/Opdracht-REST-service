@@ -15,7 +15,7 @@ namespace ConsoleAppTestRepos {
             string connectionString = ConfigurationManager.ConnectionStrings["EFconnection"].ConnectionString;
 
 
-            FitnessRepositories repos = FitnessDatalayerFactory.GeefRepositories(connectionString, RepositoryType.EFCore);
+            FitnessRepositories repos = FitnessDatalayerFactory.GeefRepositories(connectionString, "EFCore");
             FitnessManagementContext ctx = new FitnessManagementContext(connectionString);
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
@@ -116,15 +116,15 @@ namespace ConsoleAppTestRepos {
             Member gertDB = repos.MemberRepository.GetMember(2);
             Member johnDB = repos.MemberRepository.GetMember(3);
             
-            Reservation reservationGert1 = new Reservation(new DateTime(2024, 12, 13),1, bike2DB, timeSlot8, gertDB);
-            Reservation reservationGert2 = new Reservation(new DateTime(2024, 12, 14),2, bike2DB, timeSlot9, gertDB);
-            Reservation reservationjohn1 = new Reservation(new DateTime(2024, 12, 14),3, treadmill2DB, timeSlot18, johnDB);
-            Reservation reservationsteve = new Reservation(new DateTime(2024, 12, 11), 4, bike2DB, timeSlot18, steveDB);
+            Reservation reservationGert1 = new Reservation(new DateTime(2024, 12, 13),1, bike2DB, timeSlot8, gertDB, 1);
+            Reservation reservationGert2 = new Reservation(new DateTime(2024, 12, 14),2, bike2DB, timeSlot9, gertDB, 2);
+            Reservation reservationjohn1 = new Reservation(new DateTime(2024, 12, 14),3, treadmill2DB, timeSlot18, johnDB, 3);
+            Reservation reservationsteve = new Reservation(new DateTime(2024, 12, 11), 4, bike2DB, timeSlot18, steveDB, 4);
 
             repos.ReservationRepository.AddReservation(reservationGert1);
             repos.ReservationRepository.AddReservation(reservationGert2);
             repos.ReservationRepository.AddReservation(reservationjohn1);
-            repos.ReservationRepository.AddDubbleRes(reservationsteve);
+            
 
             Console.WriteLine("\nAll Reservations:");
             List<Reservation> allReservations = repos.ReservationRepository.GetAll();
@@ -148,43 +148,43 @@ namespace ConsoleAppTestRepos {
 
             
             Console.WriteLine("\nGet Reservation by ID:");
-            Reservation specificReservation = repos.ReservationRepository.GetReservation(1);
+            List<Reservation> specificReservation = repos.ReservationRepository.GetReservation(1);
             Console.WriteLine(specificReservation);
 
             
-            Console.WriteLine("\nDelete Reservation:");
-            Console.WriteLine("Id2 moet weg zijn");
-            Reservation Gert2 = repos.ReservationRepository.GetReservation(2);
-            repos.ReservationRepository.DeleteReservation(Gert2);
-            allReservations = repos.ReservationRepository.GetAll();
-            foreach (var reservation in allReservations) {
-                Console.WriteLine(reservation);
-            }
+            //Console.WriteLine("\nDelete Reservation:");
+            //Console.WriteLine("Id2 moet weg zijn");
+            //List <Reservation> Gert2 = repos.ReservationRepository.GetReservation(2);
+            //repos.ReservationRepository.DeleteReservation(Gert2);
+            //allReservations = repos.ReservationRepository.GetAll();
+            //foreach (var reservation in allReservations) {
+            //    Console.WriteLine(reservation);
+            //}
 
             
-            Console.WriteLine("\nUpdate Reservation:");
-            Reservation jhonUpdate = repos.ReservationRepository.GetReservation(3);
-            jhonUpdate.Date = new DateTime(2024, 12, 15);
-            repos.ReservationRepository.UpdateReservation(jhonUpdate);
-            Console.WriteLine(repos.ReservationRepository.GetReservation(jhonUpdate.ReservationId));
+            //Console.WriteLine("\nUpdate Reservation:");
+            //Reservation jhonUpdate = repos.ReservationRepository.GetReservation(3);
+            //jhonUpdate.Date = new DateTime(2024, 12, 15);
+            //repos.ReservationRepository.UpdateReservation(jhonUpdate);
+            //Console.WriteLine(repos.ReservationRepository.GetReservation(jhonUpdate.ReservationId));
 
-            Console.WriteLine("\nUpdate DubbleReservation:");
-            Reservation reservationsteveUpdate = repos.ReservationRepository.GetReservation(4);
-            reservationsteveUpdate.Date = new DateTime(2024, 12, 16);
-            repos.ReservationRepository.UpdateDubbleRes(reservationsteveUpdate);
-            Console.WriteLine(repos.ReservationRepository.GetReservation(reservationsteveUpdate.ReservationId));
+            //Console.WriteLine("\nUpdate DubbleReservation:");
+            //Reservation reservationsteveUpdate = repos.ReservationRepository.GetReservation(4);
+            //reservationsteveUpdate.Date = new DateTime(2024, 12, 16);
+            //repos.ReservationRepository.UpdateDubbleRes(reservationsteveUpdate);
+            //Console.WriteLine(repos.ReservationRepository.GetReservation(reservationsteveUpdate.ReservationId));
 
-            Console.WriteLine("\nDelete DubbleReservation:");
-            Console.WriteLine("Id4 en Id5 moet weg zijn");
-            Reservation reservationsteveDelete = repos.ReservationRepository.GetReservation(4);
-            repos.ReservationRepository.DeleteDubbleRes(reservationsteveDelete);
-            allReservations = repos.ReservationRepository.GetAll();
-            foreach (var reservation in allReservations) {
-                Console.WriteLine(reservation);
-            }
+            //Console.WriteLine("\nDelete DubbleReservation:");
+            //Console.WriteLine("Id4 en Id5 moet weg zijn");
+            //Reservation reservationsteveDelete = repos.ReservationRepository.GetReservation(4);
+            //repos.ReservationRepository.DeleteDubbleRes(reservationsteveDelete);
+            //allReservations = repos.ReservationRepository.GetAll();
+            //foreach (var reservation in allReservations) {
+            //    Console.WriteLine(reservation);
+            //}
 
             Console.WriteLine("\n-------------------------------------------------------------------------------------");
-            Console.WriteLine("Reservation");
+            Console.WriteLine("Programs");
             Console.WriteLine("-------------------------------------------------------------------------------------\n");
 
             FitnessManagement.BL.Models.Program start2Run = new FitnessManagement.BL.Models.Program("1", "Start2Run", new DateTime(2024, 12, 13), ProgramTarget.beginner, 20);
@@ -205,7 +205,15 @@ namespace ConsoleAppTestRepos {
             Member gertMetProgram = repos.MemberRepository.GetMember(2);
             Console.WriteLine(gertMetProgram);
 
-           
+            bool IsNew = repos.ProgramRepository.IsProgramNew("Start2Run", new DateTime(2024, 12, 13));
+            Console.WriteLine($"Moet True zijn: {IsNew}");
+
+            bool isProgram = repos.ProgramRepository.IsProgram("1");
+            Console.WriteLine($"Moet True zijn: {isProgram}");
+
+            run.ProgramCode = "Start2RunForFun";
+                run.Target = ProgramTarget.advanced;
+            //repos.ProgramRepository.UpdateProgram(run);
         }
     }
 }

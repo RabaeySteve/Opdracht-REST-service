@@ -12,16 +12,20 @@ namespace FitnessManagement.EF.Model {
     public class ReservationEF {
         public ReservationEF() { }
 
-        public ReservationEF(int reservationId, DateTime date, EquipmentEF equipment, TimeSlotEF timeSlot, MemberEF member) {
+        public ReservationEF(int reservationId, DateTime date, EquipmentEF equipment, TimeSlotEF timeSlot, MemberEF member, int groupsId) {
             ReservationId = reservationId;
             Date = date;
             Equipment = equipment;
             TimeSlot = timeSlot;
             Member = member;
+            GroupsId = groupsId;
         }
 
         [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ReservationId { get; set; }
+
+        [Required]
+        public int GroupsId {  get; set; }
 
         [Required]
         public DateTime Date { get; set; }

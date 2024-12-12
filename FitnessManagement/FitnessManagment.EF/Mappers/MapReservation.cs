@@ -19,7 +19,8 @@ namespace FitnessManagement.EF.Mappers {
                       db.ReservationId,
                       MapEquipment.MapToDomain(db.Equipment),
                       MapTimeSlot.MapToDomain(db.TimeSlot),
-                      MapMember.MapToDomain(db.Member, ctx)
+                      MapMember.MapToDomain(db.Member, ctx),
+                      db.GroupsId
                     );
             } catch (Exception ex) {
 
@@ -30,8 +31,8 @@ namespace FitnessManagement.EF.Mappers {
             try {
                 EquipmentEF equipmentEF = ctx.equipment.Find(r.Equipment.EquipmentId);
                 if (equipmentEF == null) { equipmentEF = MapEquipment.MapToDB(r.Equipment); }
-                TimeSlotEF timeSlotEF = ctx.time_slot.Find(r.TimeSlot.TimeSlotId);
-                if (timeSlotEF == null) { timeSlotEF = MapTimeSlot.MapToDB(r.TimeSlot); }
+                TimeSlotEF timeSlotEF = ctx.time_slot.Find(r.TimeSlotRes.TimeSlotId);
+                if (timeSlotEF == null) { timeSlotEF = MapTimeSlot.MapToDB(r.TimeSlotRes); }
                 MemberEF memberEF = ctx.members.Find(r.Member.MemberId);
                 if (memberEF == null) { memberEF = MapMember.MapToDB(r.Member); }
                 return new ReservationEF(
@@ -39,8 +40,8 @@ namespace FitnessManagement.EF.Mappers {
                       r.Date,
                       equipmentEF,
                       timeSlotEF,
-                      memberEF
-
+                      memberEF,
+                      r.GroepsId
                     );
             } catch (Exception ex) {
 
