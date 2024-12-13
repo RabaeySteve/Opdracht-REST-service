@@ -108,9 +108,10 @@ namespace FitnessManagement.BL.Services {
                 if (!IsAvailable(reservation.Date, reservation.Equipment.EquipmentId, reservation.TimeSlotRes.TimeSlotId)) {
                     throw new ReservationException("The equipment is not available for the selected date.");
                 }
-
+                reservation.ReservationId = repo.GetAll().Count + 1;
+                reservation.GroepsId = repo.GetAll().Count + 1;
                 // Controleer of de reservatie-ID al bestaat
-                if (!IsReservation(reservation.ReservationId)) {
+                if (IsReservation(reservation.ReservationId)) {
                     throw new ReservationException("Reservation already exists.");
                 }
 
@@ -122,18 +123,21 @@ namespace FitnessManagement.BL.Services {
 
                 // Controleer of er niet meer dan 2 opeenvolgende tijdslots zijn gereserveerd
                 foreach (var r in reservationsDateMember) {
-                    if (r.Equipment.EquipmentId == reservation.Equipment.EquipmentId &&
-                        Math.Abs(r.TimeSlotRes.StartTime - reservation.TimeSlotRes.StartTime) <= 2) {
-                        throw new ReservationException("Cannot reserve more than 2 consecutive time slots.");
+                    if (r.Equipment.EquipmentId == reservation.Equipment.EquipmentId) {
+                        int timeslotR = r.TimeSlotRes.TimeSlotId;
+                        int timeslot = reservation.TimeSlotRes.TimeSlotId;
+                        if (timeslotR == (timeslot + 2) || timeslotR == (timeslot - 2)) {
+                            throw new ReservationException("Cannot reserve more than 2 consecutive time slots.");
+                        }
+
                     }
                 }
-                reservation.ReservationId = repo.GetAll().Count + 1;
-                reservation.GroepsId = repo.GetAll().Count + 1;
+                
                 // Voeg de reservering toe
                 var secondReservation = new Reservation();
                 if (dubbleReservation) {
-                    
 
+                  
                     // Maak de tweede reservering aan met het volgende tijdslot
                     var secondTimeSlot = new TimeSlot {
                         TimeSlotId = reservation.TimeSlotRes.TimeSlotId + 1 // Volgend tijdslot
@@ -150,7 +154,23 @@ namespace FitnessManagement.BL.Services {
                     }
                     
                     secondReservation.GroepsId =reservation.GroepsId;
-                    
+
+                    var reservationsDateMember2 = GetReservationsMemberDate(secondReservation.Member.MemberId, secondReservation.Date);
+                    if (reservationsDateMember2.Count >= 3) {
+                        throw new ReservationException("You can only make 4 reservations per day.");
+                    }
+
+                    // Controleer of er niet meer dan 2 opeenvolgende tijdslots zijn gereserveerd
+                    foreach (var r in reservationsDateMember2) {
+                        if (r.Equipment.EquipmentId == secondReservation.Equipment.EquipmentId) {
+                            int timeslotR = r.TimeSlotRes.TimeSlotId;
+                            int timeslotSecond = secondReservation.TimeSlotRes.TimeSlotId;
+                            if (timeslotR == (timeslotSecond +1) || timeslotR == (timeslotSecond - 2)) {
+                                throw new ReservationException("Cannot reserve more than 2 consecutive time slots.");
+                            }
+
+                        }
+                    }
                 }
                 repo.AddReservation(reservation);
                 if (dubbleReservation) {

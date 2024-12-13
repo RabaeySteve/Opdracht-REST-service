@@ -117,7 +117,9 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsReservation(int reservationId) {
             try {
-                return ctx.reservation.Any(x => x.ReservationId == reservationId);
+
+                bool excist = ctx.reservation.Any(x => x.ReservationId == reservationId);
+                return excist;
             } catch (Exception ex) {
 
                 throw new RepoException("ReservationRepo - IsReservation", ex);

@@ -32,6 +32,14 @@ namespace FitnessManagement.API.Controllers {
             ReservationRepo.AddReservation(ReservationMapper.MapReservation(reservationDTO), reservationDTO.DubleReservation);
             return CreatedAtAction(nameof(Get), new { id =  reservationDTO.MemberId}, reservationDTO);
         }
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id) {
+            if (!ReservationRepo.IsReservation(id)) {
+                return NotFound();
+            }
+            ReservationRepo.DeleteReservation(ReservationRepo.GetReservation(id).FirstOrDefault());
+            return NoContent();
+        }
 
        
     }
