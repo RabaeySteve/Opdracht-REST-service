@@ -5,21 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using FitnessManagement.BL.Exceptions;
 namespace FitnessManagement.BL.Models {
-    public class Runningsession {
+    public class RusnningSession {
         private DateTime _date;
         private int _duration;
         private float _avgSpeed;
 
-        public List<RunningsessionDetail> Details { get; set; } = new List<RunningsessionDetail>();
+        public List<RusnningSessionDetail> Details { get; set; } = new List<RusnningSessionDetail>();
 
-        public int RunningsessionId { get; set; }
+        public int RusnningSessionId { get; set; }
         public int MemberId { get; set; }
 
         public DateTime Date {
             get => _date;
             set {
                 if (value.Date > DateTime.Now.Date) {
-                    throw new RunningsessionException("Date cannot be in the future.");
+                    throw new RusnningSessionException("Date cannot be in the future.");
                 }
                 _date = value;
             }
@@ -29,7 +29,7 @@ namespace FitnessManagement.BL.Models {
             get => _duration;
             set {
                 if (value <= 0) {
-                    throw new RunningsessionException("Duration must be greater than 0.");
+                    throw new RusnningSessionException("Duration must be greater than 0.");
                 }
                 _duration = value;
             }
@@ -39,14 +39,14 @@ namespace FitnessManagement.BL.Models {
             get => _avgSpeed;
             set {
                 if (value <= 0) {
-                    throw new RunningsessionException("Average speed must be greater than 0.");
+                    throw new RusnningSessionException("Average speed must be greater than 0.");
                 }
                 _avgSpeed = value;
             }
         }
 
         public override string ToString() {
-            return $"Runningsession ID: {RunningsessionId}, Date: {Date.ToShortDateString()}, Member ID: {MemberId}, Duration: {Duration} mins, Avg Speed: {AvgSpeed} km/h";
+            return $"RusnningSession ID: {RusnningSessionId}, Date: {Date.ToShortDateString()}, Member ID: {MemberId}, Duration: {Duration} mins, Avg Speed: {AvgSpeed} km/h";
         }
     }
 }

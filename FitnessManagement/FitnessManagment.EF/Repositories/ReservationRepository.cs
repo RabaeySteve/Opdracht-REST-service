@@ -106,7 +106,11 @@ namespace FitnessManagement.EF.Repositories {
 
         public List<Reservation> GetReservationsMember(int memberId) {
             try {
-                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.Member.MemberId == memberId).ToList();
+                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.Member.MemberId == memberId)
+                    .Include(x => x.Equipment)
+                    .Include(x => x.Member)
+                    .Include(x => x.TimeSlot)
+                    .ToList();
                 return reservationEFs.Select(x => MapReservation.MapToDomain(x, ctx)).ToList();
 
             } catch (Exception ex) {

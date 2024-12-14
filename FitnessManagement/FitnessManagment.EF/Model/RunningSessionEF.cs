@@ -8,11 +8,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitnessManagement.EF.Model {
-    public class RunningSessionEF {
-        public RunningSessionEF() { }
+    public class RusnningSessionEF {
+        public RusnningSessionEF() { }
 
-        public RunningSessionEF(int runningSessionId, DateTime date, int duration, float avgSpeed, MemberEF member) {
-            RunningSessionId = runningSessionId;
+        public RusnningSessionEF(int RusnningSessionId, DateTime date, int duration, float avgSpeed, MemberEF member) {
+            RusnningSessionId = RusnningSessionId;
             Date = date;
             Duration = duration;
             AvgSpeed = avgSpeed;
@@ -20,7 +20,7 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
-        public int RunningSessionId { get; set; }
+        public int RusnningSessionId { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
@@ -35,6 +35,6 @@ namespace FitnessManagement.EF.Model {
         public MemberEF Member { get; set; }
 
 
-        public List<RunningSessionDetailsEF> Details { get; set; }
+        public List<RusnningSessionDetailsEF> Details { get; set; }
     }
 }

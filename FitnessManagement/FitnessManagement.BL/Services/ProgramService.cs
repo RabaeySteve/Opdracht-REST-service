@@ -1,4 +1,5 @@
-﻿using FitnessManagement.BL.Exceptions;
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.Exceptions;
 using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
 using System;
@@ -56,8 +57,21 @@ namespace FitnessManagement.BL.Services {
                 throw new ProgramException("IsProgram", ex);
             }
         }
+        public Program GetProgramByProgramCode(string programCode) {
+            try {
+                if (!repo.IsProgram(programCode)) {
+                    throw new ProgramException("");
+                }
+                return repo.GetProgramByProgramCode(programCode);
+            } catch (ProgramException ex) {
+
+                throw new ProgramException("");
+            }
+        }
+
 
        
+
 
     }
 }

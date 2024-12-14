@@ -108,8 +108,11 @@ namespace FitnessManagement.BL.Services {
                 if (!IsAvailable(reservation.Date, reservation.Equipment.EquipmentId, reservation.TimeSlotRes.TimeSlotId)) {
                     throw new ReservationException("The equipment is not available for the selected date.");
                 }
-                reservation.ReservationId = repo.GetAll().Count + 1;
-                reservation.GroepsId = repo.GetAll().Count + 1;
+                if (reservation.ReservationId == 0) {
+                    reservation.ReservationId = repo.GetAll().Count + 1;
+                    reservation.GroepsId = repo.GetAll().Count + 1;
+                }
+                
                 // Controleer of de reservatie-ID al bestaat
                 if (IsReservation(reservation.ReservationId)) {
                     throw new ReservationException("Reservation already exists.");
@@ -174,7 +177,7 @@ namespace FitnessManagement.BL.Services {
                 }
                 repo.AddReservation(reservation);
                 if (dubbleReservation) {
-                    secondReservation.ReservationId = repo.GetAll().Count + 1;
+                    secondReservation.ReservationId = reservation.ReservationId + 1;
                     repo.AddReservation(secondReservation);
                 }
                
@@ -208,13 +211,14 @@ namespace FitnessManagement.BL.Services {
                 if (!IsReservation(reservation.ReservationId)) {
                     throw new ReservationException("Reservation bestaat niet");
                 } else {
+                    reservation.GroepsId = reservation.ReservationId;
                     DeleteReservation(reservation);
                     AddReservation(reservation, dubbleReservation);
                     return reservation;
                 }
             } catch (Exception ex) {
 
-                throw new ReservationException("AddReservation");
+                throw new ReservationException("UpdateReservation");
             }
 
         }

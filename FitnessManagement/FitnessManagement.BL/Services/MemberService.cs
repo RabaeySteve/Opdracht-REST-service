@@ -98,11 +98,12 @@ namespace FitnessManagement.BL.Services {
                 throw;
             }
         }
-        public void AddProgram(int memberId, Program program) {
+        public void AddProgram(int memberId, string programCode) {
             try {
-                if (IsProgram(program.ProgramCode)) {
-                    
+                if (IsProgram(programCode)) {
+                    throw new MemberException("");
                 }
+               repo.AddProgram(memberId, programCode);
             } catch (Exception ex) {
 
                 throw;

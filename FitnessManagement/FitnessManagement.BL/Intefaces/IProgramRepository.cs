@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace FitnessManagement.BL.Intefaces {
     public interface IProgramRepository {
         IEnumerable<Program> GetAll();
+        
         Program GetProgramByProgramCode(string programCode);
         bool IsProgram(string programCode);
         void AddProgram(Program Program);

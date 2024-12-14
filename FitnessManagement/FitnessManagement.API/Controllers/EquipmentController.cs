@@ -11,17 +11,17 @@ namespace FitnessManagement.API.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class EquipmentController : ControllerBase {
-        private EquipmentService EquipmentRepo;
+        private EquipmentService EquipmentService;
 
-        public EquipmentController(EquipmentService equipmentRepo) {
-            this.EquipmentRepo = equipmentRepo;
+        public EquipmentController(EquipmentService equipmentService) {
+            this.EquipmentService = equipmentService;
 
         }
 
         [HttpGet("{id}")]
         public ActionResult<Equipment> Get(int id) {
             try {
-                return EquipmentRepo.GetEquipment(id);
+                return EquipmentService.GetEquipment(id);
             } catch (MemberException ex) {
 
                 return NotFound(ex.Message);
@@ -30,7 +30,7 @@ namespace FitnessManagement.API.Controllers {
 
         [HttpPost]
         public ActionResult<Equipment> Post(Equipment equipment) {
-            EquipmentRepo.AddEquipment(equipment);
+            EquipmentService.AddEquipment(equipment);
             return CreatedAtAction(nameof(Get), new { id = equipment.EquipmentId }, equipment);
         }
         [HttpPut]
@@ -39,7 +39,7 @@ namespace FitnessManagement.API.Controllers {
                 return BadRequest();
             }
             
-            EquipmentRepo.SetMaintenance(equipment.EquipmentId, equipment.IsInMaintenance);
+            EquipmentService.SetMaintenance(equipment.EquipmentId, equipment.IsInMaintenance);
             return new NoContentResult();
         }
     }

@@ -1,23 +1,14 @@
 ﻿using FitnessBL.Models;
 using FitnessManagement.API.DTO_s;
+using FitnessManagement.BL.Models;
 using FitnessManagement.EF.Exceptions;
 using static FitnessBL.Models.Member;
+using static FitnessManagement.BL.Models.Equipment;
 
 namespace FitnessManagement.API.Mapper {
     public class MemberMapper {
-        public static AddMemberDTO AddMemberPapper(Member member) {
-            return new AddMemberDTO {
-                MemberId = member.MemberId,
-                FirstName = member.FirstName,
-                LastName = member.LastName,
-                Email = member.Email,
-                Address = member.Address,
-                Birthday = member.Birthday,
-                Interests = member.Interests
-
-            };
-        }
-        public static Member ToMember(AddMemberDTO dto) {
+        
+        public static Member ToMember(MemberDTO dto) {
             return new Member {
                 MemberId = dto.MemberId,
                 FirstName = dto.FirstName,
@@ -42,6 +33,36 @@ namespace FitnessManagement.API.Mapper {
             }
 
 
+        }
+
+        public static Member MapProgramsToMember(MemberProgramsDTO dto) {
+            return new Member() {
+                MemberId=dto.MemberId,
+                Programs = dto.ProgramsList
+            };
+        }
+        public static MemberReservationsDTO MapReservationsToMember(List<Reservation> reservations) {
+            return new MemberReservationsDTO() {
+                MemberId = MemberIdFromReservations(reservations),
+                ReservationsList = reservations.Select(r => new MemberReservationsListDTO {
+                    ReservationId = r.ReservationId,
+                    Date = r.Date,
+                    StartTime = r.TimeSlotRes.StartTime,
+                    equipmentType = r.Equipment.Type
+                }).ToList()
+            };
+
+        }
+
+        public static int MemberIdFromReservations(List<Reservation> reservations) {
+            try {
+                Reservation reservation = reservations.FirstOrDefault();
+                int reservationMember = reservation.Member.MemberId;
+                return reservationMember;
+            } catch (Exception) {
+
+                throw;
+            }
         }
     }
 }

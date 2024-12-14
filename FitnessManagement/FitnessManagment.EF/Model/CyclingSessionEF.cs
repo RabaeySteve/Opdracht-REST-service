@@ -33,15 +33,20 @@ namespace FitnessManagement.EF.Model {
 
         [Required]
         public int Duration { get; set; }
-
+        [Required]
         public float AvgWatt { get; set; }
+        [Required]
         public float MaxWatt { get; set; }
+        [Required]
         public float AvgCadence { get; set; }
+        [Required]
         public float MaxCadence { get; set; }
 
+        [Required]
         [Column(TypeName = "nvarchar(45)")]
         public string? TrainingType { get; set; }
 
+        [Required]
         [Column(TypeName = "nvarchar(500)")]
         public string? Comment { get; set; }
 
