@@ -1,5 +1,8 @@
 ﻿using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
+using FitnessManagement.EF.Mappers;
+using FitnessManagement.EF.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +16,27 @@ namespace FitnessManagement.EF.Repositories {
         public CyclingRepository(string connectioString) {
             this.ctx = new FitnessManagementContext(connectioString);
         }
+        private void SaveAndClear() {
+            ctx.SaveChanges();
+            ctx.ChangeTracker.Clear();
+        }
 
         public void AddSession(CyclingSession session) {
-            throw new NotImplementedException();
+            try {
+                ctx.CyclingSession.Add(MapCyclingSession.MapToDB(session, ctx));
+                SaveAndClear();
+            } catch (Exception) {
+
+                throw;
+            }
         }
 
         public void Delete(int sessionid) {
-            throw new NotImplementedException();
+            CyclingSessionEF cyclingSessionEF = ctx.CyclingSession.Where(c => c.CyclingSessionId == sessionid).FirstOrDefault();
+            if (cyclingSessionEF != null) {
+                ctx.CyclingSession.Remove(cyclingSessionEF);
+                SaveAndClear();
+            }
         }
 
         public IEnumerable<CyclingSession> GetAll() {
@@ -27,19 +44,44 @@ namespace FitnessManagement.EF.Repositories {
         }
 
         public CyclingSession GetById(int id) {
-            throw new NotImplementedException();
+            try {
+                return MapCyclingSession.MapToDomain(ctx.CyclingSession.Where(c => c.CyclingSessionId == id).Include(x => x.Member).AsNoTracking().FirstOrDefault(), ctx);
+            } catch (Exception) {
+
+                throw;
+            }
         }
 
         public bool IsCyclingSession(int id) {
-            throw new NotImplementedException();
+            try {
+                return ctx.CyclingSession.Any(c => c.CyclingSessionId == id);
+            } catch (Exception) {
+
+                throw;
+            }
         }
 
         public List<CyclingSession> SessionsforMember(int memberId) {
-            throw new NotImplementedException();
+            try {
+                List<CyclingSessionEF> cyclingSessionEFs = ctx.CyclingSession.Where(m => m.Member.MemberId == memberId)
+                    .Include(m => m.Member).ToList();
+
+                return cyclingSessionEFs.Select(c => MapCyclingSession.MapToDomain(c, ctx)).ToList();
+            } catch (Exception) {
+
+                throw;
+            }
         }
 
         public void UpdateSession(CyclingSession session) {
-            throw new NotImplementedException();
+            try {
+                CyclingSessionEF sessionEF = MapCyclingSession.MapToDB(session, ctx);
+                ctx.CyclingSession.Update(sessionEF);
+                SaveAndClear();
+            } catch (Exception) {
+
+                throw;
+            }
         }
     }
 }

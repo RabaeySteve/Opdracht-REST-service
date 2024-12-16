@@ -14,6 +14,10 @@ namespace FitnessDataLayerProvider {
         public IReservationRepository ReservationRepository { get; }
 
         public IProgramRepository ProgramRepository { get; }
+        public RunningRepository RunningRepository { get; }
+        public IRunningSessionRepository RunningSessionRepository { get; }
+        public ICyclingRepository CyclingRepository { get; }
+
 
         public FitnessRepositories(string connectionString, string repositoryType) {
 
@@ -25,6 +29,9 @@ namespace FitnessDataLayerProvider {
                         TimeSlotRepository = new TimeSlotRepository(connectionString);
                         ReservationRepository = new ReservationRepository(connectionString);
                         ProgramRepository = new ProgramRepository(connectionString);
+                        RunningRepository = new RunningRepository(connectionString);
+                        CyclingRepository = new CyclingRepository(connectionString);
+
                         break;
                     
                     default: throw new Exception();

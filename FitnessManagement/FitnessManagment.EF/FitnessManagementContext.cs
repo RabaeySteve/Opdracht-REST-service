@@ -16,12 +16,12 @@ namespace FitnessManagement.EF {
 
         public DbSet<MemberEF> members { get; set; }
         public DbSet<ProgramEF> programs { get; set; }
-        public DbSet<RusnningSessionEF> RusnningSession_main { get; set; }
+        public DbSet<RunningSessionEF> RunningSession_main { get; set; }
         public DbSet<CyclingSessionEF> CyclingSession { get; set; }
         public DbSet<EquipmentEF> equipment { get; set; }
         public DbSet<ReservationEF> reservation { get; set; }
         public DbSet<TimeSlotEF> time_slot { get; set; }
-        public DbSet<RusnningSessionDetailsEF> RusnningSession_detail { get; set; }
+        public DbSet<RunningSessionDetailsEF> RunningSession_detail { get; set; }
         public DbSet<ProgramMember> programMember { get; set; }
         public FitnessManagementContext(string connectionString) {
             this.connectionString = connectionString;

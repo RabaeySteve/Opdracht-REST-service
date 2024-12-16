@@ -6,25 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Models {
-    public class RusnningSessionDetail {
+    public class RunningSessionDetail {
         private int _intervalTime;
         private float _intervalSpeed;
 
-        public RusnningSessionDetail(int rusnningSessionId, int seqNr, int intervalTime, float intervalSpeed) {
-            RusnningSessionId = rusnningSessionId;
+        public RunningSessionDetail() {
+        }
+
+        public RunningSessionDetail(int runningSessionId, int seqNr, int intervalTime, float intervalSpeed) {
+            RunningSessionId = runningSessionId;
             SeqNr = seqNr;
             IntervalTime = intervalTime;
             IntervalSpeed = intervalSpeed;
         }
 
-        public int RusnningSessionId { get; set; }
+        public int RunningSessionId { get; set; }
         public int SeqNr { get; set; } 
 
         public int IntervalTime {
             get => _intervalTime;
             set {
                 if (value <= 0) {
-                    throw new RusnningSessionException("Interval time must be greater than 0.");
+                    throw new RunningSessionException("Interval time must be greater than 0.");
                 }
                 _intervalTime = value;
             }
@@ -34,7 +37,7 @@ namespace FitnessManagement.BL.Models {
             get => _intervalSpeed;
             set {
                 if (value <= 0) {
-                    throw new RusnningSessionException("Interval speed must be greater than 0.");
+                    throw new RunningSessionException("Interval speed must be greater than 0.");
                 }
                 _intervalSpeed = value;
             }
@@ -43,7 +46,7 @@ namespace FitnessManagement.BL.Models {
         
 
         public override string? ToString() {
-            return $"RusnningSession ID: {RusnningSessionId}, Seq Nr: {SeqNr}, Interval Time: {IntervalTime} sec, Interval Speed: {IntervalSpeed} km/h";
+            return $"RusnningSession ID: {RunningSessionId}, Seq Nr: {SeqNr}, Interval Time: {IntervalTime} sec, Interval Speed: {IntervalSpeed} km/h";
         }
     }
 }

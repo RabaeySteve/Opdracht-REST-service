@@ -28,7 +28,11 @@ namespace FitnessManagement.API {
             builder.Services.AddSingleton<ReservationService>();
             builder.Services.AddSingleton<IProgramRepository>(r => FitnessDataLayerProvider.FitnessDatalayerFactory.GeefRepositories(connectionString, dataLayer).ProgramRepository);
             builder.Services.AddSingleton<ProgramService>();
-            
+            builder.Services.AddSingleton<IRunningSessionRepository>(r => FitnessDataLayerProvider.FitnessDatalayerFactory.GeefRepositories(connectionString, dataLayer).RunningRepository);
+            builder.Services.AddSingleton<RunningSessionService>();
+            builder.Services.AddSingleton<ICyclingRepository>(r => FitnessDataLayerProvider.FitnessDatalayerFactory.GeefRepositories(connectionString, dataLayer).CyclingRepository);
+            builder.Services.AddSingleton<CyclingSessionService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

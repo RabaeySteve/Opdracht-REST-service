@@ -16,8 +16,9 @@ namespace FitnessManagement.BL.Models {
         private float _maxCadence;
         private float _maxWatt;
 
-       
 
+        public CyclingSession() {
+        }
 
         public CyclingSession(DateTime date, int duration, float avgWatt, float maxCadence, float avgCadence, float maxWatt, int cyclingSessionId, Member member, string comment, CyclingTrainingType type) {
             Date = date; 
@@ -33,6 +34,7 @@ namespace FitnessManagement.BL.Models {
         }
 
         
+
         public int CyclingSessionId { get; set; }
         public Member CyclingMember { get; set; }
 
@@ -107,7 +109,7 @@ namespace FitnessManagement.BL.Models {
             NoType
         }
         public override string ToString() {
-            return $"CyclingSession ID: {CyclingSessionId}, Member ID: {MemberId}, Date: {Date.ToShortDateString()}, " +
+            return $"CyclingSession ID: {CyclingSessionId}, Member ID: {CyclingMember}, Date: {Date.ToShortDateString()}, " +
                    $"Duration: {Duration} mins, AvgWatt: {AvgWatt}, MaxCadence: {MaxCadence}, Type: {Type}, Comment: {Comment}";
         }
     }
