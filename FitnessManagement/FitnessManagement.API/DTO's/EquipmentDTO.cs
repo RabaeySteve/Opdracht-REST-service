@@ -3,4 +3,5 @@
         public int EquipmentId { get; set; }
         public bool IsInMaintenance { get; set; }
     }
+    
 }

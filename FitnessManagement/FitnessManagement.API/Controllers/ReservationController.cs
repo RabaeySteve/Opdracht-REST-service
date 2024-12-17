@@ -29,7 +29,7 @@ namespace FitnessManagement.API.Controllers {
         }
         [HttpPost]
         public ActionResult<List<ReservationDTO>> Post(ReservationDTO reservationDTO) {
-            ReservationRepo.AddReservation(ReservationMapper.MapReservation(reservationDTO), reservationDTO.DubleReservation);
+            ReservationRepo.AddReservation(ReservationMapper.MapReservation(reservationDTO));
             return CreatedAtAction(nameof(Get), new { id =  reservationDTO.MemberId}, reservationDTO);
         }
         [HttpDelete("{id}")]
@@ -40,14 +40,14 @@ namespace FitnessManagement.API.Controllers {
             ReservationRepo.DeleteReservation(ReservationRepo.GetReservation(id).FirstOrDefault());
             return NoContent();
         }
-        [HttpPut]
-        public IActionResult Put(int id, [FromBody] ReservationDTO reservationDTO) {
-            if (reservationDTO == null || reservationDTO.ReservationId != id) {
-                return BadRequest();
-            }
-            ReservationRepo.UpdateReservation(ReservationMapper.MapReservation(reservationDTO), reservationDTO.DubleReservation);
-            return new NoContentResult();
-        }
+        //[HttpPut]
+        //public IActionResult Put(int id, [FromBody] ReservationDTO reservationDTO) {
+        //    if (reservationDTO == null || reservationDTO.ReservationId != id) {
+        //        return BadRequest();
+        //    }
+        //    ReservationRepo.UpdateReservation(ReservationMapper.MapReservation(reservationDTO), reservationDTO.DubleReservation);
+        //    return new NoContentResult();
+        //}
 
        
     }

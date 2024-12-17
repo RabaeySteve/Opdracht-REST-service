@@ -14,13 +14,13 @@ namespace FitnessBL.Models {
         private string _lastName;
         private string _email;
         private string _address;
-        private DateTime _birthday;
+        private DateOnly _birthday;
         private List<string> _interests = new List<string>();
 
 
         public Member() { }
 
-        public Member(int memberId, string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? memberType, List<Program> programs) {
+        public Member(int memberId, string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? memberType, List<Program> programs) {
             MemberId = memberId;
             _firstName = firstName;
             _lastName = lastName;
@@ -32,7 +32,7 @@ namespace FitnessBL.Models {
             Programs = programs;
         }
 
-        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type, List<Program> programs) {
+        public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type, List<Program> programs) {
             _firstName = firstName;
             _lastName = lastName;
             _email = email;
@@ -43,7 +43,7 @@ namespace FitnessBL.Models {
             Programs = programs;
         }
 
-        public Member(string firstName, string lastName, string? email, string address, DateTime birthday, List<string>? interests, MemberType? type)
+        public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type)
         : this(firstName, lastName, email, address, birthday, interests, type, new List<Program>()) {
         }
 
@@ -90,14 +90,18 @@ namespace FitnessBL.Models {
             }
         }
 
-        public DateTime Birthday {
+        public DateOnly Birthday {
             get => _birthday;
             set {
-                if (value > DateTime.Now)
+                DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+                if (value > today)
                     throw new MemberException("Birthday cannot be in the future.");
+
                 _birthday = value;
             }
         }
+
 
         public List<string>? Interests {
             get => _interests;

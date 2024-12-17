@@ -11,16 +11,16 @@ namespace FitnessManagement.BL.Models {
        
         private DateTime _date;
         private int _duration;
-        private float _avgWatt;
-        private float _avgCadence;
-        private float _maxCadence;
-        private float _maxWatt;
+        private int _avgWatt;
+        private int _avgCadence;
+        private int _maxCadence;
+        private int _maxWatt;
 
 
         public CyclingSession() {
         }
 
-        public CyclingSession(DateTime date, int duration, float avgWatt, float maxCadence, float avgCadence, float maxWatt, int cyclingSessionId, Member member, string comment, CyclingTrainingType type) {
+        public CyclingSession(DateTime date, int duration, int avgWatt, int maxCadence, int avgCadence, int maxWatt, int cyclingSessionId, Member member, string comment, CyclingTrainingType type) {
             Date = date; 
             Duration = duration; 
             AvgWatt = avgWatt; 
@@ -50,12 +50,12 @@ namespace FitnessManagement.BL.Models {
         }
 
         public CyclingTrainingType Type { get; set; }
-        public float AvgCadence {
+        public int AvgCadence {
             get { return _avgCadence; }
             set { _avgCadence = value; }
         }
 
-        public float MaxCadence {
+        public int MaxCadence {
             get => _maxCadence;
             set {
                 if (value < 0) {
@@ -65,7 +65,7 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        public float AvgWatt {
+        public int AvgWatt {
             get => _avgWatt;
             set {
                 if (value < 0) {
@@ -74,7 +74,7 @@ namespace FitnessManagement.BL.Models {
                 _avgWatt = value;
             }
         }
-        public float MaxWatt {
+        public int MaxWatt {
             get { return _maxWatt; }
             set { _maxWatt = value; }
         }
@@ -102,10 +102,10 @@ namespace FitnessManagement.BL.Models {
         }
 
         public enum CyclingTrainingType {
-            Fun,
-            Endurance,
-            Interval,
-            Recovery,
+            fun,
+            endurance,
+            interval,
+            ecovery,
             NoType
         }
         public override string ToString() {

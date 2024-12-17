@@ -21,7 +21,7 @@ namespace FitnessManagement.EF.Repositories {
             ctx.SaveChanges();
             ctx.ChangeTracker.Clear();
         }
-        public List<Reservation> GetReservationsMemberDate(int memberId, DateTime date) {
+        public List<Reservation> GetReservationsMemberDate(int memberId, DateOnly date) {
             try {
                 List<Reservation> reservationsMember = new List<Reservation>();
                 reservationsMember = GetReservationsMember(memberId);

@@ -25,7 +25,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public void AddProgram(Program program) {
             try {
-                ctx.programs.Add(MapProgram.MapToDB(program));
+                ctx.program.Add(MapProgram.MapToDB(program));
                 SaveAndClear();
             } catch (Exception ex) {
                 throw new RepoException("ProgramRepo - AddProgram", ex);
@@ -36,7 +36,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public IEnumerable<Program> GetAll() {
             try {
-                return ctx.programs.Select(p => MapProgram.MapToDomain(p)).ToList();
+                return ctx.program.Select(p => MapProgram.MapToDomain(p)).ToList();
             } catch (Exception ex) {
                 throw new RepoException("ProgramRepo - GetAll", ex);
             }
@@ -46,7 +46,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsProgramNew(string name, DateTime startDate) {
             try {
-                return ctx.programs.Any(p => p.Name == name && p.StartDate == startDate);
+                return ctx.program.Any(p => p.Name == name && p.StartDate == startDate);
             } catch (Exception ex) {
                 throw new RepoException("ProgramRepo - IsProgram", ex);
             }
@@ -54,7 +54,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public void UpdateProgram(Program program) {
             try {
-                ctx.programs.Update(MapProgram.MapToDB(program));
+                ctx.program.Update(MapProgram.MapToDB(program));
                 SaveAndClear();
             } catch (Exception ex) {
                 throw new RepoException("ProgramRepo - UpdateProgram", ex);
@@ -63,7 +63,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsProgram(string programCode) {
             try {
-                return ctx.programs.Any(x => x.ProgramCode == programCode);
+                return ctx.program.Any(x => x.ProgramCode == programCode);
             } catch (Exception ex) {
 
                 throw;
@@ -72,7 +72,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public Program GetProgramByProgramCode(string programCode) {
             try {
-                return MapProgram.MapToDomain(ctx.programs.Where(p => p.ProgramCode == programCode).AsNoTracking().FirstOrDefault());
+                return MapProgram.MapToDomain(ctx.program.Where(p => p.ProgramCode == programCode).AsNoTracking().FirstOrDefault());
             } catch (Exception ex) {
 
                 throw new RepoException("ProgramRepo - GetProgramByProgramCode", ex);

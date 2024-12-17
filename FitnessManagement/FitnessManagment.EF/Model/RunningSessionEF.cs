@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitnessManagement.EF.Model {
+   
     public class RunningSessionEF {
         public RunningSessionEF() { }
 
@@ -20,22 +17,30 @@ namespace FitnessManagement.EF.Model {
             Details = details;
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
+        [Column("runningsession_id")] // Primaire sleutel
         public int RunningSessionId { get; set; }
 
         [Required]
+        [Column("date", TypeName = "datetime2(0)")]
         public DateTime Date { get; set; }
 
         [Required]
+        [Column("duration")]
         public int Duration { get; set; }
 
+        [Required]
+        [Column("avg_speed")]
         public float AvgSpeed { get; set; }
 
-        // Foreign key
-        
+        [Required]
+        [Column("member_id")]
+        public int MemberId { get; set; }
+
+        [ForeignKey("member_id")]
         public MemberEF Member { get; set; }
 
-
+        [NotMapped] // Wordt niet in de tabel opgeslagen
         public List<RunningSessionDetailsEF> Details { get; set; }
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessManagement.EF.Model {
+    
     public class RunningSessionDetailsEF {
         public RunningSessionDetailsEF(int runningSessionId, int seqNr, int intervalTime, float intervalSpeed) {
             RunningSessionId = runningSessionId;
@@ -15,19 +11,19 @@ namespace FitnessManagement.EF.Model {
             IntervalSpeed = intervalSpeed;
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Column("runningsession_id")] // Primaire sleutel - Deel 1
         public int RunningSessionId { get; set; }
+
+        [Column("seq_nr")] // Primaire sleutel - Deel 2
         [Required]
-        public int SeqNr { get; set; } 
+        public int SeqNr { get; set; }
 
         [Required]
+        [Column("interval_time")]
         public int IntervalTime { get; set; }
+
         [Required]
-        public float IntervalSpeed { get; set; } 
-
-        
-        
-        
-
+        [Column("interval_speed")]
+        public float IntervalSpeed { get; set; }
     }
 }

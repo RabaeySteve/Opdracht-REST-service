@@ -23,7 +23,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public void AddSession(CyclingSession session) {
             try {
-                ctx.CyclingSession.Add(MapCyclingSession.MapToDB(session, ctx));
+                ctx.cyclingsession.Add(MapCyclingSession.MapToDB(session, ctx));
                 SaveAndClear();
             } catch (Exception) {
 
@@ -32,9 +32,9 @@ namespace FitnessManagement.EF.Repositories {
         }
 
         public void Delete(int sessionid) {
-            CyclingSessionEF cyclingSessionEF = ctx.CyclingSession.Where(c => c.CyclingSessionId == sessionid).FirstOrDefault();
+            CyclingSessionEF cyclingSessionEF = ctx.cyclingsession.Where(c => c.CyclingSessionId == sessionid).FirstOrDefault();
             if (cyclingSessionEF != null) {
-                ctx.CyclingSession.Remove(cyclingSessionEF);
+                ctx.cyclingsession.Remove(cyclingSessionEF);
                 SaveAndClear();
             }
         }
@@ -45,7 +45,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public CyclingSession GetById(int id) {
             try {
-                return MapCyclingSession.MapToDomain(ctx.CyclingSession.Where(c => c.CyclingSessionId == id).Include(x => x.Member).AsNoTracking().FirstOrDefault(), ctx);
+                return MapCyclingSession.MapToDomain(ctx.cyclingsession.Where(c => c.CyclingSessionId == id).Include(x => x.Member).AsNoTracking().FirstOrDefault(), ctx);
             } catch (Exception) {
 
                 throw;
@@ -54,7 +54,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsCyclingSession(int id) {
             try {
-                return ctx.CyclingSession.Any(c => c.CyclingSessionId == id);
+                return ctx.cyclingsession.Any(c => c.CyclingSessionId == id);
             } catch (Exception) {
 
                 throw;
@@ -63,7 +63,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public List<CyclingSession> SessionsforMember(int memberId) {
             try {
-                List<CyclingSessionEF> cyclingSessionEFs = ctx.CyclingSession.Where(m => m.Member.MemberId == memberId)
+                List<CyclingSessionEF> cyclingSessionEFs = ctx.cyclingsession.Where(m => m.Member.MemberId == memberId)
                     .Include(m => m.Member).ToList();
 
                 return cyclingSessionEFs.Select(c => MapCyclingSession.MapToDomain(c, ctx)).ToList();
@@ -76,7 +76,7 @@ namespace FitnessManagement.EF.Repositories {
         public void UpdateSession(CyclingSession session) {
             try {
                 CyclingSessionEF sessionEF = MapCyclingSession.MapToDB(session, ctx);
-                ctx.CyclingSession.Update(sessionEF);
+                ctx.cyclingsession.Update(sessionEF);
                 SaveAndClear();
             } catch (Exception) {
 

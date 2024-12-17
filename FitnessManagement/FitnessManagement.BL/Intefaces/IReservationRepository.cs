@@ -9,7 +9,7 @@ namespace FitnessManagement.BL.Intefaces {
     public interface IReservationRepository {
         List<Reservation> GetAll();
         List<Reservation> GetReservationsMember(int memberId);
-        List<Reservation> GetReservationsMemberDate(int memberId, DateTime date);
+        List<Reservation> GetReservationsMemberDate(int memberId, DateOnly date);
         
         List<Equipment> GetAllEquipment();
         Equipment GetEquipment(int EquipmentId);

@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FitnessBL.Models;
 
 namespace FitnessManagement.EF.Model {
+    
     public class CyclingSessionEF {
         public CyclingSessionEF() { }
 
-        public CyclingSessionEF(int cyclingSessionId, DateTime date, int duration, float avgWatt, float maxWatt, float avgCadence, float maxCadence, string? trainingType, string? comment, MemberEF member) {
+        public CyclingSessionEF(int cyclingSessionId, DateTime date, int duration, int avgWatt, int maxWatt, int avgCadence, int maxCadence, string? trainingType, string? comment, MemberEF member) {
             CyclingSessionId = cyclingSessionId;
             Date = date;
             Duration = duration;
@@ -26,32 +21,45 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
+        [Column("cyclingsession_id")] // Primaire sleutel
         public int CyclingSessionId { get; set; }
 
         [Required]
+        [Column("date", TypeName = "datetime2(0)")] // Datum
         public DateTime Date { get; set; }
 
         [Required]
+        [Column("duration")]
         public int Duration { get; set; }
-        [Required]
-        public float AvgWatt { get; set; }
-        [Required]
-        public float MaxWatt { get; set; }
-        [Required]
-        public float AvgCadence { get; set; }
-        [Required]
-        public float MaxCadence { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(45)")]
+        [Column("avg_watt")]
+        public int AvgWatt { get; set; }
+
+        [Required]
+        [Column("max_watt")]
+        public int MaxWatt { get; set; }
+
+        [Required]
+        [Column("avg_cadence")]
+        public int AvgCadence { get; set; }
+
+        [Required]
+        [Column("max_cadence")]
+        public int MaxCadence { get; set; }
+
+        [Required]
+        [Column("trainingtype", TypeName = "nvarchar(45)")]
         public string? TrainingType { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar(500)")]
+        [Column("comment", TypeName = "nvarchar(500)")]
         public string? Comment { get; set; }
 
-        // FK
-        
+        //[Required]
+        //[Column("member_id")]
+        //public int MemberId { get; set; }
+
+        [ForeignKey("member_id")]
         public MemberEF Member { get; set; }
     }
 }

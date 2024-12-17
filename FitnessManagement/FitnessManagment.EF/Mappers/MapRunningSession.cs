@@ -38,7 +38,7 @@ namespace FitnessManagement.EF.Mappers {
 
         public static List<RunningSessionDetail> GetDetailList(int runningSessionId, FitnessManagementContext ctx) {
             try {
-                List<RunningSessionDetailsEF> runningSessionDetailsEFs = ctx.RunningSession_detail
+                List<RunningSessionDetailsEF> runningSessionDetailsEFs = ctx.runningsession_detail
                     .Where(rd => rd.RunningSessionId == runningSessionId)
                     .ToList();
 

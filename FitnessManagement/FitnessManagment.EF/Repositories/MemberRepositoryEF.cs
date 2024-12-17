@@ -84,7 +84,7 @@ namespace FitnessManagement.EF.Repositories {
                 throw new RepoException("MemberRepo - IsMember", ex);
             }
         }
-        public bool IsMember(string firstname, string adress, DateTime birthday) {
+        public bool IsMember(string firstname, string adress, DateOnly birthday) {
             try {
                 return ctx.members.Any(x => x.FirstName == firstname && x.Address == adress && x.Birthday == birthday);
             } catch (Exception ex) {
@@ -115,7 +115,7 @@ namespace FitnessManagement.EF.Repositories {
         public bool ProgramMemberExist(string programCode, int memberId) {
             try {
                 MemberEF memberEF = ctx.members.Include(m => m.MemberPrograms).FirstOrDefault(m => m.MemberId == memberId);
-                ProgramEF programEF = ctx.programs.FirstOrDefault(p => p.ProgramCode == programCode);
+                ProgramEF programEF = ctx.program.FirstOrDefault(p => p.ProgramCode == programCode);
 
                 return memberEF.MemberPrograms.Any(mp => mp.ProgramCode == programCode);
             } catch (Exception ex) {
@@ -126,11 +126,11 @@ namespace FitnessManagement.EF.Repositories {
         public void AddProgram(int memberId, string programCode) {
             try {
                 MemberEF memberEF = ctx.members.Include(m => m.MemberPrograms).FirstOrDefault(m => m.MemberId == memberId);
-                ProgramEF programEF = ctx.programs.FirstOrDefault(p => p.ProgramCode == programCode);
+                ProgramEF programEF = ctx.program.FirstOrDefault(p => p.ProgramCode == programCode);
 
                 bool exists = memberEF.MemberPrograms.Any(mp => mp.ProgramCode == programCode);
 
-                int currentMembers= ctx.programMember.Where(p => p.ProgramCode == programCode).Count();
+                int currentMembers= ctx.programmembers.Where(p => p.ProgramCode == programCode).Count();
 
                 
                 if (!exists && currentMembers < programEF.MaxMembers) {
@@ -140,7 +140,7 @@ namespace FitnessManagement.EF.Repositories {
                         Program = programEF,
                         Member = memberEF
                     };
-                    ctx.programMember.Add(programMember);
+                    ctx.programmembers.Add(programMember);
                     
                 }
                 SaveAndClear();

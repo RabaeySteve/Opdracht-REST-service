@@ -43,7 +43,7 @@ namespace FitnessManagement.BL.Services {
                 throw new MemberException("IsMember", ex);
             }
         }
-        public bool IsMember(string firstname, string adress, DateTime birthday) {
+        public bool IsMember(string firstname, string adress, DateOnly birthday) {
             try {
                 return repo.IsMember(firstname, adress, birthday);
             } catch (Exception ex) {
@@ -100,7 +100,7 @@ namespace FitnessManagement.BL.Services {
         }
         public void AddProgram(int memberId, string programCode) {
             try {
-                if (IsProgram(programCode)) {
+                if (!IsProgram(programCode)) {
                     throw new MemberException("");
                 }
                repo.AddProgram(memberId, programCode);

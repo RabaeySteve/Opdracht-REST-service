@@ -10,12 +10,12 @@ namespace FitnessManagement.BL.Models
 {
     public class Reservation
     {
-        private DateTime _date;
+        private DateOnly _date;
 
         public Reservation() {
         }
 
-        public Reservation(DateTime date, Equipment equipment, TimeSlot timeSlot, Member member, int groupsId) {
+        public Reservation(DateOnly date, Equipment equipment, TimeSlot timeSlot, Member member, int groupsId) {
             _date = date;
             Equipment = equipment;
             TimeSlotRes = timeSlot;
@@ -23,7 +23,7 @@ namespace FitnessManagement.BL.Models
             GroepsId = groupsId;
         }
 
-        public Reservation(DateTime date, int reservationId, Equipment equipment, TimeSlot timeSlot, Member member, int groupsId) {
+        public Reservation(DateOnly date, int reservationId, Equipment equipment, TimeSlot timeSlot, Member member, int groupsId) {
             _date = date;
             ReservationId = reservationId;
             Equipment = equipment;
@@ -32,17 +32,22 @@ namespace FitnessManagement.BL.Models
             GroepsId = groupsId;
         }
 
-        public DateTime Date {
+        public DateOnly Date {
             get { return _date; }
             set {
-                if (value.Date < DateTime.Now.Date ) {
+                DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+                if (value < today) {
                     throw new ReservationException("Reservation can't happen in the past.");
-                } if (value.Date > DateTime.Now.AddDays(7)) {
-                    throw new ReservationException("Reservation can't be later then a week.");
                 }
-                
-                _date = value; }
+                if (value > today.AddDays(7)) {
+                    throw new ReservationException("Reservation can't be later than a week.");
+                }
+
+                _date = value;
+            }
         }
+
 
 
         public int GroepsId { get; set; }

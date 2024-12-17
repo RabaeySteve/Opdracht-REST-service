@@ -23,7 +23,7 @@ namespace FitnessManagement.EF.Repositories {
         public void AddSession(RunningSession session) {
             try {
                 RunningSessionEF runninSessionEF = MapRunningSession.MapToDB(session, ctx);
-                ctx.RunningSession_main.Add(runninSessionEF);
+                ctx.runningsession_main.Add(runninSessionEF);
                 SaveAndClear();
             } catch (Exception) {
                 throw;
@@ -31,12 +31,12 @@ namespace FitnessManagement.EF.Repositories {
         }
 
         public void Delete(int sessionId) {
-            RunningSessionEF runningSessionEF = ctx.RunningSession_main
+            RunningSessionEF runningSessionEF = ctx.runningsession_main
                 .Where(r => r.RunningSessionId == sessionId)
                 .FirstOrDefault();
 
             if (runningSessionEF != null) {
-                ctx.RunningSession_main.Remove(runningSessionEF);
+                ctx.runningsession_main.Remove(runningSessionEF);
                 SaveAndClear();
             }
         }
@@ -44,7 +44,7 @@ namespace FitnessManagement.EF.Repositories {
         public IEnumerable<RunningSession> GetAll() {
 
             try {
-                List<RunningSessionEF> runningSessionEf = ctx.RunningSession_main.AsNoTracking().ToList();
+                List<RunningSessionEF> runningSessionEf = ctx.runningsession_main.AsNoTracking().ToList();
 
                 return runningSessionEf.Select(r => MapRunningSession.MapToDomain(r, ctx)).ToList();
             } catch (Exception) {
@@ -57,7 +57,7 @@ namespace FitnessManagement.EF.Repositories {
         public RunningSession GetById(int id) {
             try {
                 return MapRunningSession.MapToDomain(
-                    ctx.RunningSession_main
+                    ctx.runningsession_main
                         .Where(r => r.RunningSessionId == id)
                         .Include(x => x.Member)
                         .AsNoTracking()
@@ -69,7 +69,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsRunningSession(int id) {
             try {
-                return ctx.RunningSession_main.Any(r => r.RunningSessionId == id);
+                return ctx.runningsession_main.Any(r => r.RunningSessionId == id);
             } catch (Exception) {
                 throw;
             }
@@ -77,7 +77,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public List<RunningSession> SessionsForMember(int memberId) {
             try {
-                List<RunningSessionEF> runningSessionsEF = ctx.RunningSession_main
+                List<RunningSessionEF> runningSessionsEF = ctx.runningsession_main
                     .Where(r => r.Member.MemberId == memberId)
                     .Include(r => r.Member)
                     .ToList();
@@ -92,7 +92,7 @@ namespace FitnessManagement.EF.Repositories {
 
         public void UpdateSession(RunningSession session) {
             try {
-                ctx.RunningSession_main.Update(MapRunningSession.MapToDB(session, ctx));
+                ctx.runningsession_main.Update(MapRunningSession.MapToDB(session, ctx));
                 SaveAndClear();
             } catch (Exception) {
                 throw;

@@ -11,7 +11,7 @@ namespace FitnessManagement.BL.Intefaces {
         IEnumerable<Member> GetMembers();
         Member GetMember(int id);
         bool IsMember(int id);
-        bool IsMember(string firstname,string adress, DateTime birthday);
+        bool IsMember(string firstname,string adress, DateOnly birthday);
         void AddMember(Member member);
         void UpdateMember(Member member);
 

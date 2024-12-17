@@ -104,7 +104,7 @@ namespace FitnessManagement.EF.Mappers {
         public static List<Program> GetProgramList(int memberId, FitnessManagementContext ctx) {
             try {
                 
-                List<ProgramEF> programEFs = ctx.programMember
+                List<ProgramEF> programEFs = ctx.programmembers
                     .Include(pm => pm.Program)
                     .Where(pm => pm.MemberId == memberId)
                     .Select(pm => pm.Program)

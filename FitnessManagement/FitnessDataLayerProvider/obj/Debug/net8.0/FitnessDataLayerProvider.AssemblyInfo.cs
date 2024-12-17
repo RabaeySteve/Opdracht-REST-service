@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FitnessDataLayerProvider")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+270fdd0a967d7f86aabc9cdd80ea560e6bd5302b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac7a1048530f76746ee27947e875aaedf637bee1")]
 [assembly: System.Reflection.AssemblyProductAttribute("FitnessDataLayerProvider")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FitnessDataLayerProvider")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

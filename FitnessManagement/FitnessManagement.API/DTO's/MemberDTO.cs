@@ -11,7 +11,7 @@ namespace FitnessManagement.API.DTO_s {
         public string LastName {get; set; }
         public string? Email {get; set; }
         public string Address {get; set; }
-        public DateTime Birthday {get ; set; }
+        public DateOnly Birthday {get ; set; }
         public List<string>? Interests {get; set; }
         public String? Type { get; set; }
     }
@@ -31,7 +31,7 @@ namespace FitnessManagement.API.DTO_s {
     public class MemberReservationsListDTO {
         
         public int ReservationId { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public int StartTime { get; set; }
         public EquipmentType equipmentType { get; set; }
     }
