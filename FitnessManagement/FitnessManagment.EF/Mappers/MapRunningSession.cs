@@ -9,30 +9,40 @@ using System.Threading.Tasks;
 namespace FitnessManagement.EF.Mappers {
     public class MapRunningSession {
         public static RunningSession MapToDomain(RunningSessionEF db, FitnessManagementContext ctx) {
-            return new RunningSession(
-                db.RunningSessionId,
-                MapMember.MapToDomain(db.Member, ctx),
-                db.Date,
-                db.Duration,
-                db.AvgSpeed,
-                GetDetailList(db.RunningSessionId, ctx)
-            );
+            try {
+                return new RunningSession(
+               db.RunningSessionId,
+               MapMember.MapToDomain(db.Member, ctx),
+               db.Date,
+               db.Duration,
+               db.AvgSpeed,
+               GetDetailList(db.RunningSessionId, ctx)
+           );
+            } catch (Exception ex) {
+
+                throw;
+            }
+           
         }
         public static RunningSessionEF MapToDB(RunningSession r,  FitnessManagementContext ctx) {
             MemberEF memberEF = ctx.members.Find(r.RunningMember.MemberId);
                 if (memberEF == null) { memberEF = MapMember.MapToDB(r.RunningMember); }
 
-            
-            return new RunningSessionEF(
+            try {
+                return new RunningSessionEF(
                     r.RunningSessionId,
                     r.Date,
                     r.Duration,
                     r.AvgSpeed,
                     memberEF,
                     MapDetailsToDB(r.Details)
-                   
 
                 );
+            } catch (Exception ex) {
+
+                throw;
+            }
+            
         }
 
 

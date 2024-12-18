@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace FitnessManagement.BL.Models {
     public class RunningSessionDetail {
         private int _intervalTime;
-        private float _intervalSpeed;
+        private double _intervalSpeed;
 
         public RunningSessionDetail() {
         }
 
-        public RunningSessionDetail(int runningSessionId, int seqNr, int intervalTime, float intervalSpeed) {
+        public RunningSessionDetail(int runningSessionId, int seqNr, int intervalTime, double intervalSpeed) {
             RunningSessionId = runningSessionId;
             SeqNr = seqNr;
             IntervalTime = intervalTime;
@@ -33,7 +33,7 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        public float IntervalSpeed {
+        public double IntervalSpeed {
             get => _intervalSpeed;
             set {
                 if (value <= 0) {

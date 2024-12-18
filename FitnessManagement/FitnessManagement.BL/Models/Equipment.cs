@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Models {
     public class Equipment {
-        public enum EquipmentType {
-            treadmill,
-            bike
-        }
+       
         public Equipment() {
         }
 
@@ -27,6 +24,11 @@ namespace FitnessManagement.BL.Models {
         public int EquipmentId { get; set; }
         public EquipmentType Type { get; set; }
         public bool IsInMaintenance { get; set; }
+
+        public enum EquipmentType {
+            treadmill,
+            bike
+        }
         public override string? ToString() {
             return $"Equipment: {Type} InMaintenance? {IsInMaintenance}";
         }

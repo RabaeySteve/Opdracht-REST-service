@@ -9,16 +9,41 @@ namespace FitnessManagement.API.Mapper {
     public class MemberMapper {
         
         public static Member ToMember(MemberDTO dto) {
-            return new Member {
-                MemberId = dto.MemberId,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Email = dto.Email,
-                Address = dto.Address,
-                Birthday = dto.Birthday,
-                Interests = dto.Interests,
-                Type = MapStringToMembertype(dto.Type)
-            };
+            try {
+                return new Member {
+                    MemberId = dto.MemberId,
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Email = dto.Email,
+                    Address = dto.Address,
+                    Birthday = dto.Birthday,
+                    Interests = dto.Interests,
+                    Type = MapStringToMembertype(dto.Type)
+                };
+            } catch (Exception ex) {
+
+                throw;
+            }
+            
+        }
+        public static MemberDTO ToMemberDTO(Member m) {
+            try {
+                
+                return new MemberDTO {
+                    MemberId = m.MemberId,
+                    FirstName = m.FirstName,
+                    LastName = m.LastName,
+                    Email = m.Email,
+                    Address = m.Address,
+                    Birthday = m.Birthday,
+                    Interests = m.Interests,
+                    Type = m.Type.ToString()
+                };
+            } catch (Exception ex) {
+
+                throw;
+            }
+
         }
 
         public static MemberType MapStringToMembertype(string memberType) {

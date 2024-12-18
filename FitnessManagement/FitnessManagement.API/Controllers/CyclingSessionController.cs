@@ -33,14 +33,6 @@ namespace FitnessManagement.API.Controllers {
             CyclingRepo.AddSession(CyclingSessionMapper.MapCyclingSession(cyclingSessionDTO));
             return CreatedAtAction(nameof(Get), new {id = cyclingSessionDTO.CyclingSessionId}, cyclingSessionDTO);
         }
-        [HttpPut]
-        public IActionResult Put(int id, [FromBody] CyclingSessionDTO cyclingSessionDTO) {
-            if (cyclingSessionDTO == null || cyclingSessionDTO.CyclingSessionId != id) {
-                return BadRequest();
-            }
-
-            CyclingRepo.UpdateSession(CyclingSessionMapper.MapCyclingSession(cyclingSessionDTO));
-            return new NoContentResult();
-        }
+      
     }
 }

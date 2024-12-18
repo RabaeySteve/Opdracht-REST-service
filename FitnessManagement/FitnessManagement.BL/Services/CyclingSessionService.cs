@@ -56,29 +56,20 @@ namespace FitnessManagement.BL.Services {
             
             
         }
-        public void Delete(int id) {
-            try {
-                if (!repo.IsCyclingSession(id)) throw new CyclingSessionException("");
-                repo.Delete(id);
-            } catch (Exception) {
-
-                throw;
-            }
-        }
-        public CyclingSession UpdateSession(CyclingSession session) {
-            try {
-                if (!repo.IsCyclingSession(session.CyclingSessionId)) throw new CyclingSessionException("");
-                repo.UpdateSession(session);
-                return session;
-            } catch (Exception) {
-
-                throw;
-            }
-        }
+        
+       
         public List<CyclingSession> SessionsforMember(int memberId) {
             try {
                 return repo.SessionsforMember(memberId);
             } catch (Exception) {
+
+                throw;
+            }
+        }
+        public List<CyclingSession> GetByCustomerAndDate(int memberId, int year, int month) {
+            try {
+                return repo.GetByCustomerAndDate(memberId, year, month);
+            } catch (Exception ex) {
 
                 throw;
             }

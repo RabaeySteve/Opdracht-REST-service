@@ -9,12 +9,12 @@ namespace FitnessManagement.BL.Models {
     public class RunningSession {
         private DateTime _date;
         private int _duration;
-        private float _avgSpeed;
+        private double _avgSpeed;
 
         public RunningSession() {
         }
 
-        public RunningSession(int runningSessionId, Member member, DateTime date, int duration, float avgSpeed, List<RunningSessionDetail> details) {
+        public RunningSession(int runningSessionId, Member member, DateTime date, int duration, double avgSpeed, List<RunningSessionDetail> details) {
             RunningSessionId = runningSessionId;
             RunningMember = member;
             _date = date;
@@ -48,7 +48,7 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        public float AvgSpeed {
+        public double AvgSpeed {
             get => _avgSpeed;
             set {
                 if (value <= 0) {

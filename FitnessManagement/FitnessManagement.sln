@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessDataLayerProvider", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppTestRepos", "ConsoleAppTestRepos\ConsoleAppTestRepos.csproj", "{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XunitestFitnessManagement", "XunitestFitnessManagement\XunitestFitnessManagement.csproj", "{A8258B5E-B87E-4C81-8B62-F94C96939F21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FF583EC-7B60-4B03-B39E-D8CD33D5E793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8258B5E-B87E-4C81-8B62-F94C96939F21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8258B5E-B87E-4C81-8B62-F94C96939F21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8258B5E-B87E-4C81-8B62-F94C96939F21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8258B5E-B87E-4C81-8B62-F94C96939F21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

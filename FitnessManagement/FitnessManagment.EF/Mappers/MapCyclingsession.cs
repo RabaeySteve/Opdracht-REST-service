@@ -14,19 +14,16 @@ namespace FitnessManagement.EF.Mappers {
         public static CyclingSession MapToDomain(CyclingSessionEF db, FitnessManagementContext ctx) {
             try {
                 return new CyclingSession(
+                      db.CyclingSessionId,
                       db.Date,
                       db.Duration,
                       db.AvgWatt,
-                      db.MaxCadence,
                       db.MaxWatt,
                       db.AvgCadence,
-                      db.CyclingSessionId,
-                      MapMember.MapToDomain(db.Member, ctx),
+                      db.MaxCadence,
                       db.Comment,
-                      MapStringToCycleType(db.TrainingType)
-
-
-
+                      MapStringToCycleType(db.TrainingType),
+                      MapMember.MapToDomain(db.Member, ctx)
                     );
             } catch (Exception ex) {
 

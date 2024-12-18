@@ -60,12 +60,12 @@ namespace FitnessManagement.BL.Services {
         public Program GetProgramByProgramCode(string programCode) {
             try {
                 if (!repo.IsProgram(programCode)) {
-                    throw new ProgramException("");
+                    throw new ProgramException("Program doesn't excist");
                 }
                 return repo.GetProgramByProgramCode(programCode);
             } catch (ProgramException ex) {
 
-                throw new ProgramException("");
+                throw new ProgramException("GetProgramByProgramCode", ex);
             }
         }
 

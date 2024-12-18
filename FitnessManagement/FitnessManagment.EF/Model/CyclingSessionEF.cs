@@ -21,11 +21,11 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
-        [Column("cyclingsession_id")] // Primaire sleutel
+        [Column("cyclingsession_id")] 
         public int CyclingSessionId { get; set; }
 
         [Required]
-        [Column("date", TypeName = "datetime2(0)")] // Datum
+        [Column("date", TypeName = "datetime2(0)")] 
         public DateTime Date { get; set; }
 
         [Required]
@@ -55,10 +55,7 @@ namespace FitnessManagement.EF.Model {
         [Column("comment", TypeName = "nvarchar(500)")]
         public string? Comment { get; set; }
 
-        //[Required]
-        //[Column("member_id")]
-        //public int MemberId { get; set; }
-
+        
         [ForeignKey("member_id")]
         public MemberEF Member { get; set; }
     }

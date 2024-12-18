@@ -14,7 +14,7 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
-        [Column("time_slot_id")] // Primaire sleutel
+        [Column("time_slot_id")] 
         public int TimeSlotId { get; set; }
 
         [Required]

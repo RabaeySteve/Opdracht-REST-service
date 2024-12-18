@@ -13,14 +13,14 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
-        [Column("equipment_id")] // Primaire sleutel
+        [Column("equipment_id")] 
         public int EquipmentId { get; set; }
 
         [Required]
-        [Column("device_type", TypeName = "nvarchar(45)")] // Mapping naar kolom device_type
+        [Column("device_type", TypeName = "nvarchar(45)")] 
         public string Type { get; set; }
 
-        // Extra kolom, toegevoegd achteraan
+        
         
         [Column(TypeName = "bit")]
         public bool IsInMaintenance { get; set; }

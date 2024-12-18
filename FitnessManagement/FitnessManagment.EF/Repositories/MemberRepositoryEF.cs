@@ -63,10 +63,9 @@ namespace FitnessManagement.EF.Repositories {
 
         public IEnumerable<Member> GetMembers() {
             try {
-                // Haal alle MemberEF-records op (met AsNoTracking)
-                var memberEFs = ctx.members.AsNoTracking().ToList();
+                
+                List<MemberEF> memberEFs = ctx.members.AsNoTracking().ToList();
 
-                // Map elk record naar de Business Layer
                 return memberEFs.Select(x => MapMember.MapToDomain(x, ctx)).ToList();
             } catch (Exception ex) {
                 throw new RepoException("MemberRepo - GetMembers", ex);
@@ -107,9 +106,9 @@ namespace FitnessManagement.EF.Repositories {
         public bool IsProgram(string programCode) {
             try {
                 return ctx.members.Any(m => m.MemberPrograms.Any(p => p.ProgramCode == programCode));
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("MemberRepo - IsProgram", ex);
             }
         }
         public bool ProgramMemberExist(string programCode, int memberId) {
@@ -120,7 +119,7 @@ namespace FitnessManagement.EF.Repositories {
                 return memberEF.MemberPrograms.Any(mp => mp.ProgramCode == programCode);
             } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("MemberRepo - ProgramMemberExist", ex);
             }
         }
         public void AddProgram(int memberId, string programCode) {
@@ -146,14 +145,21 @@ namespace FitnessManagement.EF.Repositories {
                 SaveAndClear();
             } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("MemberRepo - AddProgram", ex);
             }
         }
 
-        public void DeleteProgram(int memberId, string programCode) {
-            throw new NotImplementedException();
-        }
+        public int GetAllProgramMembers(string programCode) {
+            try {
+                List<MemberEF> memberEFs = ctx.members
+                .Include(x => x.MemberPrograms)
+                .Where(x => x.MemberPrograms.Any(mp => mp.ProgramCode == programCode))
+                .ToList();
+                return memberEFs.Count();
+            } catch (Exception ex) {
 
-       
+                throw new RepoException("MemberRepo - GetAllProgramMembers", ex);
+            }
+        }
     }
 }

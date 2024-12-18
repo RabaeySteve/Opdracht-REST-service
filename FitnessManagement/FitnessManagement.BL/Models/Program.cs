@@ -25,7 +25,12 @@ namespace FitnessManagement.BL.Models {
 
         public string ProgramCode {
 			get { return _programCode; }
-			set { _programCode = value; }
+			set {
+                if (value.Length > 10) {
+                    throw new ProgramException("ProgramCode can't be longer then 10 characters");
+                }
+
+                _programCode = value; }
 		}
 
         public ProgramTarget Target { get; set; }
@@ -39,9 +44,6 @@ namespace FitnessManagement.BL.Models {
 				
 				_name = value; }
 		}
-
-		
-
 		public DateTime StartDate {
 			get { return _startDate; }
 			set {if (value.Date < DateTime.Now.Date) {
@@ -50,7 +52,6 @@ namespace FitnessManagement.BL.Models {
 				
 				_startDate = value; }
 		}
-		
 		public int MaxMembers {
 			get { return _maxMembers; }
 			set {

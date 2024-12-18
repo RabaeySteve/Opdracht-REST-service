@@ -14,8 +14,8 @@ using static FitnessManagement.EF.Repositories.MemberRepositoryEF;
 namespace FitnessManagement.EF.Mappers {
     public class MapMember {
         public static Member MapToDomain(MemberEF db, FitnessManagementContext ctx) {
-			try {
-                
+            try {
+
                 return new Member(
                        db.MemberId,
                        db.FirstName,
@@ -23,15 +23,15 @@ namespace FitnessManagement.EF.Mappers {
                        db.Email,
                        db.Address,
                        db.Birthday,
-                       MapInterestStringToList(db.Interests), 
+                       MapInterestStringToList(db.Interests),
                        MapStringToMembertype(db.Type),
                        GetProgramList(db.MemberId, ctx)
 
                     );
-			} catch (Exception ex) {
+            } catch (Exception ex) {
 
-				throw new MapException("MapMember - MapToDomain", ex);
-			}
+                throw new MapException("MapMember - MapToDomain", ex);
+            }
         }
         public static MemberEF MapToDB(Member m) {
             try {
@@ -46,7 +46,7 @@ namespace FitnessManagement.EF.Mappers {
                         m.Type.ToString(),
                         MapListToMemberPrograms(m.Programs, m.MemberId)
 
-                    ) ;
+                    );
             } catch (Exception ex) {
 
                 throw new MapException("MapMember - MapToDB");
@@ -63,7 +63,7 @@ namespace FitnessManagement.EF.Mappers {
                 return MemberType.noType;
             }
 
-           
+
         }
         public static List<string> MapInterestStringToList(string interest) {
             return !string.IsNullOrWhiteSpace(interest) ? new List<string>(interest.Split(',')) : new List<string>();
@@ -72,20 +72,6 @@ namespace FitnessManagement.EF.Mappers {
         public static string MapInterestToString(List<string> interest) {
             return interest != null ? string.Join(", ", interest) : string.Empty;
         }
-
-        //public static List<Program> MapMemberProgramsToList() {
-        //    if (programMember == null ) {
-        //        return new List<Program>();
-        //    }
-
-        //    return programMember.Select(pm => new Program {
-        //        ProgramCode = pm.ProgramCode,
-        //        Name = pm.Program.Name,
-        //        StartDate = pm.Program.StartDate,
-        //        Target = MapStringToProgramTarget(pm.Program.Target),
-        //        MaxMembers = pm.Program.MaxMembers
-        //    }).ToList();
-        //}
 
         public static List<ProgramMember> MapListToMemberPrograms(List<Program> programs, int memberId) {
             return programs.Select(p => new ProgramMember {
@@ -103,7 +89,7 @@ namespace FitnessManagement.EF.Mappers {
 
         public static List<Program> GetProgramList(int memberId, FitnessManagementContext ctx) {
             try {
-                
+
                 List<ProgramEF> programEFs = ctx.programmembers
                     .Include(pm => pm.Program)
                     .Where(pm => pm.MemberId == memberId)
@@ -116,8 +102,6 @@ namespace FitnessManagement.EF.Mappers {
                     result.Add(mapProgram);
                 }
                 return result;
-
-
 
             } catch (Exception ex) {
 

@@ -8,7 +8,7 @@ namespace FitnessManagement.EF.Model {
     public class RunningSessionEF {
         public RunningSessionEF() { }
 
-        public RunningSessionEF(int runningSessionId, DateTime date, int duration, float avgSpeed, MemberEF member, List<RunningSessionDetailsEF> details) {
+        public RunningSessionEF(int runningSessionId, DateTime date, int duration, double avgSpeed, MemberEF member, List<RunningSessionDetailsEF> details) {
             RunningSessionId = runningSessionId;
             Date = date;
             Duration = duration;
@@ -18,7 +18,7 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
-        [Column("runningsession_id")] // Primaire sleutel
+        [Column("runningsession_id")] 
         public int RunningSessionId { get; set; }
 
         [Required]
@@ -31,11 +31,9 @@ namespace FitnessManagement.EF.Model {
 
         [Required]
         [Column("avg_speed")]
-        public float AvgSpeed { get; set; }
+        public double AvgSpeed { get; set; }
 
-        [Required]
-        [Column("member_id")]
-        public int MemberId { get; set; }
+        
 
         [ForeignKey("member_id")]
         public MemberEF Member { get; set; }

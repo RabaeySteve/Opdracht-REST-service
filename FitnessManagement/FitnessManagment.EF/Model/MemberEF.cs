@@ -8,16 +8,6 @@ namespace FitnessManagement.EF.Model {
     public class MemberEF {
         public MemberEF() { }
 
-        public MemberEF(string firstName, string lastName, string address, string? email, string? interests, string? type, DateOnly birthday) {
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Address = address;
-            Interests = interests;
-            Type = type;
-            Birthday = birthday;
-        }
-
         public MemberEF(int memberId, string firstName, string lastName, string? email, string address, DateOnly birthday, string? interests, string? memberType, List<ProgramMember> memberPrograms) {
             MemberId = memberId;
             FirstName = firstName;

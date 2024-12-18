@@ -1,5 +1,6 @@
 ﻿using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
+using FitnessManagement.EF.Exceptions;
 using FitnessManagement.EF.Mappers;
 using FitnessManagement.EF.Model;
 using Microsoft.EntityFrameworkCore;
@@ -25,19 +26,13 @@ namespace FitnessManagement.EF.Repositories {
             try {
                 ctx.cyclingsession.Add(MapCyclingSession.MapToDB(session, ctx));
                 SaveAndClear();
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("CyclingRepo - AddSession", ex);
             }
         }
 
-        public void Delete(int sessionid) {
-            CyclingSessionEF cyclingSessionEF = ctx.cyclingsession.Where(c => c.CyclingSessionId == sessionid).FirstOrDefault();
-            if (cyclingSessionEF != null) {
-                ctx.cyclingsession.Remove(cyclingSessionEF);
-                SaveAndClear();
-            }
-        }
+       
 
         public IEnumerable<CyclingSession> GetAll() {
             throw new NotImplementedException();
@@ -46,18 +41,18 @@ namespace FitnessManagement.EF.Repositories {
         public CyclingSession GetById(int id) {
             try {
                 return MapCyclingSession.MapToDomain(ctx.cyclingsession.Where(c => c.CyclingSessionId == id).Include(x => x.Member).AsNoTracking().FirstOrDefault(), ctx);
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("CyclingRepo - GetById", ex);
             }
         }
 
         public bool IsCyclingSession(int id) {
             try {
                 return ctx.cyclingsession.Any(c => c.CyclingSessionId == id);
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("CyclingRepo - IsCyclingSession", ex);
             }
         }
 
@@ -67,20 +62,25 @@ namespace FitnessManagement.EF.Repositories {
                     .Include(m => m.Member).ToList();
 
                 return cyclingSessionEFs.Select(c => MapCyclingSession.MapToDomain(c, ctx)).ToList();
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("CyclingRepo - SessionsforMember", ex);
             }
         }
 
-        public void UpdateSession(CyclingSession session) {
+        public List<CyclingSession> GetByCustomerAndDate(int memberId, int year, int month) {
             try {
-                CyclingSessionEF sessionEF = MapCyclingSession.MapToDB(session, ctx);
-                ctx.cyclingsession.Update(sessionEF);
-                SaveAndClear();
-            } catch (Exception) {
+                List<CyclingSessionEF> cyclingSessionsEF = ctx.cyclingsession
+                   .Where(r => r.Member.MemberId == memberId &&
+                               r.Date.Year == year &&
+                               r.Date.Month == month)
+                   .AsNoTracking()
+                   .ToList();
 
-                throw;
+
+                return cyclingSessionsEF.Select(x => MapCyclingSession.MapToDomain(x, ctx)).ToList();
+            } catch (Exception ex) {
+                throw new RepoException("Error fetching running sessions by customer and date", ex);
             }
         }
     }

@@ -12,10 +12,9 @@ namespace FitnessManagement.BL.Intefaces {
         CyclingSession GetById(int id);
         bool IsCyclingSession(int id);
         List<CyclingSession> SessionsforMember(int memberId);
-       
+        public List<CyclingSession> GetByCustomerAndDate(int memberId, int year, int month);
         void AddSession(CyclingSession session);
-        void UpdateSession(CyclingSession session);
-        void Delete(int sessionid);
+       
 
     }
 }

@@ -16,7 +16,7 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Column("programCode", TypeName = "nvarchar(10)")] // Primaire sleutel
+        [Column("programCode", TypeName = "nvarchar(10)")] 
         public string ProgramCode { get; set; }
 
         [Required]

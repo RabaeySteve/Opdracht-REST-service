@@ -1,4 +1,5 @@
-﻿using FitnessManagement.BL.Intefaces;
+﻿using FitnessManagement.BL.Exceptions;
+using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace FitnessManagement.BL.Services {
                 return repo.GetTimeSlot(startTime);
             } catch (Exception ex) {
 
-                throw;
+                throw new TimeSlotException("GetTimeSlot", ex);
             }
         }
     }

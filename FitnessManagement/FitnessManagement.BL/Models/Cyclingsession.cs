@@ -12,34 +12,34 @@ namespace FitnessManagement.BL.Models {
         private DateTime _date;
         private int _duration;
         private int _avgWatt;
+        private int _maxWatt;
         private int _avgCadence;
         private int _maxCadence;
-        private int _maxWatt;
+        private string _comment;
 
 
         public CyclingSession() {
         }
 
-        public CyclingSession(DateTime date, int duration, int avgWatt, int maxCadence, int avgCadence, int maxWatt, int cyclingSessionId, Member member, string comment, CyclingTrainingType type) {
-            Date = date; 
-            Duration = duration; 
-            AvgWatt = avgWatt; 
-            MaxCadence = maxCadence; 
-            MaxWatt = maxWatt;
-            AvgCadence = avgCadence;
+        public CyclingSession(int cyclingSessionId, DateTime date, int duration, int avgWatt, int maxWatt, int avgCadence, int maxCadence, string comment, CyclingTrainingType type, Member cyclingMember) {
             CyclingSessionId = cyclingSessionId;
-            CyclingMember = member;
-            Comment = comment;
+            _date = date;
+            _duration = duration;
+            _avgWatt = avgWatt;
+            _maxWatt = maxWatt;
+            _avgCadence = avgCadence;
+            _maxCadence = maxCadence;
+            _comment = comment;
             Type = type;
+            CyclingMember = cyclingMember;
+           
         }
-
-        
 
         public int CyclingSessionId { get; set; }
         public Member CyclingMember { get; set; }
 
-        private string _comment;
-        public string Comment {
+        
+        public string? Comment {
             get => _comment;
             set {
                 if (value?.Length > 500) {
@@ -52,14 +52,21 @@ namespace FitnessManagement.BL.Models {
         public CyclingTrainingType Type { get; set; }
         public int AvgCadence {
             get { return _avgCadence; }
-            set { _avgCadence = value; }
+            set { if (value < 0) {
+                    throw new CyclingSessionException("AvgCadence must be higher then 0");
+                }
+               
+                _avgCadence = value; }
         }
 
         public int MaxCadence {
             get => _maxCadence;
             set {
                 if (value < 0) {
-                    throw new CyclingSessionException("MaxCadence must be a positive value.");
+                    throw new CyclingSessionException("MaxCadence must be higher then 0");
+                }
+                if (value < AvgCadence) {
+                    throw new CyclingSessionException("MaxCadence cannot be lower than AvgCadence");
                 }
                 _maxCadence = value;
             }
@@ -69,17 +76,23 @@ namespace FitnessManagement.BL.Models {
             get => _avgWatt;
             set {
                 if (value < 0) {
-                    throw new CyclingSessionException("AvgWatt must be a positive value.");
+                    throw new CyclingSessionException("AvgWatt must be higher then 0");
                 }
                 _avgWatt = value;
             }
         }
         public int MaxWatt {
-            get { return _maxWatt; }
-            set { _maxWatt = value; }
+            get => _maxWatt;
+            set {
+                if (value < 0) {
+                    throw new CyclingSessionException("MaxWatt must be 0 or higher.");
+                }
+                if (value < AvgWatt) {
+                    throw new CyclingSessionException("MaxWatt cannot be lower than AvgWatt.");
+                }
+                _maxWatt = value;
+            }
         }
-
-
 
         public int Duration {
             get => _duration;

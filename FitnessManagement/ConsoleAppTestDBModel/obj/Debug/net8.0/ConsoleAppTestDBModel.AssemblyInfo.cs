@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ConsoleAppTestDBModel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bf6642255eb8898beea65b760eb5ade8caeeedf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a16deb7c534e9ac64e1df6c362e08853b84c1f50")]
 [assembly: System.Reflection.AssemblyProductAttribute("ConsoleAppTestDBModel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ConsoleAppTestDBModel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

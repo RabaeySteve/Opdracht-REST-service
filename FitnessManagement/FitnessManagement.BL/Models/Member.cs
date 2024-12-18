@@ -7,8 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FitnessBL.Models {
-
-
     public class Member {
         private string _firstName;
         private string _lastName;
@@ -20,7 +18,7 @@ namespace FitnessBL.Models {
 
         public Member() { }
 
-        public Member(int memberId, string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? memberType, List<Program> programs) {
+        public Member(int memberId, string firstName, string lastName, string email, string address, DateOnly birthday, List<string>? interests, MemberType memberType, List<Program> programs) {
             MemberId = memberId;
             _firstName = firstName;
             _lastName = lastName;
@@ -32,20 +30,20 @@ namespace FitnessBL.Models {
             Programs = programs;
         }
 
-        public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type, List<Program> programs) {
-            _firstName = firstName;
-            _lastName = lastName;
-            _email = email;
-            _address = address;
-            _birthday = birthday;
-            _interests = interests;
-            Type = type;
-            Programs = programs;
-        }
+        //public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type, List<Program> programs) {
+        //    _firstName = firstName;
+        //    _lastName = lastName;
+        //    _email = email;
+        //    _address = address;
+        //    _birthday = birthday;
+        //    _interests = interests;
+        //    Type = type;
+        //    Programs = programs;
+        //}
 
-        public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type)
-        : this(firstName, lastName, email, address, birthday, interests, type, new List<Program>()) {
-        }
+        //public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type)
+        //: this(firstName, lastName, email, address, birthday, interests, type, new List<Program>()) {
+        //}
 
 
         public int MemberId { get; set; }
@@ -72,11 +70,21 @@ namespace FitnessBL.Models {
             }
         }
 
-        public string? Email {
+        public string Email {
             get => _email;
             set {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new MemberException("Email cannot be empty.");
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new MemberException("Email cannot be empty or null.");
+                }
+
+                if (value.Length > 50) {
+                    throw new MemberException("Email cannot exceed 50 characters.");
+                }
+
+                if (!IsValidEmail(value)) {
+                    throw new MemberException("Invalid email format.");
+                }
+
                 _email = value;
             }
         }
@@ -84,8 +92,12 @@ namespace FitnessBL.Models {
         public string Address {
             get => _address;
             set {
-                if (string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value)) {
                     throw new MemberException("Address cannot be empty.");
+                }
+                if (value.Length > 200) {
+                    throw new MemberException("Address cannot exceed 200 characters.");
+                }
                 _address = value;
             }
         }
@@ -111,7 +123,7 @@ namespace FitnessBL.Models {
                 _interests = value;
             }
         }
-        public MemberType? Type { get; set; }
+        public MemberType Type { get; set; }
 
         public List<Program> Programs { get; set; } = new List<Program>();
         public enum MemberType {
@@ -124,6 +136,11 @@ namespace FitnessBL.Models {
         public override string ToString() {
             string programstring = string.Join(",\n", Programs);
             return $"Member: {FirstName} {LastName}, Email: {Email}, birthday: {Birthday}, Membertype: {Type}, \n{programstring}";
+        }
+        private bool IsValidEmail(string email) {
+           
+            string emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return System.Text.RegularExpressions.Regex.IsMatch(email, emailRegex);
         }
 
 

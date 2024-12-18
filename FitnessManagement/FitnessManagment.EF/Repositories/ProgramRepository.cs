@@ -66,7 +66,7 @@ namespace FitnessManagement.EF.Repositories {
                 return ctx.program.Any(x => x.ProgramCode == programCode);
             } catch (Exception ex) {
 
-                throw;
+                throw new RepoException("ProgramRepo - IsProgram", ex);
             }
         }
 
