@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using FitnessBL.Models;
 using FitnessManagement.BL.Exceptions;
+using FitnessManagement.BL.Intefaces;
 namespace FitnessManagement.BL.Models {
-    public class RunningSession {
+    public class RunningSession : ITrainingSession {
         private DateTime _date;
         private int _duration;
         private double _avgSpeed;
@@ -15,7 +16,7 @@ namespace FitnessManagement.BL.Models {
         }
 
         public RunningSession(int runningSessionId, Member member, DateTime date, int duration, double avgSpeed, List<RunningSessionDetail> details) {
-            RunningSessionId = runningSessionId;
+            TrainingId = runningSessionId;
             RunningMember = member;
             _date = date;
             _duration = duration;
@@ -25,7 +26,7 @@ namespace FitnessManagement.BL.Models {
 
         public List<RunningSessionDetail> Details { get; set; } = new List<RunningSessionDetail>();
 
-        public int RunningSessionId { get; set; }
+        public int TrainingId { get; set; }
         public Member RunningMember { get; set; }
 
         public DateTime Date {
@@ -57,9 +58,13 @@ namespace FitnessManagement.BL.Models {
                 _avgSpeed = value;
             }
         }
+        public string TrainingType { get; set; }
+        public string GetImpact() {
+            return "Unknown";
+        }
 
         public override string ToString() {
-            return $"RusnningSession ID: {RunningSessionId}, Date: {Date.ToShortDateString()}, Member ID: {RunningMember.MemberId}, Duration: {Duration} mins, Avg Speed: {AvgSpeed} km/h";
+            return $"RusnningSession ID: {TrainingId}, Date: {Date.ToShortDateString()}, Member ID: {RunningMember.MemberId}, Duration: {Duration} mins, Avg Speed: {AvgSpeed} km/h";
         }
     }
 }

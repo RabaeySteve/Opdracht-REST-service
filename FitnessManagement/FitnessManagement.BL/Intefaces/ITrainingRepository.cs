@@ -1,5 +1,6 @@
 ﻿
 using FitnessManagement.BL.DTO_s.DTOModels;
+using FitnessManagement.BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace FitnessManagement.BL.Intefaces {
 
         TrainingStatistics GetStatisticsForCustomer(int memberId);
 
-        TrainingSession GetSessionDetails(int memberId);
+        RunningSession GetRunningDetails(int runningSession);
+        CyclingSession GetCyclingDetails(int CylingSession);
     }
 }

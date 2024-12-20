@@ -22,8 +22,9 @@ namespace FitnessManagement.EF.Mappers {
                       db.AvgCadence,
                       db.MaxCadence,
                       db.Comment,
-                      MapStringToCycleType(db.TrainingType),
-                      MapMember.MapToDomain(db.Member, ctx)
+                      MapMember.MapToDomain(db.Member, ctx),
+                      MapStringToCycleType(db.TrainingType)
+                      
                     );
             } catch (Exception ex) {
 
@@ -35,7 +36,7 @@ namespace FitnessManagement.EF.Mappers {
                 MemberEF memberEF = ctx.members.Find(c.CyclingMember.MemberId);
                 if (memberEF == null) { memberEF = MapMember.MapToDB(c.CyclingMember); }
                 return new CyclingSessionEF(
-                      c.CyclingSessionId,
+                      c.TrainingId,
                       c.Date,
                       c.Duration,
                       c.AvgWatt,

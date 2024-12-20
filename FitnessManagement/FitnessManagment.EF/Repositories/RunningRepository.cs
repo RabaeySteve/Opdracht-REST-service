@@ -69,9 +69,12 @@ namespace FitnessManagement.EF.Repositories {
                         .Include(x => x.Member)
                         .AsNoTracking()
                         .FirstOrDefault();
+                if (runningSessionEF == null) {
+                    
+                    return null;
+                }
 
-
-               return MapRunningSession.MapToDomain(runningSessionEF, ctx);
+                return MapRunningSession.MapToDomain(runningSessionEF, ctx);
 
             } catch (Exception ex ) {
                 throw new RepoException("GetById", ex);

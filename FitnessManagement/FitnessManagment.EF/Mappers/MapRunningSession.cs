@@ -30,7 +30,7 @@ namespace FitnessManagement.EF.Mappers {
 
             try {
                 return new RunningSessionEF(
-                    r.RunningSessionId,
+                    r.TrainingId,
                     r.Date,
                     r.Duration,
                     r.AvgSpeed,

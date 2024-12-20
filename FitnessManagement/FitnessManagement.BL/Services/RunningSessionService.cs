@@ -31,7 +31,7 @@ namespace FitnessManagement.BL.Services {
 
         public RunningSession AddSession(RunningSession session) {
             try {
-                if (repo.IsRunningSession(session.RunningSessionId)) throw new RunningSessionException("Running session already exists.");
+                if (repo.IsRunningSession(session.TrainingId)) throw new RunningSessionException("Running session already exists.");
 
                 repo.AddSession(session);
                 return session;

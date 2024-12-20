@@ -35,17 +35,11 @@ namespace FitnessManagement.BL.Services {
             }
         }
 
-        public string TrainingImpact(CyclingSession session) {
-            if (session.AvgWatt < 150 && session.Duration <= 90) return "low";
-            if (session.AvgWatt < 150 && session.Duration > 90) return "medium";
-            if (session.AvgWatt >= 150 && session.AvgWatt <= 200) return "medium";
-            if (session.AvgWatt > 200) return "high";
-            return "unknown";
-        }
+       
 
         public CyclingSession AddSession(CyclingSession session) {
             try {
-                if (repo.IsCyclingSession(session.CyclingSessionId)) throw new CyclingSessionException("");
+                if (repo.IsCyclingSession(session.TrainingId)) throw new CyclingSessionException("");
                 repo.AddSession(session);
 
                 return session;

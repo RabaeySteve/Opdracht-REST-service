@@ -32,6 +32,8 @@ namespace FitnessManagement.API {
             builder.Services.AddSingleton<RunningSessionService>();
             builder.Services.AddSingleton<ICyclingRepository>(r => FitnessDataLayerProvider.FitnessDatalayerFactory.GeefRepositories(connectionString, dataLayer).CyclingRepository);
             builder.Services.AddSingleton<CyclingSessionService>();
+            builder.Services.AddSingleton<ITrainingRepository>(r => FitnessDataLayerProvider.FitnessDatalayerFactory.GeefRepositories(connectionString, dataLayer).TrainingRepository);
+            builder.Services.AddSingleton<TrainingService>();
 
             var app = builder.Build();
 

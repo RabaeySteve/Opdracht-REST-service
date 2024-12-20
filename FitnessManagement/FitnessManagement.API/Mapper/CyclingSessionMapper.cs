@@ -7,7 +7,7 @@ namespace FitnessManagement.API.Mapper {
 
         public static CyclingSession MapCyclingSession(CyclingSessionDTO c) {
             return new CyclingSession {
-                CyclingSessionId = c.CyclingSessionId,
+                TrainingId = c.CyclingSessionId,
                 CyclingMember = IdToMember(c.MemberId),
                 Date = c.Date,
                 Duration = c.Duration,
@@ -24,7 +24,7 @@ namespace FitnessManagement.API.Mapper {
         public static CyclingSessionDTO MapCyclingSessionToDTO(CyclingSession c) {
             try {
                 return new CyclingSessionDTO {
-                    CyclingSessionId = c.CyclingSessionId,
+                    CyclingSessionId = c.TrainingId,
                     MemberId = c.CyclingMember.MemberId,
                     Date = c.Date,
                     Duration = c.Duration,

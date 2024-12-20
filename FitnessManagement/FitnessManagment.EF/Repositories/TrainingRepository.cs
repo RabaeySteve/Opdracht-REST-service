@@ -46,10 +46,30 @@ namespace FitnessManagement.EF.Repositories {
                 throw;
             }
         }
+        public CyclingSession GetCyclingDetails(int CylingSession) {
+            try {
+                string connectionString = ctx.Database.GetDbConnection().ConnectionString;
+                var cyclingRepo = new CyclingRepository(connectionString);
 
-        public TrainingSession GetSessionDetails(int sessionId) {
-            throw new NotImplementedException();
+                return cyclingRepo.GetById(CylingSession);
+            } catch (Exception) {
+
+                throw;
+            }
         }
+        public RunningSession GetRunningDetails(int runningSession) {
+            try {
+                string connectionString = ctx.Database.GetDbConnection().ConnectionString;
+                var runningRepo = new RunningRepository(connectionString);
+
+                return runningRepo.GetById(runningSession);
+            } catch (Exception) {
+
+                throw;
+            }
+        }
+
+    
 
         public List<TrainingSession> GetSessionsForCustomerMonth(int memberId, int year, int month) {
             try {

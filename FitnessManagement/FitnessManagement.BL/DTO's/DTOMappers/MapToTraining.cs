@@ -11,7 +11,7 @@ namespace FitnessManagement.BL.DTO_s.DTOMappers {
         public static TrainingSession MapCyclingSessionToTraining(CyclingSession c) {
             try {
                 return new TrainingSession {
-                    Id = c.CyclingSessionId,
+                    Id = c.TrainingId,
                     MemberId = c.CyclingMember.MemberId,
                     Date = DateOnly.FromDateTime(c.Date),
                     Duration = c.Duration,
@@ -26,11 +26,11 @@ namespace FitnessManagement.BL.DTO_s.DTOMappers {
         public static TrainingSession MapRunningSessionToTraining(RunningSession r) {
             try {
                 return new TrainingSession {
-                    Id = r.RunningSessionId,
+                    Id = r.TrainingId,
                     MemberId = r.RunningMember.MemberId,
                     Date = DateOnly.FromDateTime(r.Date),
                     Duration = r.Duration,
-                    TrainingType = "CyclingSession"
+                    TrainingType = "RunningSession"
                 };
             } catch (Exception) {
 

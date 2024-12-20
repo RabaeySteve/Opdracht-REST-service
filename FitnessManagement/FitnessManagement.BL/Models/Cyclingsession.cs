@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FitnessBL.Models;
 using FitnessManagement.BL.Exceptions;
+using FitnessManagement.BL.Intefaces;
 
 namespace FitnessManagement.BL.Models {
-    public class CyclingSession {
+    public class CyclingSession : ITrainingSession{
        
         private DateTime _date;
         private int _duration;
@@ -21,8 +22,8 @@ namespace FitnessManagement.BL.Models {
         public CyclingSession() {
         }
 
-        public CyclingSession(int cyclingSessionId, DateTime date, int duration, int avgWatt, int maxWatt, int avgCadence, int maxCadence, string comment, CyclingTrainingType type, Member cyclingMember) {
-            CyclingSessionId = cyclingSessionId;
+        public CyclingSession(int trainingId, DateTime date, int duration, int avgWatt, int maxWatt, int avgCadence, int maxCadence, string comment, Member cyclingMember, CyclingTrainingType type) {
+            TrainingId = trainingId;
             _date = date;
             _duration = duration;
             _avgWatt = avgWatt;
@@ -30,12 +31,13 @@ namespace FitnessManagement.BL.Models {
             _avgCadence = avgCadence;
             _maxCadence = maxCadence;
             _comment = comment;
-            Type = type;
             CyclingMember = cyclingMember;
+            Type = type;
+            
            
         }
 
-        public int CyclingSessionId { get; set; }
+        public int TrainingId { get; set; }
         public Member CyclingMember { get; set; }
 
         
@@ -118,11 +120,21 @@ namespace FitnessManagement.BL.Models {
             fun,
             endurance,
             interval,
-            ecovery,
+            recovery,
             NoType
         }
+        public string TrainingType { get; set; }
+        public string GetImpact() {
+            if (AvgWatt < 150 && Duration <= 90) return "low";
+            if (AvgWatt < 150 && Duration > 90) return "medium";
+            if (AvgWatt >= 150 && AvgWatt <= 200) return "medium";
+            if (AvgWatt > 200) return "high";
+            return "unknown";
+        }
+
+
         public override string ToString() {
-            return $"CyclingSession ID: {CyclingSessionId}, Member ID: {CyclingMember}, Date: {Date.ToShortDateString()}, " +
+            return $"CyclingSession ID: {TrainingId}, Member ID: {CyclingMember}, Date: {Date.ToShortDateString()}, " +
                    $"Duration: {Duration} mins, AvgWatt: {AvgWatt}, MaxCadence: {MaxCadence}, Type: {Type}, Comment: {Comment}";
         }
     }
