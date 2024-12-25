@@ -15,11 +15,11 @@ namespace FitnessManagement.API.Controllers {
     public class MemberController : ControllerBase {
 
         private MemberService MemberRepo;
-        //private ReservationService ReservationRepo;
+        private ReservationService ReservationRepo;
 
-        public MemberController(MemberService memberRepo/*, ReservationService reservationRepo*/) {
+        public MemberController(MemberService memberRepo, ReservationService reservationRepo) {
             this.MemberRepo = memberRepo;
-            //this.ReservationRepo = reservationRepo;
+            this.ReservationRepo = reservationRepo;
         }
 
         [HttpGet("{id}")]
@@ -46,15 +46,17 @@ namespace FitnessManagement.API.Controllers {
                 throw new MemberException("");
             }
         }
-        //[HttpGet("{id}/Reservations")]
-        //public ActionResult<MemberReservationsDTO> GetMemberReservations(int id) {
-        //    try {
-        //        return MemberMapper.MapReservationsToMember(ReservationRepo.GetReservationsMember(id));
-        //    } catch (Exception) {
+        [HttpGet("{id}/Reservations")]
+        public ActionResult<List<ReservationGetDTO>> GetMemberReservations(int id) {
+            try {
+                List<Reservation> reservation = ReservationRepo.GetReservationsMember(id);
+                List<ReservationGetDTO> reservationGetDTO = reservation.Select(x => ReservationMapper.MapToGetDTO(x)).ToList();
+                return reservationGetDTO;
+            } catch (Exception) {
 
-        //        return NotFound();
-        //    }
-        //}
+                return NotFound();
+            }
+        }
 
         [HttpPost("Create-Member")]
         public ActionResult<Member> Post(MemberDTO member) {

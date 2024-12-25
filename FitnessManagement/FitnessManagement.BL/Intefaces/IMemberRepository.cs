@@ -16,16 +16,9 @@ namespace FitnessManagement.BL.Intefaces {
         void UpdateMember(Member member);
 
         void DeleteMember(int id);
-
-
         bool IsProgram(string programCode);
         int GetAllProgramMembers(string programCode);
-      
         void AddProgram(int memberId, string programCode);
-        
-        
-
-
-
+       
     }
 }

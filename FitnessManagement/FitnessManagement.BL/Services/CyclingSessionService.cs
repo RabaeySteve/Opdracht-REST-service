@@ -16,42 +16,6 @@ namespace FitnessManagement.BL.Services {
             this.repo = repo;
         }
 
-        public bool IsCyclingSession(int id) {
-            try {
-                return repo.IsCyclingSession(id);
-            } catch (Exception) {
-
-                throw;
-            }
-        }
-
-        public CyclingSession GetById(int id) {
-            try {
-                if (!repo.IsCyclingSession(id)) throw new CyclingSessionException("");
-                return repo.GetById(id);
-            } catch (Exception) {
-
-                throw;
-            }
-        }
-
-       
-
-        public CyclingSession AddSession(CyclingSession session) {
-            try {
-                if (repo.IsCyclingSession(session.TrainingId)) throw new CyclingSessionException("");
-                repo.AddSession(session);
-
-                return session;
-            } catch (Exception) {
-
-                throw;
-            }
-            
-            
-        }
-        
-       
         public List<CyclingSession> SessionsforMember(int memberId) {
             try {
                 return repo.SessionsforMember(memberId);

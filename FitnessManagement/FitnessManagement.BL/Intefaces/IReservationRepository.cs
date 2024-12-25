@@ -1,4 +1,5 @@
-﻿using FitnessManagement.BL.Models;
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +8,16 @@ using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Intefaces {
     public interface IReservationRepository {
-        List<Reservation> GetAll();
-        List<Reservation> GetReservationsMember(int memberId);
-        List<Reservation> GetReservationsMemberDate(int memberId, DateOnly date);
+        int GetReservationId();
+        Reservation GetReservationId(int reservationId);
         
-        List<Equipment> GetAllEquipment();
-        Equipment GetEquipment(int EquipmentId);
-        List<Reservation> GetReservation(int groupsId);
+        List<Reservation> GetReservationMember(int memberId);
+        List<Reservation> GetReservationMemberDate(int memberId, DateOnly date);
+        bool IsTimeSlotAvailable(Reservation reservation);
         bool IsReservation(int reservationId);
-        
         void AddReservation(Reservation reservation);
-        
-       
-        void DeleteReservation(Reservation reservation);
+        void UpdateReservation(Reservation reservation);
+        void DeleteReservation(int groupId);
      
     }
 }

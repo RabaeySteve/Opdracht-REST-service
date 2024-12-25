@@ -4,6 +4,7 @@ using FitnessManagement.API.Mapper;
 using FitnessManagement.BL.Exceptions;
 using FitnessManagement.BL.Models;
 using FitnessManagement.BL.Services;
+using FitnessManagement.EF.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,36 +20,39 @@ namespace FitnessManagement.API.Controllers {
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<Reservation>> Get(int id) {
+        public ActionResult<ReservationGetDTO> Get(int id) {
             try {
-                return ReservationRepo.GetReservation(id);
+                Reservation reservation =  ReservationRepo.GetReservation(id);
+                ReservationGetDTO reservationDTO = ReservationMapper.MapToGetDTO(reservation);
+                return reservationDTO;
             } catch (ReservationException ex) {
 
                 return NotFound(ex.Message);
             }
         }
         [HttpPost]
-        public ActionResult<List<ReservationDTO>> Post(ReservationDTO reservationDTO) {
-            ReservationRepo.AddReservation(ReservationMapper.MapReservation(reservationDTO));
-            return CreatedAtAction(nameof(Get), new { id =  reservationDTO.MemberId}, reservationDTO);
+        public ActionResult<ReservationPostDTO> Post(ReservationPostDTO reservationDTO) {
+
+            ReservationRepo.AddReservation(ReservationMapper.MapPostReservation(reservationDTO));
+            return CreatedAtAction(nameof(Get), new { id = reservationDTO.MemberId }, reservationDTO);
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id) {
             if (!ReservationRepo.IsReservation(id)) {
                 return NotFound();
             }
-            ReservationRepo.DeleteReservation(ReservationRepo.GetReservation(id).FirstOrDefault());
+            ReservationRepo.DeleteReservation(id);
             return NoContent();
         }
-        //[HttpPut]
-        //public IActionResult Put(int id, [FromBody] ReservationDTO reservationDTO) {
-        //    if (reservationDTO == null || reservationDTO.ReservationId != id) {
-        //        return BadRequest();
-        //    }
-        //    ReservationRepo.UpdateReservation(ReservationMapper.MapReservation(reservationDTO), reservationDTO.DubleReservation);
-        //    return new NoContentResult();
-        //}
+        [HttpPut]
+        public IActionResult Put(int id, [FromBody] ReservationPutDTO reservationPutDTO) {
+            if (reservationPutDTO == null ) {
+                return BadRequest();
+            }
+            ReservationRepo.UpdateReservation(ReservationMapper.MapDTOToReservation(reservationPutDTO));
+            return new NoContentResult();
+        }
 
-       
+
     }
 }

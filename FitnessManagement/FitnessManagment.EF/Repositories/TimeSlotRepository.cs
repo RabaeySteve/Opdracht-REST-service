@@ -19,6 +19,7 @@ namespace FitnessManagement.EF.Repositories {
             ctx.SaveChanges();
             ctx.ChangeTracker.Clear();
         }
+        //was niet nodig maar ga het ook niet perse weg doen. 
         public void addTimeSlot(TimeSlot timeSlot) {
             try {
                 ctx.time_slot.Add(MapTimeSlot.MapToDB(timeSlot));

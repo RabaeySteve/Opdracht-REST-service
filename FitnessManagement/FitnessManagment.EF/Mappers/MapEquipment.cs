@@ -34,7 +34,7 @@ namespace FitnessManagement.EF.Mappers {
                     );
             } catch (Exception ex) {
 
-                throw new MapException("MapEquipment - MapToDB");
+                throw new MapException("MapEquipment - MapToDB", ex);
             }
         }
         public static EquipmentType MapStringToEquipmentType(string equipmentType) {

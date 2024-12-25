@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("XunitestFitnessManagement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a16deb7c534e9ac64e1df6c362e08853b84c1f50")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2524846bbce9d8aa4f2afd38fb6983bd03cdead4")]
 [assembly: System.Reflection.AssemblyProductAttribute("XunitestFitnessManagement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("XunitestFitnessManagement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

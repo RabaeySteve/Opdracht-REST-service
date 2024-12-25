@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace FitnessManagement.BL.Services {
     public class MemberService {
         private IMemberRepository repo;
-        //private IProgramRepository programRepo;
+        
 
-        public MemberService(IMemberRepository repo/*, IProgramRepository programRepo*/) {
+        public MemberService(IMemberRepository repo) {
             this.repo = repo;
-            //this.programRepo = programRepo;
+            
         }
 
         public IEnumerable<Member> GetMembers() {
@@ -105,10 +105,7 @@ namespace FitnessManagement.BL.Services {
                     throw new MemberException("Program doesn't excist");
                 }
                 int aantalMembers = repo.GetAllProgramMembers(programCode);
-                //Program program = programRepo.GetProgramByProgramCode(programCode);
-                //if (program.MaxMembers == aantalMembers) { 
-                //    throw new MemberException("Maximum members for this program");
-                //}
+                
                 
                repo.AddProgram(memberId, programCode);
             } catch (Exception ex) {

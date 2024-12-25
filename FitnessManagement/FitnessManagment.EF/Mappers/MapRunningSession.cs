@@ -25,8 +25,8 @@ namespace FitnessManagement.EF.Mappers {
            
         }
         public static RunningSessionEF MapToDB(RunningSession r,  FitnessManagementContext ctx) {
-            MemberEF memberEF = ctx.members.Find(r.RunningMember.MemberId);
-                if (memberEF == null) { memberEF = MapMember.MapToDB(r.RunningMember); }
+            MemberEF memberEF = ctx.members.Find(r.Member.MemberId);
+                if (memberEF == null) { memberEF = MapMember.MapToDB(r.Member); }
 
             try {
                 return new RunningSessionEF(

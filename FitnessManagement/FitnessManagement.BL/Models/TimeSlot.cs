@@ -12,7 +12,9 @@ namespace FitnessManagement.BL.Models {
 		
 
         public TimeSlot() {
+
         }
+       
         public TimeSlot( int startTime) {
             _startTime = startTime;
             EndTime = EndTimeFunc(startTime);
@@ -25,21 +27,23 @@ namespace FitnessManagement.BL.Models {
             PartOfDay = PartOfDayFunc(startTime);
         }
 
-        public string PartOfDay { get; private set; }
+       
+        public int StartTime {
+            get { return _startTime; }
+            set {
+                if (value < 8 && value > 21) {
+                    throw new TimeSlotException("Start time must be between 8 and 21");
+                }
+
+                _startTime = value;
+            }
+        }
 
         public int EndTime { get; private set; }
 
-        public int StartTime {
-			get { return _startTime; }
-			set {
-				if (value < 8 && value > 21) {
-					throw new TimeSlotException("Start time must be between 8 and 21");
-				}
-				
-				_startTime = value; }
-		}
+        public string PartOfDay { get; private set; }
 
-		public int TimeSlotId { get; set; }
+        public int TimeSlotId { get; set; }
 
         public override string? ToString() {
             return $"StartTime : {StartTime} EndTime : {EndTime} PartOfTheDay : {PartOfDay}";

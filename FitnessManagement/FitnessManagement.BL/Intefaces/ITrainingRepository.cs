@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Intefaces {
     public interface ITrainingRepository {
-        List<TrainingSession> GetAllTrainingSessions(int memberId);
-        List<TrainingSession> GetSessionsForCustomerMonth(int memberId, int year, int month);
-
-        TrainingStatistics GetStatisticsForCustomer(int memberId);
+        List<TrainingSessionBase> GetAllTrainingSessions(int memberId);
+        List<TrainingSessionBase> GetSessionsForCustomerMonth(int memberId, int year, int month);
 
         RunningSession GetRunningDetails(int runningSession);
         CyclingSession GetCyclingDetails(int CylingSession);

@@ -42,8 +42,6 @@ namespace FitnessManagement.EF.Repositories {
             }
         }
 
-        
-
         public bool IsProgramNew(string name, DateTime startDate) {
             try {
                 return ctx.program.Any(p => p.Name == name && p.StartDate == startDate);

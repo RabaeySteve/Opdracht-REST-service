@@ -1,4 +1,6 @@
-﻿using FitnessManagement.BL.Intefaces;
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.Exceptions;
+using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
 using FitnessManagement.EF.Exceptions;
 using FitnessManagement.EF.Mappers;
@@ -21,170 +23,170 @@ namespace FitnessManagement.EF.Repositories {
             ctx.SaveChanges();
             ctx.ChangeTracker.Clear();
         }
-        public List<Reservation> GetReservationsMemberDate(int memberId, DateOnly date) {
-            try {
-                List<Reservation> reservationsMember = new List<Reservation>();
-                reservationsMember = GetReservationsMember(memberId);
-                List<Reservation>  reservationsMemberDate = new List<Reservation>();
-                foreach (Reservation reservation in reservationsMember) {
-                    if (reservation.Date == date) {
-                        reservationsMemberDate.Add(reservation);
-                    }
-                }
-                return reservationsMemberDate;
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - GetReservationsMemberDate", ex);
-            }
-        }
-       
-        public List<Equipment> GetAllEquipment() {
-            try {
-                return ctx.equipment.Select(x => MapEquipment.MapToDomain(x)).ToList();
-            } catch (Exception ex) {
-
-                throw;
-            }
-        }
-        public Equipment GetEquipment(int id) {
-            try {
-
-                return MapEquipment.MapToDomain(ctx.equipment.Where(x => x.EquipmentId == id).AsNoTracking().FirstOrDefault());
-            } catch (Exception ex) {
-                throw new RepoException("EquipmentRepo - GetEquipment", ex);
-            }
-        }
-
-
-
-
-        public void DeleteReservation(Reservation reservation) {
-            try {
-                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.GroupsId == reservation.GroepsId).ToList();
-                foreach (ReservationEF reservationEF in reservationEFs) {
-                    if (reservationEF != null) {
-                        ctx.reservation.Remove(reservationEF);
-                        
-                    }
-                }
-                SaveAndClear();
-
-
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - DeleteReservation", ex);
-            }
-        }
-
-        public List<Reservation> GetAll() {
-            try {
-                List<ReservationEF> reservationEFs =  ctx.reservation.Include(x => x.Member).Include(x => x.Equipment).Include(x => x.TimeSlot).ToList();
-                    
-                return  reservationEFs.Select(x => MapReservation.MapToDomain(x, ctx)).ToList();
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - GetAll", ex);
-            }
-        }
-
-        public List<Reservation> GetReservation(int groupsId) {
-            try {
-                List<ReservationEF> reservationEF = ctx.reservation
-                    .Where(x => x.GroupsId == groupsId) // Filter de reserveringen op GroupId
-                    .Include(x => x.Member)             // Voeg gerelateerde navigatie-eigenschappen toe
-                    .Include(x => x.Equipment)
-                    .Include(x => x.TimeSlot)
-                    .ToList();
-
-                List<Reservation> reservations = reservationEF.Select(x => MapReservation.MapToDomain(x, ctx)).ToList(); // Pas de mapping toe
-                return reservations;                  // Materialiseer de query als lijst
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - GetReservationsMember", ex);
-            }
-        }
-
-        public List<Reservation> GetReservationsMember(int memberId) {
-            try {
-                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.Member.MemberId == memberId)
-                    .Include(x => x.Equipment)
-                    .Include(x => x.Member)
-                    .Include(x => x.TimeSlot)
-                    .ToList();
-                return reservationEFs.Select(x => MapReservation.MapToDomain(x, ctx)).ToList();
-
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - GetReservation", ex);
-            }
-        }
-
-        public bool IsReservation(int reservationId) {
-            try {
-
-                bool excist = ctx.reservation.Any(x => x.ReservationId == reservationId);
-                return excist;
-            } catch (Exception ex) {
-
-                throw new RepoException("ReservationRepo - IsReservation", ex);
-            }
-        }
         public void AddReservation(Reservation reservation) {
             try {
-                ctx.reservation.Add(MapReservation.MapToDB(reservation, ctx));
-                SaveAndClear();
+                // Zet een transactie op om fouten te voorkomen
+                using var transaction = ctx.Database.BeginTransaction();
+
+                // Schakel IDENTITY_INSERT in voor de hele sessie
+                ctx.Database.ExecuteSqlRaw("SET IDENTITY_INSERT reservation ON");
+
+
+                List<ReservationEF> reservationEFs = MapReservation.MapToDB(reservation, ctx);
+                foreach (ReservationEF reservationEF in reservationEFs) {
+                    ctx.reservation.Add(reservationEF); // Alleen toevoegen
+                }
+
+                SaveAndClear(); // Sla alle wijzigingen op na de loop
+
+                // Schakel IDENTITY_INSERT uit
+                ctx.Database.ExecuteSqlRaw("SET IDENTITY_INSERT reservation OFF");
+
+                // Commit de transactie
+                transaction.Commit();
             } catch (Exception ex) {
 
                 throw new RepoException("ReservationRepo - AddReservation", ex);
             }
         }
-        //public void AddDubbleRes(Reservation reservation) {
-        //    try {
-        //        AddReservation(reservation);
-        //        int reservationId = reservation.ReservationId;
-        //        int timeslot = reservation.TimeSlot.TimeSlotId;
-        //        Reservation newReservation = reservation;
-        //        newReservation.ReservationId = reservationId + 1;
-        //        newReservation.TimeSlot.TimeSlotId = timeslot + 1;
-        //        AddReservation(newReservation);
-        //        SaveAndClear();
-        //    } catch (Exception ex) {
 
-        //        throw new RepoException("ReservationRepo - AddDubbleRes", ex);
-        //    }
-        //}
-        //public void UpdateReservation(Reservation reservation) {
-        //    try {
-        //        DeleteReservation(reservation);
-
-        //        AddReservation(reservation);
-        //        SaveAndClear();
-        //    } catch (Exception ex) {
-
-        //        throw new RepoException("ReservationRepo - UpdateReservation", ex);
-        //    }
-        //}
-
-      
-
-        public void UpdateDubbleRes(Reservation reservation) {
+        public Reservation GetReservationId(int reservationId) {
             try {
-                DeleteReservation(reservation);
-                AddReservation(reservation);
-                int reservationId = reservation.ReservationId;
-                int timeslot = reservation.TimeSlotRes.TimeSlotId;
-                Reservation newReservation = reservation;
-                newReservation.ReservationId = reservationId +1;
-                newReservation.TimeSlotRes.TimeSlotId = timeslot + 1;
-                DeleteReservation(newReservation);
-                
-                AddReservation(newReservation);
-            } catch (Exception ex) {
+                ReservationEF reservationEF = ctx.reservation
+                    .Include(x => x.Equipment)
+                    .Include(x => x.TimeSlot)
+                    .Include(x => x.Member)
+                    .AsNoTracking()
+                    .FirstOrDefault(r => r.ReservationId == reservationId);
 
-                throw new RepoException("ReservationRepo - UpdateDubbleRes", ex);
+
+                return MapReservation.MapToDomain(reservationEF, ctx);
+            } catch (Exception ex) {
+                throw new RepoException("ReservationRepo - GetReservationId", ex);
             }
         }
 
-        
+
+        public List<Reservation> GetReservationMember(int memberId) {
+            try {
+                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.Member.MemberId == memberId).Include(x => x.Equipment)
+                    .Include(x => x.TimeSlot)
+                    .Include(x => x.Member).ToList();
+
+                return reservationEFs.Select(x => MapReservation.MapToDomain(x, ctx)).ToList();
+            } catch (Exception ex) {
+
+                throw new RepoException("ReservationRepo - GetReservationMember", ex);
+            }
+        }
+
+        public List<Reservation> GetReservationMemberDate(int memberId, DateOnly date) {
+            try {
+
+                List<ReservationEF> reservationsEF = ctx.reservation
+                    .Where(r => r.Member.MemberId == memberId && r.Date == date)
+                    .Include(r => r.TimeSlot) 
+                    .Include(r => r.Equipment) 
+                    .AsNoTracking()
+                    .ToList();
+
+                if (reservationsEF == null) {
+                    throw new RepoException("reservation doesn't excist.");
+                }
+                List<Reservation> reservations = reservationsEF
+                    .Select(r => MapReservation.MapToDomain(r, ctx))
+                    .ToList();
+
+                List<Reservation> filteredReservation = reservations
+                    .GroupBy(r => r.GroupsId).Select(g => g.First()).ToList();
+
+                return filteredReservation;
+            } catch (Exception ex) {
+                throw new RepoException("ReservationRepo - GetReservationMemberDate", ex);
+            }
+        }
+
+
+        public bool IsReservation(int reservationId) {
+            try {
+                return ctx.reservation.Any(x => x.ReservationId == reservationId);
+            } catch (Exception) {
+
+                throw;
+            }
+        }
+
+        public bool IsTimeSlotAvailable(Reservation reservation) {
+            try {
+                // Controleer of er twee tijdsloten in de reservatie zitten
+                List<int> timeSlots = reservation.TimeSLotEquipment.Keys.ToList();
+                List<Equipment> equipments = reservation.TimeSLotEquipment.Values.ToList();
+
+                if (timeSlots.Count == 2) {
+                    // Controleer de beschikbaarheid van het eerste tijdslot
+                    bool firstSlotAvailable = !ctx.reservation.Any(x =>
+                        x.Date == reservation.Date &&
+                        x.TimeSlot.TimeSlotId == timeSlots[0] &&
+                        x.Equipment.EquipmentId == equipments[0].EquipmentId);
+
+                    // Controleer de beschikbaarheid van het tweede tijdslot
+                    bool secondSlotAvailable = !ctx.reservation.Any(x =>
+                        x.Date == reservation.Date &&
+                        x.TimeSlot.TimeSlotId == timeSlots[1] &&
+                        x.Equipment.EquipmentId == equipments[1].EquipmentId);
+
+                    // Beide tijdsloten moeten beschikbaar zijn
+                    return firstSlotAvailable && secondSlotAvailable;
+                } else if (timeSlots.Count == 1) {
+                    // Controleer de beschikbaarheid van het enige tijdslot
+                    return !ctx.reservation.Any(x =>
+                        x.Date == reservation.Date &&
+                        x.TimeSlot.TimeSlotId == timeSlots[0] &&
+                        x.Equipment.EquipmentId == equipments[0].EquipmentId);
+                }
+
+               
+                throw new ArgumentException("Reservation must have at least one time slot.");
+            } catch (Exception ex) {
+                throw new RepoException("ReservationRepo - IsTimeSlotAvailable", ex);
+            }
+        }
+
+
+
+        public void UpdateReservation(Reservation reservation) {
+            try {
+                List<ReservationEF> reservationEFs = MapReservation.MapToDB(reservation, ctx);
+                foreach (ReservationEF reservationEF in reservationEFs) {
+                    ctx.reservation.Update(reservationEF);
+                }
+                SaveAndClear();
+            } catch (Exception ex) {
+                throw new RepoException("ReservationRepo - UpdateReservation", ex);
+            }
+        }
+
+        public int GetReservationId() {
+            try {
+                // Haal het hoogste bestaande ReservationId op of gebruik 0 als er geen records zijn
+                int maxId = ctx.reservation.Any() ? ctx.reservation.Max(r => r.ReservationId) : 0;
+                return maxId + 1; // Retourneer een nieuw ID dat uniek is
+            } catch (Exception ex) {
+                throw new RepoException("ReservationRepo - GetReservationId", ex);
+            }
+        }
+
+        public void DeleteReservation(int groupId) {
+            try {
+                List<ReservationEF> reservationEFs = ctx.reservation.Where(x => x.GroupsId == groupId).ToList();
+                foreach (ReservationEF reservationEF in reservationEFs) {
+                    ctx.reservation.Remove(reservationEF);
+                }
+                SaveAndClear();
+            } catch (Exception ex) {
+
+                throw new RepoException("ReservationRepo - DeleteReservation", ex);
+            }
+        }
     }
 }

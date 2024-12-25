@@ -17,19 +17,16 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("reservation_id")]
         public int ReservationId { get; set; }
 
-        //[Required]
-        //[Column("equipment_id")]
-        //public int EquipmentId { get; set; }
+        
 
         [ForeignKey("equipment_id")]
         public EquipmentEF Equipment { get; set; }
 
-        //[Required]
-        //[Column("time_slot_id")]
-        //public int TimeSlotId { get; set; }
+     
 
         [ForeignKey("time_slot_id")]
         public TimeSlotEF TimeSlot { get; set; }
@@ -38,9 +35,7 @@ namespace FitnessManagement.EF.Model {
         [Column("date", TypeName = "date")]
         public DateOnly Date { get; set; }
 
-        //[Required]
-        //[Column("member_id")]
-        //public int MemberId { get; set; }
+        
 
         [ForeignKey("member_id")]
         public MemberEF Member { get; set; }

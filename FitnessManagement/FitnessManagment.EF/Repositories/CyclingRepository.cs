@@ -22,37 +22,12 @@ namespace FitnessManagement.EF.Repositories {
             ctx.ChangeTracker.Clear();
         }
 
-        public void AddSession(CyclingSession session) {
-            try {
-                ctx.cyclingsession.Add(MapCyclingSession.MapToDB(session, ctx));
-                SaveAndClear();
-            } catch (Exception ex) {
-
-                throw new RepoException("CyclingRepo - AddSession", ex);
-            }
-        }
-
-       
-
-        public IEnumerable<CyclingSession> GetAll() {
-            throw new NotImplementedException();
-        }
-
         public CyclingSession GetById(int id) {
             try {
                 return MapCyclingSession.MapToDomain(ctx.cyclingsession.Where(c => c.CyclingSessionId == id).Include(x => x.Member).AsNoTracking().FirstOrDefault(), ctx);
             } catch (Exception ex) {
 
                 throw new RepoException("CyclingRepo - GetById", ex);
-            }
-        }
-
-        public bool IsCyclingSession(int id) {
-            try {
-                return ctx.cyclingsession.Any(c => c.CyclingSessionId == id);
-            } catch (Exception ex) {
-
-                throw new RepoException("CyclingRepo - IsCyclingSession", ex);
             }
         }
 

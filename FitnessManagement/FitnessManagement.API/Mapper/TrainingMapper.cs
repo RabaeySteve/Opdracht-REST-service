@@ -1,40 +1,27 @@
-﻿using FitnessManagement.API.DTO_s;
+﻿using FitnessBL.Models;
+using FitnessManagement.API.DTO_s;
+using FitnessManagement.API.Exceptions;
 using FitnessManagement.BL.DTO_s.DTOModels;
 using FitnessManagement.BL.Models;
 
 namespace FitnessManagement.API.Mapper {
     public class TrainingMapper {
-        public static TrainingImpact MapCyclingSessionToTraining(CyclingSession c) {
+       
+        public static TrainingMapped MapTraining(TrainingSessionBase t) {
             try {
-                return new TrainingImpact {
-                    Id = c.TrainingId,
-                    MemberId = c.CyclingMember.MemberId,
-                    Date = DateOnly.FromDateTime(c.Date),
-                    Duration = c.Duration,
-                    TrainingType = "CyclingSession",
-                    Impact = GetTrainingImpact(c)
-                };
-            } catch (Exception) {
-
-                throw;
-            }
-
-        }
-        public static TrainingTypeMonth MapTrainingTypeMonth(TrainingSession t) {
-            try {
-                return new TrainingTypeMonth {
-                    TrainingType = t.TrainingType,
+                return new TrainingMapped {
+                    TrainingId = t.TrainingId,
+                    MemberId = t.Member.MemberId,
                     Date = t.Date,
-                    Impact = t.GetType()
-
+                    Duration = t.Duration,
+                    TrainingSessionType = t.TrainingSessionType,
 
                 };
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new MapperException("MapTraining", ex);
             }
-
         }
-        
+
     }
 }

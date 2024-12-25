@@ -1,4 +1,6 @@
-﻿using FitnessManagement.BL.DTO_s.DTOModels;
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.DTO_s.DTOModels;
+using FitnessManagement.BL.Exceptions;
 using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
 using System;
@@ -14,123 +16,218 @@ namespace FitnessManagement.BL.Services {
         public TrainingService(ITrainingRepository repo) {
             this.repo = repo;
         }
-       
 
-        public List<TrainingSession> GetMonthlySessionCountsType(int memberId, int year) {
-            List<TrainingSession> sessions = repo.GetAllTrainingSessions(memberId);
+        public List<MonthlySessionImpact> GetTrainingStatisticsImpact(int memberId, int year) {
+            try {
+                List<TrainingSessionBase> sessions = repo.GetAllTrainingSessions(memberId);
 
-            if (!sessions.Any(s => s.Date.Year == year)) {
-                return new List<TrainingSession> { new TrainingSession() };
+                if (sessions.Count == 0) {
+                    return new List<MonthlySessionImpact>();
+                }
+
+                var groupedSessions = sessions
+                    .Where(s => s.Date.Year == year) // Filter op het specifieke jaar
+                    .GroupBy(s => s.Date.Month) // Groepeer op maand (integerwaarde)
+                    .OrderBy(g => g.Key); // Sorteer op maandnummer (integer)
+
+                List<MonthlySessionImpact> monthlyOverview = new List<MonthlySessionImpact>();
+
+                foreach (var group in groupedSessions) {
+                    var cyclingFunSessions = group
+                        .Where(s => s.TrainingSessionType == TrainingSessionType.Cycling && s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.fun)
+                        .ToList();
+
+                    var cyclingEnduranceSessions = group
+                        .Where(s => s.TrainingSessionType == TrainingSessionType.Cycling && s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.endurance)
+                        .ToList();
+
+                    var cyclingIntervalSessions = group
+                        .Where(s => s.TrainingSessionType == TrainingSessionType.Cycling && s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.interval)
+                        .ToList();
+
+                    var cyclingRecoverySessions = group
+                        .Where(s => s.TrainingSessionType == TrainingSessionType.Cycling && s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.recovery)
+                        .ToList();
+
+                    var monthOverview = new MonthlySessionImpact {
+                        Month = GetMonthName(group.Key),
+                        RunningSessions = group.Count(s => s.TrainingSessionType == TrainingSessionType.Running),
+
+                        // Cycling Sessions Fun
+                        CyclingSessionsFun = cyclingFunSessions.Count,
+                        FunImpactLow = cyclingFunSessions.Count(s => CalculateTrainingImpact(s) == "Low"),
+                        FunImpactMedium = cyclingFunSessions.Count(s => CalculateTrainingImpact(s) == "Medium"),
+                        FunImpactHigh = cyclingFunSessions.Count(s => CalculateTrainingImpact(s) == "High"),
+
+                        // Cycling Sessions Endurance
+                        CyclingSessionsEndurance = cyclingEnduranceSessions.Count,
+                        EnduranceImpactLow = cyclingEnduranceSessions.Count(s => CalculateTrainingImpact(s) == "Low"),
+                        EnduranceImpactMedium = cyclingEnduranceSessions.Count(s => CalculateTrainingImpact(s) == "Medium"),
+                        EnduranceImpactHigh = cyclingEnduranceSessions.Count(s => CalculateTrainingImpact(s) == "High"),
+
+                        // Cycling Sessions Interval
+                        CyclingSessionsInterval = cyclingIntervalSessions.Count,
+                        IntervalImpactLow = cyclingIntervalSessions.Count(s => CalculateTrainingImpact(s) == "Low"),
+                        IntervalImpactMedium = cyclingIntervalSessions.Count(s => CalculateTrainingImpact(s) == "Medium"),
+                        IntervalImpactHigh = cyclingIntervalSessions.Count(s => CalculateTrainingImpact(s) == "High"),
+
+                        // Cycling Sessions Recovery
+                        CyclingSessionsRecovery = cyclingRecoverySessions.Count,
+                        RecoveryImpactLow = cyclingRecoverySessions.Count(s => CalculateTrainingImpact(s) == "Low"),
+                        RecoveryImpactMedium = cyclingRecoverySessions.Count(s => CalculateTrainingImpact(s) == "Medium"),
+                        RecoveryImpactHigh = cyclingRecoverySessions.Count(s => CalculateTrainingImpact(s) == "High")
+                    };
+
+                    monthlyOverview.Add(monthOverview);
+                }
+
+                return monthlyOverview.ToList();
+            } catch (Exception ex) {
+                throw new TrainingException("GetTrainingStatisticsImpact", ex);
             }
-
-            return sessions.Where(s => s.Date.Year == year).ToList();
-
         }
 
-        public Dictionary<int, int> GetMonthlySessionCounts(int memberId, int year) {
-            List<TrainingSession> sessions = repo.GetAllTrainingSessions(memberId);
-
-            if (!sessions.Any(s => s.Date.Year == year)) {
-                return new Dictionary<int, int>();
+        public string CalculateTrainingImpact(TrainingSessionBase session) {
+            if (session is CyclingSession cyclingSession) {
+                if (cyclingSession.AvgWatt < 150 && cyclingSession.Duration <= 90) return "Low";
+                if (cyclingSession.AvgWatt < 150) return "Medium";
+                if (cyclingSession.AvgWatt >= 150 && cyclingSession.AvgWatt <= 200) return "Medium";
+                if (cyclingSession.AvgWatt > 200) return "High";
             }
 
-            return sessions
-                .Where(s => s.Date.Year == year)
-                .GroupBy(s => s.Date.Month)
-                .ToDictionary(g => g.Key, g => g.Count());
+            return "Unknown";
         }
+
+
+
+
+
+        public List<MonthlySessionOverview> GetTrainingStatisticsPerMonth(int memberId, int year) {
+            try {
+                List<TrainingSessionBase> sessions = repo.GetAllTrainingSessions(memberId);
+
+                if (sessions.Count == 0) {
+                    return new List<MonthlySessionOverview>();
+                }
+
+                var groupedSessions = sessions
+                 .Where(s => s.Date.Year == year) // Filter op het specifieke jaar
+                 .GroupBy(s => s.Date.Month) // Groepeer op maand (integerwaarde)
+                 .OrderBy(g => g.Key); // Sorteer op maandnummer (integer)
+
+
+
+                List<MonthlySessionOverview> monthlyOverview = new List<MonthlySessionOverview>();
+
+                foreach (var group in groupedSessions) {
+                    var monthOverview = new MonthlySessionOverview {
+                        Month = GetMonthName(group.Key), 
+                        RunningSessions = group.Count(s => s.TrainingSessionType == TrainingSessionType.Running),
+                        CyclingSessionsFun = group.Count(s =>
+                            s.TrainingSessionType == TrainingSessionType.Cycling &&
+                            s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.fun),
+                        CyclingSessionsEndurance = group.Count(s =>
+                            s.TrainingSessionType == TrainingSessionType.Cycling &&
+                            s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.endurance),
+                        CyclingSessionsInterval = group.Count(s =>
+                            s.TrainingSessionType == TrainingSessionType.Cycling &&
+                            s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.interval),
+                        CyclingSessionsRecovery = group.Count(s =>
+                            s.TrainingSessionType == TrainingSessionType.Cycling &&
+                            s is CyclingSession cycling && cycling.Type == CyclingSession.CyclingTrainingType.recovery)
+                    };
+
+                    monthlyOverview.Add(monthOverview);
+                }
+
+                return monthlyOverview.ToList();
+            } catch (Exception ex) {
+                throw new TrainingException("GetTrainingStatisticsPerMonth", ex);
+            }
+        }
+
+
+
 
 
         public TrainingStatistics GetTrainingStatistics(int memberId) {
             try {
-                List<TrainingSession> sessions = repo.GetAllTrainingSessions(memberId);
-                if (sessions.Count > 0) {
-                    int totalSessions = sessions.Count;
-                    int totalDurationInMinutes = 0;
-                    int shortestSessionInMinutes = sessions.FirstOrDefault().Duration;
-                    int longestSessionInMinutes = 0;
+                List<TrainingSessionBase> sessions = repo.GetAllTrainingSessions(memberId);
 
-                    for (int i = 0; i < sessions.Count; i++) {
-                        totalDurationInMinutes = totalDurationInMinutes + sessions[i].Duration;
-                        if (shortestSessionInMinutes != 0) {
-                            if (sessions[i].Duration < shortestSessionInMinutes) {
-                                shortestSessionInMinutes = sessions[i].Duration;
-                            }
-                        }
-                        if (sessions[i].Duration > longestSessionInMinutes) {
-                            longestSessionInMinutes = sessions[i].Duration;
-                        }
-
-                    }
-                    double averageSessionDurationInMinutes = totalDurationInMinutes / totalSessions;
-
-                    return new TrainingStatistics {
-                        TotalSessions = totalSessions,
-                        TotalDurationInMinutes = totalDurationInMinutes,
-                        AverageSessionDurationInMinutes = averageSessionDurationInMinutes,
-                        ShortestSessionInMinutes = shortestSessionInMinutes,
-                        LongestSessionInMinutes = longestSessionInMinutes
-                    };
+                if (sessions.Count == 0) {
+                    return null;
                 }
 
-                return null;
+                int totalSessions = sessions.Count;
+                int totalDurationInMinutes = sessions.Sum(s => s.Duration);
+                int shortestSessionInMinutes = sessions.Min(s => s.Duration);
+                int longestSessionInMinutes = sessions.Max(s => s.Duration);
 
-            } catch (Exception ex) {
+                double averageSessionDurationInMinutes = totalDurationInMinutes / (double)totalSessions;
 
-                throw new Exception();
-            }
-
-        }
-        public List<TrainingSession> GetSessionsForCustomerMonth(int memberId, int year, int month) {
-            try {
-                List<TrainingSession> sessions = repo.GetSessionsForCustomerMonth(memberId, year, month);
-                return sessions.ToList();
-            } catch (Exception) {
-
-                throw;
-            }
-
-        }
-        public ITrainingSession GetSessionDetails(int trainingId, string trainingType) {
-            try {
-                string TypeToLower = trainingType.ToLower();
-                return TypeToLower switch {
-                    "cycling" => GetCyclingDetails(trainingId),
-                    "running" => GetRunningDetails(trainingId),
-                    _ => throw new ArgumentException("Ongeldig trainingstype opgegeven.")
+                return new TrainingStatistics {
+                    TotalSessions = totalSessions,
+                    TotalDurationInMinutes = totalDurationInMinutes,
+                    AverageSessionDurationInMinutes = averageSessionDurationInMinutes,
+                    ShortestSessionInMinutes = shortestSessionInMinutes,
+                    LongestSessionInMinutes = longestSessionInMinutes
                 };
 
-
             } catch (Exception ex) {
 
-                throw;
+                throw new TrainingException("GetTrainingStatistics", ex);
+            }
+
+        }
+        public List<TrainingSessionBase> GetSessionsForCustomerMonth(int memberId, int year, int month) {
+            try {
+                return repo.GetSessionsForCustomerMonth(memberId, year, month);
+            } catch (Exception ex) {
+                throw new TrainingException("GetSessionsForCustomerMonth", ex);
             }
         }
+
+        public TrainingSessionBase GetSessionDetails(int trainingId, TrainingSessionType trainingType) {
+            return trainingType switch {
+                TrainingSessionType.Cycling => GetCyclingDetails(trainingId),
+                TrainingSessionType.Running => GetRunningDetails(trainingId),
+                _ => throw new ArgumentException("Invalid training type specified.")
+            };
+        }
+
         public CyclingSession GetCyclingDetails(int CylingSession) {
             try {
                 return repo.GetCyclingDetails(CylingSession);
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new TrainingException("GetSessionsForCustomerMonth", ex);
             }
         }
         public RunningSession GetRunningDetails(int runningSession) {
             try {
                 return repo.GetRunningDetails(runningSession);
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new TrainingException("GetRunningDetails", ex);
             }
         }
-     
-        public string EasyInputTrainingType(string trainingType) {
-            return trainingType.ToLower() switch {
-                "runningsession" => "RunningSession",
-                "running" => "RunningSession",
-                "cyclingsession" => "CyclingSession",
-                "cycling" => "CyclingSession",
-                _ => trainingType
-            };
-        }
+        private string GetMonthName(int month) {
+    return month switch {
+        1 => "Jan",
+        2 => "Feb",
+        3 => "Mar",
+        4 => "Apr",
+        5 => "May",
+        6 => "Jun",
+        7 => "Jul",
+        8 => "Aug",
+        9 => "Sep",
+        10 => "Oct",
+        11 => "Nov",
+        12 => "Dec",
+        _ => "Unknown"
+    };
+}
+
     }
 }

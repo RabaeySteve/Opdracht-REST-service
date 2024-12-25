@@ -1,14 +1,21 @@
 ﻿using FitnessBL.Models;
 using FitnessManagement.API.DTO_s;
+using FitnessManagement.API.Exceptions;
 using FitnessManagement.BL.Models;
 
 namespace FitnessManagement.API.Mapper {
     public class CyclingSessionMapper {
 
         public static CyclingSession MapCyclingSession(CyclingSessionDTO c) {
+            try {
+
+            } catch (Exception ex) {
+
+                throw new MapperException("MapCyclingSession", ex);
+            }
             return new CyclingSession {
                 TrainingId = c.CyclingSessionId,
-                CyclingMember = IdToMember(c.MemberId),
+                Member = IdToMember(c.MemberId),
                 Date = c.Date,
                 Duration = c.Duration,
                 AvgWatt = c.AvgWatt,
@@ -25,7 +32,7 @@ namespace FitnessManagement.API.Mapper {
             try {
                 return new CyclingSessionDTO {
                     CyclingSessionId = c.TrainingId,
-                    MemberId = c.CyclingMember.MemberId,
+                    MemberId = c.Member.MemberId,
                     Date = c.Date,
                     Duration = c.Duration,
                     AvgWatt = c.AvgWatt,
@@ -37,9 +44,9 @@ namespace FitnessManagement.API.Mapper {
 
 
                 };
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new MapperException("MapCyclingSessionToDTO", ex);
             }
        
         }

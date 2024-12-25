@@ -1,5 +1,6 @@
 ﻿using FitnessBL.Models;
 using FitnessManagement.API.DTO_s;
+using FitnessManagement.API.Exceptions;
 using FitnessManagement.BL.Models;
 
 namespace FitnessManagement.API.Mapper {
@@ -8,7 +9,7 @@ namespace FitnessManagement.API.Mapper {
             try {
                 return new RunningSession {
                     TrainingId = r.RunningSessionId,
-                    RunningMember = IdToMember(r.MemberId),
+                    Member = IdToMember(r.MemberId),
                     Date = r.Date,
                     Duration = r.Duration,
                     AvgSpeed = r.AvgSpeed,
@@ -19,9 +20,9 @@ namespace FitnessManagement.API.Mapper {
                         IntervalSpeed = d.IntervalSpeed
                     }).ToList()
                 };
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new MapperException("MapRunningSession", ex);
             }
         }
 
@@ -30,7 +31,7 @@ namespace FitnessManagement.API.Mapper {
             try {
                 return new RunningSessionDTO {
                     RunningSessionId = s.TrainingId,
-                    MemberId = s.RunningMember.MemberId,
+                    MemberId = s.Member.MemberId,
                     Date = s.Date,
                     Duration = s.Duration,
                     AvgSpeed = s.AvgSpeed,
@@ -40,14 +41,12 @@ namespace FitnessManagement.API.Mapper {
                         IntervalSpeed = d.IntervalSpeed
                     }).ToList()
                 };
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                throw new MapperException("MapToRunningDTO", ex);
             }
 
         }
-
-
 
         public static Member IdToMember(int memberId) {
             return new Member {

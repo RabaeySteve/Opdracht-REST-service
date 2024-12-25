@@ -1,4 +1,5 @@
-﻿using FitnessManagement.BL.Exceptions;
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.Exceptions;
 using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
 using System;
@@ -14,75 +15,32 @@ namespace FitnessManagement.BL.Services {
         public ReservationService(IReservationRepository repo) {
             this.repo = repo;
         }
-        // Je moet de getmethode zodanig aanpassen dit die kijkt of er al een reservatie voor of na is op die dag voor die member.
-        // je gaat een getreservation aanmaken. Daar ga je een meth hebben of het een dubble sessie is of een enkele. En dat op deze manier teruggeven
-        public List<Reservation> GetAll() {
+        public Reservation GetReservation(int reservationId) {
             try {
-                return repo.GetAll();
-            } catch (Exception ex) {
-
-                throw new ReservationException("GetAll");
-            }
-        }
-        public bool IsAvailable(DateOnly reservationDate, int equipmentId, int timeslot) {
-            DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
-            DateOnly endDate = startDate.AddDays(7);
-
-            // Controleer of de reservatiedatum binnen de geldige periode valt
-            if (reservationDate < startDate || reservationDate >= endDate) {
-                return false;
-            }
-
-            var equipment = repo.GetEquipment(equipmentId);
-            if (equipment.IsInMaintenance) {
-                return false;
-            }
-
-            var reservations = repo.GetAll();
-
-            // Controleer of de opgegeven tijdslot al is gereserveerd
-            foreach (var reservation in reservations) {
-                if (reservation.Equipment.EquipmentId == equipmentId &&
-                    reservation.Date == reservationDate &&
-                    reservation.TimeSlotRes.TimeSlotId == timeslot) {
-                    return false;
+                if (!repo.IsReservation(reservationId)) {
+                    throw new ReservationException("GetReservation - Reservatie bestaat niet");
                 }
-            }
 
-            return true; // Beschikbaar
-        }
-
-        public List<Equipment> GetAllEquipment() {
-            try {
-                return repo.GetAllEquipment();
+                return repo.GetReservationId(reservationId);
             } catch (Exception ex) {
-
-                throw;
+                throw new ReservationException("GetReservation", ex);
             }
         }
 
-        public List<Reservation> GetReservationsMemberDate(int memberId, DateOnly date) {
-            try {
-                return repo.GetReservationsMemberDate(memberId, date);
-            } catch (Exception ex) {
 
-                throw new ReservationException("GetReservationsMemberDate");
-            }
-        }
         public List<Reservation> GetReservationsMember(int memberId) {
             try {
-                return repo.GetReservationsMember(memberId);
+                return repo.GetReservationMember(memberId);
             } catch (Exception ex) {
-
-                throw new ReservationException("GetReservations");
+                throw new ReservationException("GetReservationsByMember", ex);
             }
         }
-        public List<Reservation> GetReservation(int id) {
-            try {
-                return repo.GetReservation(id);
-            } catch (Exception ex) {
 
-                throw new ReservationException("GetReservation");
+        public bool IsTimeSlotAvailable(Reservation reservation) {
+            try {
+                return repo.IsTimeSlotAvailable(reservation);
+            } catch (Exception ex) {
+                throw new ReservationException("IsTimeSlotAvailable", ex);
             }
         }
         public bool IsReservation(int reservationId) {
@@ -90,104 +48,142 @@ namespace FitnessManagement.BL.Services {
                 return repo.IsReservation(reservationId);
             } catch (Exception ex) {
 
-                throw new ReservationException("IsReservation");
+                throw new ReservationException("IsReservation", ex);
             }
         }
-        private Dictionary<DateOnly, Dictionary<int, int>> _reservationsByDate = new Dictionary<DateOnly, Dictionary<int, int>>();
+        public List<Reservation> GetReservationMemberDate(int memberId, DateOnly date) {
+            try {
+                return repo.GetReservationMemberDate(memberId, date);
+            } catch (Exception ex) {
 
-
-        public List<Reservation> AddReservation(List<Reservation> reservations) {
-            var addedReservations = new List<Reservation>();
-
-            foreach (var reservation in reservations) {
-                // 1. Controleer beschikbaarheid van het tijdslot en apparatuur
-                if (!IsAvailable(reservation.Date, reservation.Equipment.EquipmentId, reservation.TimeSlotRes.TimeSlotId)) {
-                    throw new ReservationException($"TimeSlot {reservation.TimeSlotRes.TimeSlotId} is not available for Equipment {reservation.Equipment.Type}.");
+                throw new ReservationException("GetReservationMemberDate", ex);
+            }
+        }
+        public Reservation AddReservation(Reservation reservation) {
+            try {
+                // Controleer of de reservatie al bestaat
+                if (repo.IsReservation(reservation.ReservationId)) {
+                    throw new ReservationException("AddReservation - Reservation already exists");
                 }
 
-                // 2. Genereer nieuw ReservationId en GroepsId
-                if (reservation.ReservationId == 0) {
-                    reservation.ReservationId = repo.GetAll().Count + 1;
-                    reservation.GroepsId = reservation.ReservationId; // Initieel groepsId = ReservationId
-                }
+                // Haal alle bestaande reservaties van de gebruiker op voor dezelfde datum
+                var existingReservations = GetReservationMemberDate(reservation.Member.MemberId, reservation.Date);
 
-                // 3. Controleer of de reservering al bestaat
-                if (IsReservation(reservation.ReservationId)) {
-                    throw new ReservationException("Reservation already exists.");
-                }
+                // Tel het totaal aantal tijdsloten uit alle bestaande reservaties
+                int totalTimeSlots = existingReservations.Sum(r => r.TimeSLotEquipment.Count) + reservation.TimeSLotEquipment.Count;
 
-                // 4. Controleer maximaal 4 reserveringen per dag voor de member
-                var reservationsForDate = GetReservationsMemberDate(reservation.Member.MemberId, reservation.Date);
-                if (reservationsForDate.Count >= 4) {
-                    throw new ReservationException("You can only make 4 reservations per day.");
+                // Controleer of het totaal aantal tijdsloten de limiet van 4 overschrijdt
+                if (totalTimeSlots > 4) {
+                    throw new ReservationException("AddReservation - Maximum of 4 time slots per day is reached");
                 }
+                if (reservation.TimeSLotEquipment.Count == 2) {
+                    var TimeSlots = reservation.TimeSLotEquipment.Keys.ToList();
+                    if (Math.Abs(TimeSlots[0] - TimeSlots[1]) != 1) {
+                        throw new ReservationException("Reservation TimeSlots must be consecutive");
+                    }
+                }
+                // Controleer op conflicten tussen tijdsloten
+                foreach (var tijdslot in reservation.TimeSLotEquipment.Keys) {
+                    foreach (var existingReservation in existingReservations) {
+                        foreach (var existingTijdslot in existingReservation.TimeSLotEquipment.Keys) {
+                            // Controleer op exacte overlap
+                            if (tijdslot == existingTijdslot) {
+                                throw new ReservationException("AddReservation - Overlapping time slots are not allowed.");
+                            }
 
-                // 5. Controleer opeenvolgende tijdslots
-                foreach (var existing in reservationsForDate) {
-                    if (existing.Equipment.EquipmentId == reservation.Equipment.EquipmentId) {
-                        int existingTimeSlot = existing.TimeSlotRes.TimeSlotId;
-                        if (Math.Abs(existingTimeSlot - reservation.TimeSlotRes.TimeSlotId) > 1) {
-                            throw new ReservationException("Cannot reserve more than 2 consecutive time slots.");
+                            // Controleer op directe aansluitingen
+                            if (Math.Abs(tijdslot - existingTijdslot) == 1) // Direct aansluitend
+                            {
+                                // Haal de status op van aansluitende tijdsloten
+                                bool hasBefore = existingReservations.Any(r => r.TimeSLotEquipment.Keys.Contains(tijdslot - 1));
+                                bool hasAfter = existingReservations.Any(r => r.TimeSLotEquipment.Keys.Contains(tijdslot + 1));
+
+                                if (reservation.TimeSLotEquipment.Count == 1) {
+                                    // Als er een slot ervoor en een na is, gooi een uitzondering
+                                    if (hasBefore && hasAfter) {
+                                        throw new ReservationException("AddReservation - Consecutive time slots limit exceeded.");
+                                    }
+
+                                    // Controleer op meer dan 2 aansluitende tijdsloten
+                                    if (existingReservations.Count(r => r.TimeSLotEquipment.Keys.Contains(tijdslot - 1)) > 1 ||
+                                        existingReservations.Count(r => r.TimeSLotEquipment.Keys.Contains(tijdslot + 1)) > 1) {
+                                        throw new ReservationException("AddReservation - Consecutive time slots limit exceeded.");
+                                    }
+                                } else if (reservation.TimeSLotEquipment.Count == 2) {
+                                    // Als de nieuwe reservation al twee slots heeft, mag er niets ervoor of erna zijn
+                                    if (hasBefore || hasAfter) {
+                                        throw new ReservationException("AddReservation - Consecutive time slots limit exceeded.");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
-                // 6. Voeg de reservering toe
+
+
+                // Controleer of de nieuwe tijdsloten beschikbaar zijn
+                if (!IsTimeSlotAvailable(reservation)) {
+                    throw new ReservationException("AddReservation - Timeslot is not available");
+                }
+
+                // Voeg de reservatie toe via de repository
+                reservation.ReservationId = repo.GetReservationId();
+                reservation.GroupsId = reservation.ReservationId;
                 repo.AddReservation(reservation);
-                addedReservations.Add(reservation);
+                return reservation;
+            } catch (Exception ex) {
+                throw new ReservationException("AddReservation", ex);
+            }
+        }
+        public void DeleteReservation(int groupId) {
+            try {
+                if (!repo.IsReservation(groupId))
+                    throw new ReservationException("UpdateReservation - Reservation Doesn't excist");
+                repo.DeleteReservation(groupId);
+            } catch (Exception ex) {
 
-                // 7. Maak een tweede reservering indien nodig
-                if (reservations.Count == 2) {
-                    var secondReservation = reservations[1];
-                    secondReservation.ReservationId = reservation.ReservationId + 1; // Uniek ID
-                    secondReservation.GroepsId = reservation.GroepsId; // Zelfde GroepsId
+                throw new ReservationException("AddReservation", ex);
+            }
+        }
 
-                    // Controleer beschikbaarheid van de tweede reservering
-                    if (!IsAvailable(secondReservation.Date, secondReservation.Equipment.EquipmentId, secondReservation.TimeSlotRes.TimeSlotId)) {
-                        throw new ReservationException($"TimeSlot {secondReservation.TimeSlotRes.TimeSlotId} is not available for Equipment {secondReservation.Equipment.Type}.");
+        public void UpdateReservation(Reservation reservation) {
+            try {
+                if (!repo.IsReservation(reservation.ReservationId))
+                    throw new ReservationException("UpdateReservation - Reservatie bestaat niet");
+                var existingReservations = GetReservationMemberDate(reservation.Member.MemberId, reservation.Date);
+
+                // Tel het totaal aantal tijdsloten uit alle bestaande reservaties
+                int totalTimeSlots = existingReservations.Sum(r => r.TimeSLotEquipment.Count) + reservation.TimeSLotEquipment.Count;
+
+                // Controleer of het totaal aantal tijdsloten de limiet van 4 overschrijdt
+                if (totalTimeSlots > 4) {
+                    throw new ReservationException("AddReservation - Maximum of 4 time slots per day is reached");
+                }
+
+                // Controleer op conflicten tussen tijdsloten
+                foreach (var tijdslot in reservation.TimeSLotEquipment.Keys) {
+                    foreach (var existingReservation in existingReservations) {
+                        foreach (var existingTijdslot in existingReservation.TimeSLotEquipment.Keys) {
+                            // Controleer of de tijdsloten elkaar overlappen
+                            if (Math.Abs(tijdslot - existingTijdslot) == 1) {
+                                if (reservation.TimeSLotEquipment.Count == 2 || existingReservation.TimeSLotEquipment.Count == 2) {
+                                    throw new ReservationException("AddReservation - Overlapping consecutive time slots are not allowed");
+                                }
+                            }
+                        }
                     }
-
-                    repo.AddReservation(secondReservation);
-                    addedReservations.Add(secondReservation);
                 }
-            }
-
-            return addedReservations;
-        }
-
-
-
-
-
-        public void DeleteReservation(Reservation reservation) {
-            try {
-                if (!IsReservation(reservation.ReservationId)) {
-                    throw new ReservationException("Reservation bestaat niet");
-                } else {
-                    repo.DeleteReservation(reservation);
-                    
+                if (!IsTimeSlotAvailable(reservation)) {
+                    throw new ReservationException("AddReservation - Timeslot is not available");
                 }
+                repo.UpdateReservation(reservation);
             } catch (Exception ex) {
-
-                throw new ReservationException("DeleteReservation");
+                throw new ReservationException("UpdateReservation", ex);
             }
-
         }
-        public Reservation UpdateReservation(Reservation reservation, bool dubbleReservation) {
-            try {
-                if (!IsReservation(reservation.ReservationId)) {
-                    throw new ReservationException("Reservation bestaat niet");
-                } else {
-                    reservation.GroepsId = reservation.ReservationId;
-                    DeleteReservation(reservation);
-                    //AddReservation(reservation, dubbleReservation);
-                    return reservation;
-                }
-            } catch (Exception ex) {
 
-                throw new ReservationException("UpdateReservation");
-            }
+       
 
-        }
     }
 }

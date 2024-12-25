@@ -1,20 +1,14 @@
-﻿namespace FitnessManagement.API.DTO_s {
-    //public class TrainingImpact {
+﻿using FitnessBL.Models;
+using FitnessManagement.BL.Models;
 
-    //    public int Id { get; set; }
-    //    public int MemberId { get; set; }
-    //    public DateOnly Date { get; set; }
-    //    public int Duration { get; set; }
-    //    public string TrainingType { get; set; }
+namespace FitnessManagement.API.DTO_s {
 
-    //    public string? Impact { get; set; }
+    public class TrainingMapped {
+        public int TrainingId { get; set; }
+        public int MemberId { get; set; }
+        public DateTime Date { get; set; }
+        public int Duration { get; set; }
+        public TrainingSessionType TrainingSessionType { get; set; }
 
-    //}
-
-    public class TrainingTypeMonth {
-        public DateOnly Date { get; set; }
-        public string TrainingType { get; set; }
-        
-        public string? Impact { get; set; }
     }
 }

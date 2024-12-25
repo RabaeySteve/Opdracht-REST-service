@@ -18,32 +18,17 @@ namespace FitnessBL.Models {
 
         public Member() { }
 
-        public Member(int memberId, string firstName, string lastName, string email, string address, DateOnly birthday, List<string>? interests, MemberType memberType, List<Program> programs) {
+        public Member(int memberId, string firstName, string lastName, string email, string address, DateOnly birthday, List<string> interests, MemberType memberType, List<Program> programs) {
             MemberId = memberId;
             _firstName = firstName;
             _lastName = lastName;
             _email = email;
             _address = address;
             _birthday = birthday;
-            _interests = interests ?? new List<string>(); // Gebruik een lege lijst als fallback
+            _interests = interests;
             Type = memberType;
             Programs = programs;
         }
-
-        //public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type, List<Program> programs) {
-        //    _firstName = firstName;
-        //    _lastName = lastName;
-        //    _email = email;
-        //    _address = address;
-        //    _birthday = birthday;
-        //    _interests = interests;
-        //    Type = type;
-        //    Programs = programs;
-        //}
-
-        //public Member(string firstName, string lastName, string? email, string address, DateOnly birthday, List<string>? interests, MemberType? type)
-        //: this(firstName, lastName, email, address, birthday, interests, type, new List<Program>()) {
-        //}
 
 
         public int MemberId { get; set; }
@@ -115,7 +100,7 @@ namespace FitnessBL.Models {
         }
 
 
-        public List<string>? Interests {
+        public List<string> Interests {
             get => _interests;
             set {
                 if (value == null)

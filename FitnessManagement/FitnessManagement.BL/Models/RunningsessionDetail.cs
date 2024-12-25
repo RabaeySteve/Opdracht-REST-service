@@ -46,7 +46,7 @@ namespace FitnessManagement.BL.Models {
         
 
         public override string? ToString() {
-            return $"RusnningSession ID: {RunningSessionId}, Seq Nr: {SeqNr}, Interval Time: {IntervalTime} sec, Interval Speed: {IntervalSpeed} km/h";
+            return $"RunningSession ID: {RunningSessionId}, Seq Nr: {SeqNr}, Interval Time: {IntervalTime} sec, Interval Speed: {IntervalSpeed} km/h";
         }
     }
 }

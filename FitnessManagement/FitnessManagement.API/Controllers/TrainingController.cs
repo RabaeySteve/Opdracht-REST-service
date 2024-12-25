@@ -18,16 +18,16 @@ namespace FitnessManagement.API.Controllers {
         }
 
         [HttpGet("session")]
-        public ActionResult<ITrainingSession> GetSession([FromQuery] int sessionId, [FromQuery] string trainingType) {
+        public ActionResult<TrainingSessionBase> GetSession([FromQuery] int sessionId, [FromQuery] TrainingSessionType trainingSessionType) {
             try {
               
-                if (sessionId == 0 || string.IsNullOrWhiteSpace(trainingType)) {
+                if (sessionId == 0) {
                     return BadRequest("Ongeldige inputparameters.");
                 }
-                ITrainingSession session = TrainingRepo.GetSessionDetails(sessionId, trainingType);
+                var session = TrainingRepo.GetSessionDetails(sessionId, trainingSessionType);
 
                 if (session == null) {
-                    return NotFound($"Geen sessie gevonden voor ID {sessionId} en type {trainingType}.");
+                    return NotFound($"Geen sessie gevonden voor ID {sessionId} en type {trainingSessionType}.");
                 }
 
                 if (session is RunningSession runningSession) {
@@ -41,26 +41,26 @@ namespace FitnessManagement.API.Controllers {
                 }
 
                
-                return BadRequest($"Ongeldig trainingstype: {trainingType}");
+                return BadRequest($"Ongeldig trainingstype: {trainingSessionType}");
             } catch (Exception ex) {
                 
                 return StatusCode(500, $"Interne serverfout: {ex.Message}");
             }
         }
         [HttpGet("sessions/month")]
-        public ActionResult<List<TrainingImpact>> GetAllMonth([FromQuery] int memberId, [FromQuery] int year, [FromQuery] int month) {
+        public ActionResult<List<TrainingMapped>> GetAllMonth([FromQuery] int memberId, [FromQuery] int year, [FromQuery] int month) {
             try {
                 if (memberId == 0 || year == 0 || month == 0) {
                     return BadRequest("Ongeldige inputparameters.");
                 }
 
-                List<TrainingSession> sessions = TrainingRepo.GetSessionsForCustomerMonth(memberId, year, month);
-            
+                List<TrainingSessionBase> sessions = TrainingRepo.GetSessionsForCustomerMonth(memberId, year, month);
+                List<TrainingMapped> mappesSessions = sessions.Select(x => TrainingMapper.MapTraining(x)).ToList();
                 if (sessions == null || !sessions.Any()) {
                     return NotFound($"Geen sessies gevonden voor klant ID {memberId} in {year}-{month}.");
                 }
 
-                return Ok(sessions);
+                return Ok(mappesSessions);
             } catch (Exception ex) {
                 return StatusCode(500, $"Interne serverfout: {ex.Message}");
             }
@@ -75,33 +75,30 @@ namespace FitnessManagement.API.Controllers {
             }
         }
         [HttpGet("sessions-per-month")]
-        public ActionResult<Dictionary<int, int>> GetSessionsPerMonth([FromQuery] int memberId, [FromQuery] int year) {
-            if (memberId <= 0 || year <= 0) {
-                return BadRequest("Ongeldige parameters.");
+        public ActionResult<List<MonthlySessionOverview>>GetTrainingStatisticsPerMonth([FromQuery]int memberId, [FromQuery] int year) {
+            try {
+                return TrainingRepo.GetTrainingStatisticsPerMonth(memberId, year);
+            } catch (Exception) {
+
+                throw;
             }
-
-            Dictionary<int, int> result = TrainingRepo.GetMonthlySessionCounts(memberId, year);
-
-            if (result == null || result.Count == 0) {
-                return NotFound($"Geen sessies gevonden voor lid ID {memberId} in {year}.");
-            }
-
-            return Ok(result);
+          
         }
-        [HttpGet("sessions-per-month/Type")]
-        public ActionResult<Dictionary<int, int>> GetMonthlySessionCountsType([FromQuery] int memberId, [FromQuery] int year) {
-            if (memberId <= 0 || year <= 0 ) {
-                return BadRequest("Ongeldige parameters.");
+        [HttpGet("sessions-per-month-summary")]
+        public ActionResult<List<MonthlySessionImpact>> GetTrainingStatisticsImpact([FromQuery] int memberId, [FromQuery] int year) {
+            try {
+                List<MonthlySessionImpact> result = TrainingRepo.GetTrainingStatisticsImpact(memberId, year);
+
+                if (result == null || !result.Any()) {
+                    return NotFound($"Geen sessies gevonden voor lid ID {memberId} in {year}.");
+                }
+
+                return Ok(result);
+            } catch (Exception ex) {
+                return StatusCode(500, new { Error = "An error occurred while fetching session summaries.", Details = ex.Message });
             }
-
-            
-
-            if (result == null || result.Count == 0) {
-                return NotFound($"Geen sessies gevonden voor lid ID {memberId} in {year}.");
-            }
-
-            return Ok(result);
         }
+
 
 
     }

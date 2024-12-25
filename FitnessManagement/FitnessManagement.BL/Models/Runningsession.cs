@@ -7,29 +7,31 @@ using FitnessBL.Models;
 using FitnessManagement.BL.Exceptions;
 using FitnessManagement.BL.Intefaces;
 namespace FitnessManagement.BL.Models {
-    public class RunningSession : ITrainingSession {
+    public class RunningSession : TrainingSessionBase {
         private DateTime _date;
         private int _duration;
         private double _avgSpeed;
 
         public RunningSession() {
+            TrainingSessionType = TrainingSessionType.Running;
         }
 
         public RunningSession(int runningSessionId, Member member, DateTime date, int duration, double avgSpeed, List<RunningSessionDetail> details) {
             TrainingId = runningSessionId;
-            RunningMember = member;
+            Member = member;
             _date = date;
             _duration = duration;
             _avgSpeed = avgSpeed;
             Details = details;
+            TrainingSessionType = TrainingSessionType.Running;
         }
 
         public List<RunningSessionDetail> Details { get; set; } = new List<RunningSessionDetail>();
 
-        public int TrainingId { get; set; }
-        public Member RunningMember { get; set; }
+        public override int TrainingId { get; set; }
+        public override Member Member { get; set; }
 
-        public DateTime Date {
+        public override DateTime Date {
             get => _date;
             set {
                 if (value.Date > DateTime.Now.Date) {
@@ -39,7 +41,7 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        public int Duration {
+        public override int Duration {
             get => _duration;
             set {
                 if (value <= 0) {
@@ -58,13 +60,13 @@ namespace FitnessManagement.BL.Models {
                 _avgSpeed = value;
             }
         }
-        public string TrainingType { get; set; }
-        public string GetImpact() {
+       
+        public override string GetImpact() {
             return "Unknown";
         }
 
         public override string ToString() {
-            return $"RusnningSession ID: {TrainingId}, Date: {Date.ToShortDateString()}, Member ID: {RunningMember.MemberId}, Duration: {Duration} mins, Avg Speed: {AvgSpeed} km/h";
+            return $"RunningSession ID: {TrainingId}, Date: {Date.ToShortDateString()}, Member ID: {Member.MemberId}, Duration: {Duration} mins, Avg Speed: {AvgSpeed} km/h";
         }
     }
 }

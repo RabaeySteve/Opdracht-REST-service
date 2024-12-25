@@ -8,7 +8,7 @@ using FitnessManagement.BL.Exceptions;
 using FitnessManagement.BL.Intefaces;
 
 namespace FitnessManagement.BL.Models {
-    public class CyclingSession : ITrainingSession{
+    public class CyclingSession : TrainingSessionBase{
        
         private DateTime _date;
         private int _duration;
@@ -20,6 +20,7 @@ namespace FitnessManagement.BL.Models {
 
 
         public CyclingSession() {
+            TrainingSessionType = TrainingSessionType.Cycling;
         }
 
         public CyclingSession(int trainingId, DateTime date, int duration, int avgWatt, int maxWatt, int avgCadence, int maxCadence, string comment, Member cyclingMember, CyclingTrainingType type) {
@@ -31,14 +32,14 @@ namespace FitnessManagement.BL.Models {
             _avgCadence = avgCadence;
             _maxCadence = maxCadence;
             _comment = comment;
-            CyclingMember = cyclingMember;
+            Member = cyclingMember;
             Type = type;
-            
+            TrainingSessionType = TrainingSessionType.Cycling;
            
         }
 
-        public int TrainingId { get; set; }
-        public Member CyclingMember { get; set; }
+        public override int TrainingId { get; set; }
+        public override Member Member { get; set; }
 
         
         public string? Comment {
@@ -96,7 +97,7 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        public int Duration {
+        public override int Duration {
             get => _duration;
             set {
                 if (value <= 0) {
@@ -106,7 +107,7 @@ namespace FitnessManagement.BL.Models {
             }
         }
 
-        public DateTime Date {
+        public override DateTime Date {
             get => _date;
             set {
                 if (value.Date > DateTime.Now.Date) {
@@ -123,8 +124,8 @@ namespace FitnessManagement.BL.Models {
             recovery,
             NoType
         }
-        public string TrainingType { get; set; }
-        public string GetImpact() {
+        
+        public override string GetImpact() {
             if (AvgWatt < 150 && Duration <= 90) return "low";
             if (AvgWatt < 150 && Duration > 90) return "medium";
             if (AvgWatt >= 150 && AvgWatt <= 200) return "medium";
@@ -134,8 +135,10 @@ namespace FitnessManagement.BL.Models {
 
 
         public override string ToString() {
-            return $"CyclingSession ID: {TrainingId}, Member ID: {CyclingMember}, Date: {Date.ToShortDateString()}, " +
+            return $"CyclingSession ID: {TrainingId}, Member ID: {Member}, Date: {Date.ToShortDateString()}, " +
                    $"Duration: {Duration} mins, AvgWatt: {AvgWatt}, MaxCadence: {MaxCadence}, Type: {Type}, Comment: {Comment}";
         }
+
+        
     }
 }

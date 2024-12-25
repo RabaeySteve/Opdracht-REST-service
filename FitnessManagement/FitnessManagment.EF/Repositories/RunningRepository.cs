@@ -21,47 +21,6 @@ namespace FitnessManagement.EF.Repositories {
             ctx.ChangeTracker.Clear();
         }
 
-        public void AddSession(RunningSession session) {
-            try {
-                // Map de session naar een EF entity
-                RunningSessionEF runningSessionEF = MapRunningSession.MapToDB(session, ctx);
-
-                // Voeg de hoofdentiteit toe en sla op
-                ctx.runningsession_main.Add(runningSessionEF);
-                SaveAndClear(); // Slaat op en maakt de context schoon
-
-                // Haal de toegewezen ID op
-                int assignedId = runningSessionEF.RunningSessionId;
-
-                // Wijs de ID toe aan de details
-                foreach (RunningSessionDetailsEF detail in runningSessionEF.Details) {
-                    detail.RunningSessionId = assignedId;
-                    ctx.runningsession_detail.Add(detail);
-                }
-
-                // Sla de details op
-                SaveAndClear();
-            } catch (Exception ex) {
-                throw new RepoException("Error adding running session", ex);
-            }
-        }
-
-
-      
-
-        public IEnumerable<RunningSession> GetAll() {
-
-            try {
-                List<RunningSessionEF> runningSessionEf = ctx.runningsession_main.AsNoTracking().ToList();
-
-                return runningSessionEf.Select(r => MapRunningSession.MapToDomain(r, ctx)).ToList();
-            } catch (Exception) {
-
-                throw;
-            }
-           
-        }
-
         public RunningSession GetById(int id) {
             try {
                 RunningSessionEF runningSessionEF = ctx.runningsession_main
@@ -70,22 +29,14 @@ namespace FitnessManagement.EF.Repositories {
                         .AsNoTracking()
                         .FirstOrDefault();
                 if (runningSessionEF == null) {
-                    
+
                     return null;
                 }
 
                 return MapRunningSession.MapToDomain(runningSessionEF, ctx);
 
-            } catch (Exception ex ) {
+            } catch (Exception ex) {
                 throw new RepoException("GetById", ex);
-            }
-        }
-
-        public bool IsRunningSession(int id) {
-            try {
-                return ctx.runningsession_main.Any(r => r.RunningSessionId == id);
-            } catch (Exception) {
-                throw;
             }
         }
 

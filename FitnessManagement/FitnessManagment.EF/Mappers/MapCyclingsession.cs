@@ -33,8 +33,8 @@ namespace FitnessManagement.EF.Mappers {
         }
         public static CyclingSessionEF MapToDB(CyclingSession c, FitnessManagementContext ctx) {
             try {
-                MemberEF memberEF = ctx.members.Find(c.CyclingMember.MemberId);
-                if (memberEF == null) { memberEF = MapMember.MapToDB(c.CyclingMember); }
+                MemberEF memberEF = ctx.members.Find(c.Member.MemberId);
+                if (memberEF == null) { memberEF = MapMember.MapToDB(c.Member); }
                 return new CyclingSessionEF(
                       c.TrainingId,
                       c.Date,

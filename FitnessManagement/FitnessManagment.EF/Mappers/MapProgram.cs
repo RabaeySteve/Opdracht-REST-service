@@ -40,7 +40,7 @@ namespace FitnessManagement.EF.Mappers {
                     );
             } catch (Exception ex) {
 
-                throw new MapException("MapProgram - MapToDB");
+                throw new MapException("MapProgram - MapToDB", ex);
             }
         }
         public static ProgramTarget MapStringToProgramTarget(string programTarget) {

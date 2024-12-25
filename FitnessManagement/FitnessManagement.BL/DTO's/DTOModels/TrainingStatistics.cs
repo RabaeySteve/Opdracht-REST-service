@@ -11,6 +11,7 @@ namespace FitnessManagement.BL.DTO_s.DTOModels {
         public int ShortestSessionInMinutes {  get; set; }
         public int LongestSessionInMinutes { get; set; }
         public double AverageSessionDurationInMinutes { get; set; }
-        //public string TrainingImpact { get; set; } 
+        
     }
+
 }

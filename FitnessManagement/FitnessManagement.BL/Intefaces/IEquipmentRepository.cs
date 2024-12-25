@@ -11,7 +11,6 @@ namespace FitnessManagement.BL.Intefaces {
         Equipment GetEquipment(int id);
         bool IsEquipment(int id);
         void AddEquipment(Equipment equipment);
-       
         void SetMaintenance(int equipmentId, bool IsInMaintenance);
         IEnumerable<Equipment> GetAvailableEquipment();
 

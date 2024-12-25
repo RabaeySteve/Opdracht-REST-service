@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitnessManagement.EF.Model {
-    
+
     public class EquipmentEF {
         public EquipmentEF() { }
 
@@ -13,15 +13,15 @@ namespace FitnessManagement.EF.Model {
         }
 
         [Key]
-        [Column("equipment_id")] 
+        [Column("equipment_id")]
         public int EquipmentId { get; set; }
 
         [Required]
-        [Column("device_type", TypeName = "nvarchar(45)")] 
+        [Column("device_type", TypeName = "nvarchar(45)")]
         public string Type { get; set; }
 
-        
-        
+
+
         [Column(TypeName = "bit")]
         public bool IsInMaintenance { get; set; }
     }
