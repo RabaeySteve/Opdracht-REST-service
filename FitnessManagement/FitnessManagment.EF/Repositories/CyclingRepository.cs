@@ -14,8 +14,8 @@ namespace FitnessManagement.EF.Repositories {
     public class CyclingRepository : ICyclingRepository{
         private FitnessManagementContext ctx;
 
-        public CyclingRepository(string connectioString) {
-            this.ctx = new FitnessManagementContext(connectioString);
+        public CyclingRepository(string connectionString) {
+            this.ctx = new FitnessManagementContext(connectionString);
         }
         private void SaveAndClear() {
             ctx.SaveChanges();

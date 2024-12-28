@@ -30,6 +30,55 @@ namespace FitnessManagement.API.Controllers {
                 return NotFound(ex.Message);
             }
         }
+        [HttpGet("{id}/{date}")]
+        public ActionResult<List<ReservationGetDTO>> GetMemberDate(int id, string date) {
+            try {
+                if (!DateOnly.TryParse(date, out var parsedDate)) {
+                    return BadRequest("Invalid date format. Please use 'yyyy-MM-dd'.");
+                }
+                List<Reservation> reservations = ReservationRepo.GetReservationMemberDate(id, parsedDate);
+                var result = new List<ReservationGetDTO>();
+                foreach (Reservation reservation in reservations) {
+                    
+                    var mappedReservation = ReservationMapper.MapToGetDTO(reservation);
+                    
+                    result.Add(mappedReservation);
+                }
+                if (result == null) {
+                    return NotFound();
+                }
+                return Ok(result);
+            } catch (ReservationException ex) {
+
+                return NotFound(ex.Message);
+            }
+        }
+       
+        [HttpGet("{date}/AvailableTimeSlots")]
+        public ActionResult<Dictionary<int, List<EquipmentString>>> GetAvailableTimeSlots(string date) {
+            try {
+                // Controleer of de datum geldig is
+                if (!DateOnly.TryParse(date, out var parsedDate)) {
+                    return BadRequest("Invalid date format. Please use 'yyyy-MM-dd'.");
+                }
+
+                // Haal de beschikbare tijdsloten op
+                var availableTimeSlots = ReservationRepo.AvailableTimeSlotDate(parsedDate);
+
+                // Map elke lijst van Equipment naar EquipmentString
+                var mappedTimeSlots = availableTimeSlots.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Select(equipment => EquipmentMapper.MapEquipmentTypeToStirng(equipment)).ToList()
+                );
+
+                return Ok(mappedTimeSlots);
+            } catch (ReservationException ex) {
+                return NotFound(ex.Message);
+            }
+        }
+
+
+
         [HttpPost]
         public ActionResult<ReservationPostDTO> Post(ReservationPostDTO reservationDTO) {
 
@@ -47,7 +96,10 @@ namespace FitnessManagement.API.Controllers {
         [HttpPut]
         public IActionResult Put(int id, [FromBody] ReservationPutDTO reservationPutDTO) {
             if (reservationPutDTO == null ) {
-                return BadRequest();
+                return BadRequest("Data cannot be null.");
+            }
+            if (!ReservationRepo.IsReservation(id)) {
+                return NotFound($"Reservation with ID {id} does not exist.");
             }
             ReservationRepo.UpdateReservation(ReservationMapper.MapDTOToReservation(reservationPutDTO));
             return new NoContentResult();

@@ -13,6 +13,7 @@ namespace FitnessManagement.BL.Intefaces {
         
         List<Reservation> GetReservationMember(int memberId);
         List<Reservation> GetReservationMemberDate(int memberId, DateOnly date);
+        Dictionary<int, List<Equipment>> AvailableTimeSlotDate(DateOnly date);
         bool IsTimeSlotAvailable(Reservation reservation);
         bool IsReservation(int reservationId);
         void AddReservation(Reservation reservation);

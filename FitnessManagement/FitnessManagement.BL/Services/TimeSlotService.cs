@@ -14,7 +14,14 @@ namespace FitnessManagement.BL.Services {
         public TimeSlotService(ITimeSlotRepository repo) {
             this.repo = repo;
         }
+        public List<TimeSlot> GetAllTimeSlots() {
+            try {
+                return repo.GetAllTimeSlots();
+            } catch (Exception ex) {
 
+                throw new TimeSlotException("GetAllTimeSlots", ex);
+            }
+        }
         public TimeSlot GetTimeSlot(int startTime) {
             try {
                 return repo.GetTimeSlot(startTime);
@@ -23,6 +30,7 @@ namespace FitnessManagement.BL.Services {
                 throw new TimeSlotException("GetTimeSlot", ex);
             }
         }
+
     }
 
 }

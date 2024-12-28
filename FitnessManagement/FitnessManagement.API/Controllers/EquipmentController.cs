@@ -22,7 +22,7 @@ namespace FitnessManagement.API.Controllers {
         public ActionResult<Equipment> Get(int id) {
             try {
                 return EquipmentService.GetEquipment(id);
-            } catch (MemberException ex) {
+            } catch (EquipmentException ex) {
 
                 return NotFound(ex.Message);
             }
@@ -36,7 +36,7 @@ namespace FitnessManagement.API.Controllers {
         [HttpPut]
         public IActionResult Put(int id, [FromBody] EquipmentDTO equipment) {
             if (equipment == null || equipment.EquipmentId != id) {
-                return BadRequest();
+                return BadRequest("EquipmentId in the body is not the same as the routeID.");
             }
             
             EquipmentService.SetMaintenance(equipment.EquipmentId, equipment.IsInMaintenance);

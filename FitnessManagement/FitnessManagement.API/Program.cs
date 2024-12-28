@@ -1,6 +1,7 @@
 
 using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Services;
+using FitnessManagement.EF.Repositories;
 using System.Configuration;
 namespace FitnessManagement.API {
     public class Program {
@@ -34,7 +35,7 @@ namespace FitnessManagement.API {
             builder.Services.AddSingleton<CyclingSessionService>();
             builder.Services.AddSingleton<ITrainingRepository>(r => FitnessDataLayerProvider.FitnessDatalayerFactory.GeefRepositories(connectionString, dataLayer).TrainingRepository);
             builder.Services.AddSingleton<TrainingService>();
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -10,7 +10,7 @@ namespace FitnessDataLayerProvider {
     public class FitnessRepositories {
         public IMemberRepository MemberRepository { get; }
         public IEquipmentRepository EquipmentRepository { get; }
-        public ITimeSlotRepository TimeSlotRepository { get; }
+      
         public IReservationRepository ReservationRepository { get; }
 
         public IProgramRepository ProgramRepository { get; }
@@ -18,20 +18,22 @@ namespace FitnessDataLayerProvider {
         public IRunningSessionRepository RunningSessionRepository { get; }
         public ICyclingRepository CyclingRepository { get; }
         public ITrainingRepository TrainingRepository { get; }
-
+       
+        public ITimeSlotRepository TimeSlotRepository { get; }
         public FitnessRepositories(string connectionString, string repositoryType) {
 
 			try {
                 switch(repositoryType) {
                     case "EFCore":
                         MemberRepository = new MemberRepositoryEF(connectionString);
+                       
                         EquipmentRepository = new EquipmentRepository(connectionString);
-                        TimeSlotRepository = new TimeSlotRepository(connectionString);
                         ReservationRepository = new ReservationRepository(connectionString);
                         ProgramRepository = new ProgramRepository(connectionString);
                         RunningRepository = new RunningRepository(connectionString);
                         CyclingRepository = new CyclingRepository(connectionString);
                         TrainingRepository = new TrainingRepository(connectionString);
+                        
                         break;
                     
                     default: throw new Exception();

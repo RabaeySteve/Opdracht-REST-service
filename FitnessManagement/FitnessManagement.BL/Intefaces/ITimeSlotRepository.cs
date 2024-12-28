@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FitnessManagement.BL.Intefaces {
     public interface ITimeSlotRepository {
         void addTimeSlot(TimeSlot timeSlot);
-        IEnumerable<TimeSlot> GetAllTimeSlots();
+        List<TimeSlot> GetAllTimeSlots();
         TimeSlot GetTimeSlot(int startTime);
     }
 }

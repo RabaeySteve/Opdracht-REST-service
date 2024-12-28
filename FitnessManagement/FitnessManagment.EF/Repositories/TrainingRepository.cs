@@ -16,8 +16,8 @@ namespace FitnessManagement.EF.Repositories {
     public class TrainingRepository : ITrainingRepository {
         private FitnessManagementContext ctx;
 
-        public TrainingRepository(string connectioString) {
-            this.ctx = new FitnessManagementContext(connectioString);
+        public TrainingRepository(string connectionString) {
+            this.ctx = new FitnessManagementContext(connectionString);
         }
         //Zet Cyclingsessions en RunningSessions samen in 1 list.
         public List<TrainingSessionBase> GetAllTrainingSessions(int memberId) {

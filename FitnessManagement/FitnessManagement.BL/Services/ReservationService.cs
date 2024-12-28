@@ -91,31 +91,8 @@ namespace FitnessManagement.BL.Services {
                                 throw new ReservationException("AddReservation - Overlapping time slots are not allowed.");
                             }
 
-                            // Controleer op directe aansluitingen
-                            if (Math.Abs(tijdslot - existingTijdslot) == 1) // Direct aansluitend
-                            {
-                                // Haal de status op van aansluitende tijdsloten
-                                bool hasBefore = existingReservations.Any(r => r.TimeSLotEquipment.Keys.Contains(tijdslot - 1));
-                                bool hasAfter = existingReservations.Any(r => r.TimeSLotEquipment.Keys.Contains(tijdslot + 1));
-
-                                if (reservation.TimeSLotEquipment.Count == 1) {
-                                    // Als er een slot ervoor en een na is, gooi een uitzondering
-                                    if (hasBefore && hasAfter) {
-                                        throw new ReservationException("AddReservation - Consecutive time slots limit exceeded.");
-                                    }
-
-                                    // Controleer op meer dan 2 aansluitende tijdsloten
-                                    if (existingReservations.Count(r => r.TimeSLotEquipment.Keys.Contains(tijdslot - 1)) > 1 ||
-                                        existingReservations.Count(r => r.TimeSLotEquipment.Keys.Contains(tijdslot + 1)) > 1) {
-                                        throw new ReservationException("AddReservation - Consecutive time slots limit exceeded.");
-                                    }
-                                } else if (reservation.TimeSLotEquipment.Count == 2) {
-                                    // Als de nieuwe reservation al twee slots heeft, mag er niets ervoor of erna zijn
-                                    if (hasBefore || hasAfter) {
-                                        throw new ReservationException("AddReservation - Consecutive time slots limit exceeded.");
-                                    }
-                                }
-                            }
+                          
+                            
                         }
                     }
                 }
@@ -165,15 +142,14 @@ namespace FitnessManagement.BL.Services {
                 foreach (var tijdslot in reservation.TimeSLotEquipment.Keys) {
                     foreach (var existingReservation in existingReservations) {
                         foreach (var existingTijdslot in existingReservation.TimeSLotEquipment.Keys) {
-                            // Controleer of de tijdsloten elkaar overlappen
-                            if (Math.Abs(tijdslot - existingTijdslot) == 1) {
-                                if (reservation.TimeSLotEquipment.Count == 2 || existingReservation.TimeSLotEquipment.Count == 2) {
-                                    throw new ReservationException("AddReservation - Overlapping consecutive time slots are not allowed");
-                                }
+                            // Controleer of de tijdsloten exact overlappen
+                            if (tijdslot == existingTijdslot) {
+                                throw new ReservationException("AddReservation - Overlapping time slots are not allowed");
                             }
                         }
                     }
                 }
+
                 if (!IsTimeSlotAvailable(reservation)) {
                     throw new ReservationException("AddReservation - Timeslot is not available");
                 }
@@ -182,8 +158,16 @@ namespace FitnessManagement.BL.Services {
                 throw new ReservationException("UpdateReservation", ex);
             }
         }
+        public Dictionary<int, List<Equipment>> AvailableTimeSlotDate(DateOnly date) {
+            try {
+               return repo.AvailableTimeSlotDate(date);
+            } catch (Exception ex) {
 
-       
+                throw new ReservationException("AvailableTimeSlotDate", ex);
+            }
+        }
+
+
 
     }
 }

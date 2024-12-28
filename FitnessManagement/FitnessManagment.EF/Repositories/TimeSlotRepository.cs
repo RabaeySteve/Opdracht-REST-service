@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 
 namespace FitnessManagement.EF.Repositories {
     public class TimeSlotRepository : ITimeSlotRepository {
-        private FitnessManagementContext ctx;
+        private readonly FitnessManagementContext ctx;
 
-        public TimeSlotRepository(string connectioString) {
-            this.ctx = new FitnessManagementContext(connectioString);
+        public TimeSlotRepository(string connectionString) {
+           
+            ctx = new FitnessManagementContext(connectionString);
         }
-        private void SaveAndClear() {
+    
+
+    private void SaveAndClear() {
             ctx.SaveChanges();
             ctx.ChangeTracker.Clear();
         }
@@ -30,7 +33,7 @@ namespace FitnessManagement.EF.Repositories {
             }
         }
 
-        public IEnumerable<TimeSlot> GetAllTimeSlots() {
+        public List<TimeSlot> GetAllTimeSlots() {
             try {
                 return ctx.time_slot.Select(x => MapTimeSlot.MapToDomain(x)).ToList();
             } catch (Exception ex) {

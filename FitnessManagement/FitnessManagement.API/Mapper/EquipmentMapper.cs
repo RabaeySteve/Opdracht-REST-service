@@ -17,5 +17,18 @@ namespace FitnessManagement.API.Mapper
             }
           
         }
+        public static EquipmentString MapEquipmentTypeToStirng(Equipment equipment) {
+            try {
+                return new EquipmentString {
+                    EquipmentId = equipment.EquipmentId,
+                    EquipmentType = equipment.Type.ToString(),
+                    IsInMaintenance = equipment.IsInMaintenance
+                };
+            } catch (Exception ex) {
+
+                throw new MapperException("MapEquipment", ex);
+            }
+
+        }
     }
 }

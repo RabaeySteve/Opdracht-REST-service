@@ -14,17 +14,23 @@ namespace FitnessManagement.API.Mapper {
                     GroupsId = r.GroupsId,
                     Date = r.Date,
                     MemberId = r.Member.MemberId,
+                    FirstName = r.Member.FirstName,
+                    LastName = r.Member.LastName,
+                    Email = r.Member.Email,
                     Reservations = r.TimeSLotEquipment.Select(x => new TimeSlotEquipmentGetDTO {
-                        TimeSlot = x.Key != null? IdToTimeSlot(x.Key) : null,
-                        Equipment = x.Value ,
+                        TimeSlot = x.Key != null ? IdToTimeSlot(x.Key) : null,
+                        Equipment = new EquipmentString {
+                            EquipmentId = x.Value.EquipmentId,
+                            EquipmentType = x.Value.Type.ToString(), 
+                            IsInMaintenance = x.Value.IsInMaintenance
+                        }
                     }).ToList(),
-
                 };
             } catch (Exception ex) {
-
                 throw new MapperException("MapToGetDTO", ex);
             }
         }
+
         public static ReservationPutDTO MapToPutDTO(Reservation r) {
             try {
                 return new ReservationPutDTO {

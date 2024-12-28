@@ -19,7 +19,7 @@ namespace FitnessManagement.BL.Services {
             
         }
 
-        public IEnumerable<Member> GetMembers() {
+        public List<Member> GetMembers() {
             try {
                 return repo.GetMembers();
             } catch (Exception ex) {

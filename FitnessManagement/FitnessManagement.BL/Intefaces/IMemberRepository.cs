@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Intefaces {
     public interface IMemberRepository {
-        IEnumerable<Member> GetMembers();
+        List<Member> GetMembers();
         Member GetMember(int id);
         bool IsMember(int id);
         bool IsMember(string firstname,string adress, DateOnly birthday);

@@ -15,8 +15,8 @@ namespace FitnessManagement.EF.Repositories {
 
         private FitnessManagementContext ctx;
 
-        public EquipmentRepository(string connectioString) {
-            this.ctx = new FitnessManagementContext(connectioString);
+        public EquipmentRepository(string connectionString) {
+            this.ctx = new FitnessManagementContext(connectionString);
         }
         private void SaveAndClear() {
             ctx.SaveChanges();

@@ -27,17 +27,28 @@ namespace FitnessManagement.API.Controllers {
         }
         [HttpPost]
         public ActionResult<FitnessManagement.BL.Models.Program> Post(FitnessManagement.BL.Models.Program program) {
-            ProgramService.AddProgram(program);
-            return CreatedAtAction(nameof(Get), new { programCode = program.ProgramCode }, program);
+            try {
+                ProgramService.AddProgram(program);
+                return CreatedAtAction(nameof(Get), new { programCode = program.ProgramCode }, program);
+            } catch (ProgramException ex) {
+                return BadRequest(ex.Message);
+            }
+          
         }
         [HttpPut]
         public IActionResult Put(string programCode, [FromBody] FitnessManagement.BL.Models.Program program) {
-            if (program == null || program.ProgramCode != programCode) {
-                return BadRequest();
-            }
+            try {
+                if (program == null || program.ProgramCode != programCode) {
+                    return BadRequest();
+                }
 
-            ProgramService.UpdateProgram(program);
-            return new NoContentResult();
+                ProgramService.UpdateProgram(program);
+                return new NoContentResult();
+            } catch (Exception ex) {
+                return StatusCode(500, ex.Message);
+
+            }
+           
         }
     }
 }

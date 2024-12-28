@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "nFrgYVsF/VljC/+q44xwYax1MpPPTda5UanUeJKFASQnUXEp0ztvE4fMiQOdKKTDcRxrgz6n4eGNqyvgMwSZQA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\steve\\github\\jaar2\\ProgGev2\\Opdracht-REST-service\\FitnessManagementWPF\\FitnessClientWPF\\FitnessClientWPF\\FitnessManagementClient\\FitnessManagementClient.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\steve\\.nuget\\packages\\microsoft.aspnet.webapi.client\\6.0.0\\microsoft.aspnet.webapi.client.6.0.0.nupkg.sha512",
+    "C:\\Users\\steve\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\steve\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "C:\\Users\\steve\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\steve\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
+  ],
+  "logs": []
+}

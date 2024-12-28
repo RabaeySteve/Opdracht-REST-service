@@ -15,8 +15,8 @@ namespace FitnessManagement.EF.Repositories {
     public class MemberRepositoryEF : IMemberRepository {
         private FitnessManagementContext ctx;
 
-        public MemberRepositoryEF(string connectioString) {
-            this.ctx = new FitnessManagementContext(connectioString);
+        public MemberRepositoryEF(string connectionString) {
+            this.ctx = new FitnessManagementContext(connectionString);
         }
         private void SaveAndClear() {
             ctx.SaveChanges();
@@ -61,7 +61,7 @@ namespace FitnessManagement.EF.Repositories {
             }
         }
 
-        public IEnumerable<Member> GetMembers() {
+        public List<Member> GetMembers() {
             try {
                 
                 List<MemberEF> memberEFs = ctx.members.AsNoTracking().ToList();

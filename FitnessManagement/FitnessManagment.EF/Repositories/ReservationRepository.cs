@@ -16,8 +16,8 @@ namespace FitnessManagement.EF.Repositories {
     public class ReservationRepository : IReservationRepository {
         private FitnessManagementContext ctx;
 
-        public ReservationRepository(string connectioString) {
-            this.ctx = new FitnessManagementContext(connectioString);
+        public ReservationRepository(string connectionString) {
+            this.ctx = new FitnessManagementContext(connectionString);
         }
         private void SaveAndClear() {
             ctx.SaveChanges();
@@ -151,6 +151,51 @@ namespace FitnessManagement.EF.Repositories {
                 throw new RepoException("ReservationRepo - IsTimeSlotAvailable", ex);
             }
         }
+        public Dictionary<int, List<Equipment>> AvailableTimeSlotDate(DateOnly date) {
+            try {
+                // Haal alle tijdsloten op
+                var allTimeSlots = ctx.time_slot.ToList();
+
+                // Haal alle apparatuur op
+                var allEquipment = ctx.equipment.ToList();
+
+                // Haal alle bezette combinaties van tijdsloten en apparatuur op voor de opgegeven datum
+                var occupiedTimeSlotEquipments = ctx.reservation
+                    .Where(r => r.Date == date)
+                    .Select(r => new { r.TimeSlot.TimeSlotId, r.Equipment.EquipmentId })
+                    .ToList();
+
+                // Maak een dictionary om beschikbare apparatuur per tijdslot te verzamelen
+                var availableTimeSlotEquipments = new Dictionary<int, List<Equipment>>();
+
+                foreach (var timeSlot in allTimeSlots) {
+                    // Haal de bezette apparatuur op voor dit specifieke tijdslot
+                    var occupiedEquipmentForSlot = occupiedTimeSlotEquipments
+                        .Where(o => o.TimeSlotId == timeSlot.TimeSlotId)
+                        .Select(o => o.EquipmentId)
+                        .ToHashSet();
+
+                    // Filter apparatuur die niet bezet is en niet in onderhoud is
+                    var availableEquipment = allEquipment
+                        .Where(e => !occupiedEquipmentForSlot.Contains(e.EquipmentId) && !e.IsInMaintenance) // Controleer ook op IsInMaintenance
+                        .Select(e => MapEquipment.MapToDomain(e)) // Gebruik de mapper hier
+                        .ToList();
+
+                    // Voeg de beschikbare apparatuur toe aan het tijdslot
+                    if (availableEquipment.Any()) {
+                        availableTimeSlotEquipments[timeSlot.TimeSlotId] = availableEquipment;
+                    }
+                }
+
+                return availableTimeSlotEquipments;
+            } catch (Exception ex) {
+                throw new RepoException("ReservationRepo - AvailableTimeSlotDate", ex);
+            }
+        }
+
+
+
+
 
 
 

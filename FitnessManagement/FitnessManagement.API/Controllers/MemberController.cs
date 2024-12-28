@@ -21,6 +21,25 @@ namespace FitnessManagement.API.Controllers {
             this.MemberRepo = memberRepo;
             this.ReservationRepo = reservationRepo;
         }
+        [HttpGet]
+        [Route("members")]
+        public ActionResult<List<MemberDTO>> GetAll() {
+            try {
+               
+                var result = new List<MemberDTO>();
+                var members = MemberRepo.GetMembers();
+
+                foreach (var member in members) {
+                    var mappedMember = MemberMapper.ToMemberDTO(member);
+                    result.Add(mappedMember);
+                }
+
+                return Ok(result);
+            } catch (MemberException ex) {
+                return NotFound(ex.Message);
+            }
+        }
+
 
         [HttpGet("{id}")]
         public ActionResult<MemberDTO> Get(int id) {
@@ -31,7 +50,7 @@ namespace FitnessManagement.API.Controllers {
                 return NotFound(ex.Message);
             }
         }
-        [HttpGet(("{id}/Programs"))]
+        [HttpGet("{id}/Programs")]
         public ActionResult<MemberProgramsDTO> GetMemberPrograms(int id) {
             try {
                 Member member = MemberRepo.GetMember(id);
@@ -43,7 +62,7 @@ namespace FitnessManagement.API.Controllers {
                 
             } catch (MemberException ex) {
 
-                throw new MemberException("");
+                return NotFound(ex.Message);
             }
         }
         [HttpGet("{id}/Reservations")]
@@ -51,20 +70,24 @@ namespace FitnessManagement.API.Controllers {
             try {
                 List<Reservation> reservation = ReservationRepo.GetReservationsMember(id);
                 List<ReservationGetDTO> reservationGetDTO = reservation.Select(x => ReservationMapper.MapToGetDTO(x)).ToList();
-                return reservationGetDTO;
-            } catch (Exception) {
+                if (reservation == null || !reservation.Any()) {
+                    return NotFound("No reservations found for this member.");
+                }
 
-                return NotFound();
+                return reservationGetDTO;
+            } catch (Exception ex) {
+
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpPost("Create-Member")]
+        [HttpPost("Members")]
         public ActionResult<Member> Post(MemberDTO member) {
             MemberRepo.AddMember(MemberMapper.ToMember(member));
             return CreatedAtAction(nameof(Get), new {id = member.MemberId}, member);
         }
 
-        [HttpPost("Add-Program")]
+        [HttpPost("{id}/programs")]
         public ActionResult<Member> Post(MemberAddProgramDTO program) {
             MemberRepo.AddProgram(program.MemberId, program.ProgramCode);
             return CreatedAtAction(nameof(Get), new { id = program.MemberId }, program);
@@ -76,10 +99,7 @@ namespace FitnessManagement.API.Controllers {
             if (member == null || member.MemberId != id) {
                 return BadRequest();
             }
-            if (!MemberRepo.IsMember(id)) {
-                MemberRepo.AddMember(MemberMapper.ToMember(member));
-                return CreatedAtAction(nameof(Get), new { id = member.MemberId }, member);
-            }
+
             MemberRepo.UpdateMember(MemberMapper.ToMember(member));
             return new NoContentResult();
         }
