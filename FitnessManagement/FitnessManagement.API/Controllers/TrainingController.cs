@@ -71,16 +71,16 @@ namespace FitnessManagement.API.Controllers {
                 return TrainingRepo.GetTrainingStatistics(memberId);
             } catch (Exception ex) {
 
-                throw;
+                return NotFound(ex.Message);
             }
         }
         [HttpGet("sessions-per-month")]
         public ActionResult<List<MonthlySessionOverview>>GetTrainingStatisticsPerMonth([FromQuery]int memberId, [FromQuery] int year) {
             try {
                 return TrainingRepo.GetTrainingStatisticsPerMonth(memberId, year);
-            } catch (Exception) {
+            } catch (Exception ex) {
 
-                throw;
+                return NotFound(ex.Message);
             }
           
         }

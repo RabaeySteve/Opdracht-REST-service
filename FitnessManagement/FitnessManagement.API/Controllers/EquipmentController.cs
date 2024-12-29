@@ -21,8 +21,9 @@ namespace FitnessManagement.API.Controllers {
         [HttpGet("{id}")]
         public ActionResult<Equipment> Get(int id) {
             try {
-                return EquipmentService.GetEquipment(id);
-            } catch (EquipmentException ex) {
+                Equipment equipment = EquipmentService.GetEquipment(id);
+                return Ok(equipment);
+            } catch (Exception ex) {
 
                 return NotFound(ex.Message);
             }
@@ -30,17 +31,26 @@ namespace FitnessManagement.API.Controllers {
 
         [HttpPost]
         public ActionResult<Equipment> Post(Equipment equipment) {
-            EquipmentService.AddEquipment(equipment);
-            return CreatedAtAction(nameof(Get), new { id = equipment.EquipmentId }, equipment);
+            try {
+                EquipmentService.AddEquipment(equipment);
+                return CreatedAtAction(nameof(Get), new { id = equipment.EquipmentId }, equipment);
+            } catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
+           
         }
         [HttpPut]
         public IActionResult Put(int id, [FromBody] EquipmentDTO equipment) {
             if (equipment == null || equipment.EquipmentId != id) {
                 return BadRequest("EquipmentId in the body is not the same as the routeID.");
             }
-            
-            EquipmentService.SetMaintenance(equipment.EquipmentId, equipment.IsInMaintenance);
-            return new NoContentResult();
+            try {
+                EquipmentService.SetMaintenance(equipment.EquipmentId, equipment.IsInMaintenance);
+                return new NoContentResult();
+            } catch (Exception ex) {
+                return Conflict(new { message = ex.Message });
+            }
+          
         }
     }
 }

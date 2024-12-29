@@ -4,132 +4,139 @@ using FitnessManagement.BL.Intefaces;
 using FitnessManagement.BL.Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Services {
     public class MemberService {
-        private IMemberRepository repo;
-        
+        private readonly IMemberRepository repo;
 
         public MemberService(IMemberRepository repo) {
             this.repo = repo;
-            
         }
 
         public List<Member> GetMembers() {
             try {
                 return repo.GetMembers();
             } catch (Exception ex) {
-
-                throw new MemberException("GetMembers", ex);
+                throw new MemberException("GetMembers - Unexpected error occurred", ex);
             }
         }
+
         public Member GetMember(int id) {
             try {
-                if (!repo.IsMember(id)) throw new MemberException("GetMember - Gebruiker bestaat niet");
+                if (!repo.IsMember(id)) {
+                    throw new MemberException("GetMember - Member does not exist");
+                }
                 return repo.GetMember(id);
             } catch (Exception ex) {
-
-                throw new MemberException("GetMember", ex);
+                throw new MemberException("GetMember - Unexpected error occurred", ex);
             }
         }
+
         public bool IsMember(int id) {
             try {
                 return repo.IsMember(id);
             } catch (Exception ex) {
-
-                throw new MemberException("IsMember", ex);
+                throw new MemberException("IsMember - Unexpected error occurred", ex);
             }
         }
-        public bool IsMember(string firstname, string adress, DateOnly birthday) {
+
+        public bool IsMember(string firstname, string address, DateOnly birthday) {
             try {
-                return repo.IsMember(firstname, adress, birthday);
+                return repo.IsMember(firstname, address, birthday);
             } catch (Exception ex) {
-
-                throw new MemberException("IsMember", ex);
+                throw new MemberException("IsMember (with details) - Unexpected error occurred", ex);
             }
         }
+
         public Member AddMember(Member member) {
             try {
-                if (IsMember(member.MemberId) && IsMember(member.FirstName, member.Address, member.Birthday)) {
-                    throw new MemberException("Member bestaat al");
-                } else {
-                    repo.AddMember(member);
-                    return member;
+                if (IsMember(member.MemberId) || IsMember(member.FirstName, member.Address, member.Birthday)) {
+                    throw new MemberException("AddMember - Member already exists");
                 }
-            } catch (Exception ex) {
 
-                throw new MemberException("AddMember", ex);
+                repo.AddMember(member);
+                return member;
+            } catch (MemberException) {
+                throw;
+            } catch (Exception ex) {
+                throw new MemberException("AddMember - Unexpected error occurred", ex);
             }
         }
+
         public Member UpdateMember(Member member) {
             try {
-                if (IsMember(member.MemberId)) {
-                    repo.UpdateMember(member);
-                    return member;
-                } else {
-                    throw new MemberException("Member bestaat niet");
+                if (!IsMember(member.MemberId)) {
+                    throw new MemberException("UpdateMember - Member does not exist");
                 }
-            } catch (Exception ex) {
 
-                throw new MemberException("UpdateMember", ex);
+                repo.UpdateMember(member);
+                return member;
+            } catch (MemberException) {
+                throw;
+            } catch (Exception ex) {
+                throw new MemberException("UpdateMember - Unexpected error occurred", ex);
             }
         }
+
         public void DeleteMember(int id) {
             try {
-                if (IsMember(id)) {
-                    repo.DeleteMember(id);
-                } else {
-                    throw new MemberException("Member bestaat niet");
+                if (!IsMember(id)) {
+                    throw new MemberException("DeleteMember - Member does not exist");
                 }
+
+                repo.DeleteMember(id);
+            } catch (MemberException) {
+                throw;
             } catch (Exception ex) {
-
-                throw new MemberException("DeleteMember", ex);
-
+                throw new MemberException("DeleteMember - Unexpected error occurred", ex);
             }
         }
+
         public bool IsProgram(string programCode) {
             try {
-               return repo.IsProgram(programCode);
+                return repo.IsProgram(programCode);
             } catch (Exception ex) {
-
-                throw new MemberException("IsProgram", ex);
+                throw new MemberException("IsProgram - Unexpected error occurred", ex);
             }
         }
+
         public void AddProgram(int memberId, string programCode) {
             try {
                 if (!IsProgram(programCode)) {
-                    throw new MemberException("Program doesn't excist");
+                    throw new MemberException("AddProgram - Program does not exist");
                 }
-                int aantalMembers = repo.GetAllProgramMembers(programCode);
-                
-                
-               repo.AddProgram(memberId, programCode);
-            } catch (Exception ex) {
 
-                throw new MemberException("IsProgram", ex);
+                repo.AddProgram(memberId, programCode);
+            } catch (MemberException) {
+                throw;
+            } catch (Exception ex) {
+                throw new MemberException("AddProgram - Unexpected error occurred", ex);
             }
         }
-        int GetAllProgramMembers(string programCode) {
+
+        public int GetAllProgramMembers(string programCode) {
             try {
                 if (!IsProgram(programCode)) {
-                    throw new MemberException("");
+                    throw new MemberException("GetAllProgramMembers - Program does not exist");
                 }
-                return repo.GetAllProgramMembers(programCode);
-            } catch (Exception ex) {
 
-                throw new MemberException("GetAllProgramMembers", ex);
+                return repo.GetAllProgramMembers(programCode);
+            } catch (MemberException) {
+                throw;
+            } catch (Exception ex) {
+                throw new MemberException("GetAllProgramMembers - Unexpected error occurred", ex);
             }
         }
+
         public List<Program> GetProgramsByMemberId(Dictionary<int, Program> programs, int memberId) {
             try {
+                if (!programs.ContainsKey(memberId)) {
+                    throw new MemberException($"GetProgramsByMemberId - No programs found for member ID {memberId}");
+                }
+
                 return new List<Program> { programs[memberId] };
             } catch (Exception ex) {
-
-                throw new MemberException("GetProgramsByMemberId", ex);
+                throw new MemberException("GetProgramsByMemberId - Unexpected error occurred", ex);
             }
         }
     }

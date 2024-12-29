@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FitnessManagement.BL.Intefaces {
     public interface IReservationRepository {
         int GetReservationId();
-        Reservation GetReservationId(int reservationId);
+        Reservation GetReservation(int reservationId);
         
         List<Reservation> GetReservationMember(int memberId);
         List<Reservation> GetReservationMemberDate(int memberId, DateOnly date);

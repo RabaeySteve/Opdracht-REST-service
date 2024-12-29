@@ -35,7 +35,7 @@ namespace FitnessManagement.API.Controllers {
                 }
 
                 return Ok(result);
-            } catch (MemberException ex) {
+            } catch (Exception ex) {
                 return NotFound(ex.Message);
             }
         }
@@ -44,8 +44,9 @@ namespace FitnessManagement.API.Controllers {
         [HttpGet("{id}")]
         public ActionResult<MemberDTO> Get(int id) {
             try {
-              return  MemberMapper.ToMemberDTO(MemberRepo.GetMember(id));
-            } catch (MemberException ex) {
+                 MemberDTO memberDTO = MemberMapper.ToMemberDTO(MemberRepo.GetMember(id));
+                return Ok(memberDTO);
+            } catch (Exception ex) {
 
                 return NotFound(ex.Message);
             }
@@ -58,9 +59,9 @@ namespace FitnessManagement.API.Controllers {
                     MemberId= member.MemberId,
                     ProgramsList = member.Programs
                 };
-                return programsDTO;
+                return Ok(programsDTO);
                 
-            } catch (MemberException ex) {
+            } catch (Exception ex) {
 
                 return NotFound(ex.Message);
             }
@@ -74,34 +75,63 @@ namespace FitnessManagement.API.Controllers {
                     return NotFound("No reservations found for this member.");
                 }
 
-                return reservationGetDTO;
+                return Ok(reservationGetDTO);
             } catch (Exception ex) {
 
-                return StatusCode(500, ex.Message);
+                return NotFound(ex.Message)  ;
             }
         }
 
         [HttpPost("Members")]
         public ActionResult<Member> Post(MemberDTO member) {
-            MemberRepo.AddMember(MemberMapper.ToMember(member));
-            return CreatedAtAction(nameof(Get), new {id = member.MemberId}, member);
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+            try {
+                MemberRepo.AddMember(MemberMapper.ToMember(member));
+                return CreatedAtAction(nameof(Get), new { id = member.MemberId }, member);
+            } catch (Exception ex) {
+                return Conflict(new { message = ex.Message });
+            }
+            
         }
 
         [HttpPost("{id}/programs")]
         public ActionResult<Member> Post(MemberAddProgramDTO program) {
-            MemberRepo.AddProgram(program.MemberId, program.ProgramCode);
-            return CreatedAtAction(nameof(Get), new { id = program.MemberId }, program);
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+
+            if (!MemberRepo.IsMember(program.MemberId)) {
+                return NotFound($"Member with ID {program.MemberId} does not exist.");
+            }
+            try {
+                MemberRepo.AddProgram(program.MemberId, program.ProgramCode);
+                return CreatedAtAction(nameof(Get), new { id = program.MemberId }, program);
+            } catch (MemberException ex) {
+                // Validatiefouten worden doorgegeven
+                return BadRequest(new { Error = ex.Message });
+            } catch (Exception ex) {
+                return Conflict(new { message = ex.Message });
+            }
+           
         }
-        
+
+
 
         [HttpPut]
         public IActionResult Put(int id, [FromBody] MemberDTO member) {
             if (member == null || member.MemberId != id) {
                 return BadRequest();
             }
+            try {
+                MemberRepo.UpdateMember(MemberMapper.ToMember(member));
+                return new NoContentResult();
+            } catch (Exception ex) {
 
-            MemberRepo.UpdateMember(MemberMapper.ToMember(member));
-            return new NoContentResult();
+                return Conflict(new { message = ex.Message });
+            }
+          
         }
         
     }

@@ -27,6 +27,9 @@ namespace FitnessManagement.BL.Services {
         }
         public Equipment GetEquipment(int id) {
             try {
+                if (!repo.IsEquipment(id)) {
+                    throw new EquipmentException("GetEquipment - Equipment does not exist");
+                }
                 return repo.GetEquipment(id);
             } catch (Exception ex) {
 
@@ -53,18 +56,22 @@ namespace FitnessManagement.BL.Services {
                 throw new EquipmentException("IsEquipment", ex);
             }
         }
-        public void SetMaintenance(int equipmentId, bool IsInMaintenance) {
+        public void SetMaintenance(int equipmentId, bool isInMaintenance) {
             try {
                 if (!repo.IsEquipment(equipmentId)) {
-                    throw new EquipmentException($"Equipment with ID {equipmentId} does not exist.");
-                } else {
-                    repo.SetMaintenance(equipmentId, IsInMaintenance);
+                    throw new EquipmentException($"SetMaintenance - Equipment with ID {equipmentId} does not exist.");
                 }
-            } catch (Exception ex) {
 
-                throw new EquipmentException("SetMaintenance", ex);
+                repo.SetMaintenance(equipmentId, isInMaintenance);
+            } catch (EquipmentException) {
+               
+                throw;
+            } catch (Exception ex) {
+                
+                throw new EquipmentException($"SetMaintenance - Unexpected error occurred for Equipment ID {equipmentId}.", ex);
             }
         }
+
         public IEnumerable<Equipment> GetAvailableEquipment() {
             try {
                 return repo.GetAvailableEquipment();

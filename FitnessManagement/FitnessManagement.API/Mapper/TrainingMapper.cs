@@ -6,21 +6,18 @@ using FitnessManagement.BL.Models;
 
 namespace FitnessManagement.API.Mapper {
     public class TrainingMapper {
-       
+
         public static TrainingMapped MapTraining(TrainingSessionBase t) {
-            try {
-                return new TrainingMapped {
-                    TrainingId = t.TrainingId,
-                    MemberId = t.Member.MemberId,
-                    Date = t.Date,
-                    Duration = t.Duration,
-                    TrainingSessionType = t.TrainingSessionType,
 
-                };
-            } catch (Exception ex) {
+            return new TrainingMapped {
+                TrainingId = t.TrainingId,
+                MemberId = t.Member.MemberId,
+                Date = t.Date,
+                Duration = t.Duration,
+                TrainingSessionType = t.TrainingSessionType,
 
-                throw new MapperException("MapTraining", ex);
-            }
+            };
+
         }
 
     }

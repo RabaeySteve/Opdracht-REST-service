@@ -9,7 +9,7 @@ namespace FitnessManagement.API.Controllers {
     [ApiController]
     public class ProgramController : ControllerBase {
         private ProgramService ProgramService;
-        
+
         public ProgramController(ProgramService programService) {
             this.ProgramService = programService;
         }
@@ -18,9 +18,10 @@ namespace FitnessManagement.API.Controllers {
         [HttpGet("{programCode}")]
         public ActionResult<FitnessManagement.BL.Models.Program> Get(string programCode) {
             try {
-                return ProgramService.GetProgramByProgramCode(programCode);
-                
-            } catch (ProgramException ex) {
+                var program = ProgramService.GetProgramByProgramCode(programCode);
+                return Ok(program);
+
+            } catch (Exception ex) {
 
                 return NotFound(ex.Message);
             }
@@ -30,25 +31,26 @@ namespace FitnessManagement.API.Controllers {
             try {
                 ProgramService.AddProgram(program);
                 return CreatedAtAction(nameof(Get), new { programCode = program.ProgramCode }, program);
-            } catch (ProgramException ex) {
+            } catch (Exception ex) {
                 return BadRequest(ex.Message);
             }
-          
+
         }
         [HttpPut]
         public IActionResult Put(string programCode, [FromBody] FitnessManagement.BL.Models.Program program) {
-            try {
-                if (program == null || program.ProgramCode != programCode) {
-                    return BadRequest();
-                }
 
+            if (program == null || program.ProgramCode != programCode) {
+                return BadRequest();
+            }
+            try {
                 ProgramService.UpdateProgram(program);
                 return new NoContentResult();
             } catch (Exception ex) {
-                return StatusCode(500, ex.Message);
-
+                return Conflict(new { message = ex.Message });
             }
-           
+
+
         }
+
     }
 }

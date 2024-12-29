@@ -7,12 +7,7 @@ namespace FitnessManagement.API.Mapper {
     public class CyclingSessionMapper {
 
         public static CyclingSession MapCyclingSession(CyclingSessionDTO c) {
-            try {
-
-            } catch (Exception ex) {
-
-                throw new MapperException("MapCyclingSession", ex);
-            }
+           
             return new CyclingSession {
                 TrainingId = c.CyclingSessionId,
                 Member = IdToMember(c.MemberId),
@@ -29,7 +24,7 @@ namespace FitnessManagement.API.Mapper {
             };
         }
         public static CyclingSessionDTO MapCyclingSessionToDTO(CyclingSession c) {
-            try {
+           
                 return new CyclingSessionDTO {
                     CyclingSessionId = c.TrainingId,
                     MemberId = c.Member.MemberId,
@@ -44,10 +39,7 @@ namespace FitnessManagement.API.Mapper {
 
 
                 };
-            } catch (Exception ex) {
-
-                throw new MapperException("MapCyclingSessionToDTO", ex);
-            }
+           
        
         }
         public static Member IdToMember(int memberId) {

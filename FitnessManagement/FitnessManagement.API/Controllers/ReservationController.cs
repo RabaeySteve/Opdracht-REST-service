@@ -24,8 +24,8 @@ namespace FitnessManagement.API.Controllers {
             try {
                 Reservation reservation =  ReservationRepo.GetReservation(id);
                 ReservationGetDTO reservationDTO = ReservationMapper.MapToGetDTO(reservation);
-                return reservationDTO;
-            } catch (ReservationException ex) {
+                return Ok(reservationDTO);
+            } catch (Exception ex) {
 
                 return NotFound(ex.Message);
             }
@@ -48,7 +48,7 @@ namespace FitnessManagement.API.Controllers {
                     return NotFound();
                 }
                 return Ok(result);
-            } catch (ReservationException ex) {
+            } catch (Exception ex) {
 
                 return NotFound(ex.Message);
             }
@@ -63,16 +63,16 @@ namespace FitnessManagement.API.Controllers {
                 }
 
                 // Haal de beschikbare tijdsloten op
-                var availableTimeSlots = ReservationRepo.AvailableTimeSlotDate(parsedDate);
+                Dictionary<int, List<Equipment>> availableTimeSlots = ReservationRepo.AvailableTimeSlotDate(parsedDate);
 
                 // Map elke lijst van Equipment naar EquipmentString
-                var mappedTimeSlots = availableTimeSlots.ToDictionary(
+                Dictionary<int, List<EquipmentString>> mappedTimeSlots = availableTimeSlots.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Select(equipment => EquipmentMapper.MapEquipmentTypeToStirng(equipment)).ToList()
                 );
 
                 return Ok(mappedTimeSlots);
-            } catch (ReservationException ex) {
+            } catch (Exception ex) {
                 return NotFound(ex.Message);
             }
         }
@@ -81,9 +81,16 @@ namespace FitnessManagement.API.Controllers {
 
         [HttpPost]
         public ActionResult<ReservationPostDTO> Post(ReservationPostDTO reservationDTO) {
-
-            ReservationRepo.AddReservation(ReservationMapper.MapPostReservation(reservationDTO));
-            return CreatedAtAction(nameof(Get), new { id = reservationDTO.MemberId }, reservationDTO);
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+            try {
+                ReservationRepo.AddReservation(ReservationMapper.MapPostReservation(reservationDTO));
+                return CreatedAtAction(nameof(Get), new { id = reservationDTO.MemberId }, reservationDTO);
+            } catch (Exception ex) {
+                return Conflict(new { message = ex.Message });
+            }
+           
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id) {
@@ -101,8 +108,13 @@ namespace FitnessManagement.API.Controllers {
             if (!ReservationRepo.IsReservation(id)) {
                 return NotFound($"Reservation with ID {id} does not exist.");
             }
-            ReservationRepo.UpdateReservation(ReservationMapper.MapDTOToReservation(reservationPutDTO));
-            return new NoContentResult();
+            try {
+                ReservationRepo.UpdateReservation(ReservationMapper.MapDTOToReservation(reservationPutDTO));
+                return new NoContentResult();
+            } catch (Exception ex) {
+                return Conflict(new { message = ex.Message });
+            }
+           
         }
 
 

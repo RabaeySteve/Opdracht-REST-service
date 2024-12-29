@@ -8,7 +8,7 @@ using FitnessManagement.EF.Model;
 namespace FitnessManagement.API.Mapper {
     public class ReservationMapper {
         public static ReservationGetDTO MapToGetDTO(Reservation r) {
-            try {
+            
                 return new ReservationGetDTO {
                     ReservationId = r.ReservationId,
                     GroupsId = r.GroupsId,
@@ -26,13 +26,11 @@ namespace FitnessManagement.API.Mapper {
                         }
                     }).ToList(),
                 };
-            } catch (Exception ex) {
-                throw new MapperException("MapToGetDTO", ex);
-            }
+            
         }
 
         public static ReservationPutDTO MapToPutDTO(Reservation r) {
-            try {
+          
                 return new ReservationPutDTO {
                     ReservationId = r.ReservationId,
                     GroupsId = r.GroupsId,
@@ -44,13 +42,10 @@ namespace FitnessManagement.API.Mapper {
                     }).ToList(),
 
                 };
-            } catch (Exception ex) {
-
-                throw new MapperException("MapToPutDTO", ex);
-            }
+            
         }
         public static Reservation MapDTOToReservation(ReservationPutDTO r) {
-            try {
+           
                 return new Reservation {
                     ReservationId = r.ReservationId,
                     GroupsId = r.GroupsId,
@@ -63,13 +58,10 @@ namespace FitnessManagement.API.Mapper {
                    
 
                 };
-            } catch (Exception ex) {
-
-                throw new MapperException("MapDTOToReservation", ex);
-            }
+            
         }
         public static Reservation MapPostReservation(ReservationPostDTO r) {
-			try {
+			
                 return new Reservation {
                     ReservationId = 0,
                     Date = r.Date,
@@ -81,10 +73,7 @@ namespace FitnessManagement.API.Mapper {
                     GroupsId = 0
 
                 };
-			} catch (Exception ex) {
-
-                throw new MapperException("MapPostReservation", ex);
-            }
+			
         }
 
         public static Member IdToMember(int memberId) {

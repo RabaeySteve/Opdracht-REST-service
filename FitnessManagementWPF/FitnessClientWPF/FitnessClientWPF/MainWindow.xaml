@@ -48,14 +48,11 @@
                 <TextBlock Text ="Selected member reservation for date:" HorizontalAlignment="Center"></TextBlock>
                 <DataGrid x:Name="ReservationsList" AutoGenerateColumns="False" Height="100" ItemsSource="{Binding ReservationsList}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ReservationId" Binding="{Binding ReservationId}" Width="Auto" />
-                        <DataGridTextColumn Header="GroupsId" Binding="{Binding GroupsId}" Width="Auto" />
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="auto" />
-                       
-                        <DataGridTextColumn Header="TimeSlot" Binding="{Binding TimeSlotId}" Width="Auto" />
+
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="*" />
                         <DataGridTextColumn Header="StartTime" Binding="{Binding StartTime}" Width="Auto" />
                         <DataGridTextColumn Header="EndTime" Binding="{Binding EndTime}" Width="Auto" />
-                        <DataGridTextColumn Header="PartOfTheDay" Binding="{Binding PartOfDay}" Width="Auto" />
+                        <DataGridTextColumn Header="PartOfTheDay" Binding="{Binding PartOfDay}" Width="*" />
                         <DataGridTextColumn Header="EquipmentId" Binding="{Binding EquipmentId}" Width="Auto" />
                         <DataGridTextColumn Header="equipmentType" Binding="{Binding EquipmentType}" Width="*" />
                     </DataGrid.Columns>
@@ -78,20 +75,20 @@
 
                 </StackPanel>
                 <Grid>
-                    <!-- Definieer twee kolommen in het Grid -->
+                  
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <!-- Eerste kolom -->
+                      
                         <ColumnDefinition Width="*" />
-                        <!-- Tweede kolom -->
+                      
                     </Grid.ColumnDefinitions>
 
-                    <!-- Eerste DataGrid in de eerste kolom -->
+                
                     <DataGrid x:Name="EquipmentGrid" 
               AutoGenerateColumns="False" 
               Margin="10" 
               Height="260" 
-              Width="Auto" 
+              Width="150" 
               IsReadOnly="True" 
               Grid.Column="0">
                         <DataGrid.Columns>
@@ -100,12 +97,12 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <!-- Tweede DataGrid in de tweede kolom -->
+                    
                     <DataGrid x:Name="SecondEquipment" 
               AutoGenerateColumns="False" 
               Margin="10" 
               Height="260" 
-              Width="Auto" 
+              Width="150" 
               IsReadOnly="True" 
               Grid.Column="1">
                         <DataGrid.Columns>

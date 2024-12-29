@@ -50,7 +50,7 @@ namespace FitnessManagement.EF.Repositories {
             }
         }
 
-        public Reservation GetReservationId(int reservationId) {
+        public Reservation GetReservation(int reservationId) {
             try {
                 ReservationEF reservationEF = ctx.reservation
                     .Include(x => x.Equipment)
@@ -118,27 +118,27 @@ namespace FitnessManagement.EF.Repositories {
 
         public bool IsTimeSlotAvailable(Reservation reservation) {
             try {
-                // Controleer of er twee tijdsloten in de reservatie zitten
+             
                 List<int> timeSlots = reservation.TimeSLotEquipment.Keys.ToList();
                 List<Equipment> equipments = reservation.TimeSLotEquipment.Values.ToList();
 
                 if (timeSlots.Count == 2) {
-                    // Controleer de beschikbaarheid van het eerste tijdslot
+                 
                     bool firstSlotAvailable = !ctx.reservation.Any(x =>
                         x.Date == reservation.Date &&
                         x.TimeSlot.TimeSlotId == timeSlots[0] &&
                         x.Equipment.EquipmentId == equipments[0].EquipmentId);
 
-                    // Controleer de beschikbaarheid van het tweede tijdslot
+                    
                     bool secondSlotAvailable = !ctx.reservation.Any(x =>
                         x.Date == reservation.Date &&
                         x.TimeSlot.TimeSlotId == timeSlots[1] &&
                         x.Equipment.EquipmentId == equipments[1].EquipmentId);
 
-                    // Beide tijdsloten moeten beschikbaar zijn
+                  
                     return firstSlotAvailable && secondSlotAvailable;
                 } else if (timeSlots.Count == 1) {
-                    // Controleer de beschikbaarheid van het enige tijdslot
+                  
                     return !ctx.reservation.Any(x =>
                         x.Date == reservation.Date &&
                         x.TimeSlot.TimeSlotId == timeSlots[0] &&
@@ -153,10 +153,8 @@ namespace FitnessManagement.EF.Repositories {
         }
         public Dictionary<int, List<Equipment>> AvailableTimeSlotDate(DateOnly date) {
             try {
-                // Haal alle tijdsloten op
                 var allTimeSlots = ctx.time_slot.ToList();
 
-                // Haal alle apparatuur op
                 var allEquipment = ctx.equipment.ToList();
 
                 // Haal alle bezette combinaties van tijdsloten en apparatuur op voor de opgegeven datum
@@ -165,7 +163,6 @@ namespace FitnessManagement.EF.Repositories {
                     .Select(r => new { r.TimeSlot.TimeSlotId, r.Equipment.EquipmentId })
                     .ToList();
 
-                // Maak een dictionary om beschikbare apparatuur per tijdslot te verzamelen
                 var availableTimeSlotEquipments = new Dictionary<int, List<Equipment>>();
 
                 foreach (var timeSlot in allTimeSlots) {
@@ -213,9 +210,9 @@ namespace FitnessManagement.EF.Repositories {
 
         public int GetReservationId() {
             try {
-                // Haal het hoogste bestaande ReservationId op of gebruik 0 als er geen records zijn
+              
                 int maxId = ctx.reservation.Any() ? ctx.reservation.Max(r => r.ReservationId) : 0;
-                return maxId + 1; // Retourneer een nieuw ID dat uniek is
+                return maxId + 1;
             } catch (Exception ex) {
                 throw new RepoException("ReservationRepo - GetReservationId", ex);
             }

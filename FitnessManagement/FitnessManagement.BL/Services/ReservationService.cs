@@ -5,169 +5,174 @@ using FitnessManagement.BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitnessManagement.BL.Services {
     public class ReservationService {
-        private IReservationRepository repo;
+        private readonly IReservationRepository repo;
 
         public ReservationService(IReservationRepository repo) {
             this.repo = repo;
         }
+
         public Reservation GetReservation(int reservationId) {
             try {
                 if (!repo.IsReservation(reservationId)) {
-                    throw new ReservationException("GetReservation - Reservatie bestaat niet");
+                    throw new ReservationException("GetReservation - Reservation does not exist");
                 }
 
-                return repo.GetReservationId(reservationId);
+                return repo.GetReservation(reservationId);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-                throw new ReservationException("GetReservation", ex);
+                throw new ReservationException("GetReservation - Unexpected error occurred", ex);
             }
         }
-
 
         public List<Reservation> GetReservationsMember(int memberId) {
             try {
                 return repo.GetReservationMember(memberId);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-                throw new ReservationException("GetReservationsByMember", ex);
+                throw new ReservationException("GetReservationsByMember - Unexpected error occurred", ex);
             }
         }
 
         public bool IsTimeSlotAvailable(Reservation reservation) {
             try {
                 return repo.IsTimeSlotAvailable(reservation);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-                throw new ReservationException("IsTimeSlotAvailable", ex);
+                throw new ReservationException("IsTimeSlotAvailable - Unexpected error occurred", ex);
             }
         }
+
         public bool IsReservation(int reservationId) {
             try {
                 return repo.IsReservation(reservationId);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-
-                throw new ReservationException("IsReservation", ex);
+                throw new ReservationException("IsReservation - Unexpected error occurred", ex);
             }
         }
+
         public List<Reservation> GetReservationMemberDate(int memberId, DateOnly date) {
             try {
                 return repo.GetReservationMemberDate(memberId, date);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-
-                throw new ReservationException("GetReservationMemberDate", ex);
+                throw new ReservationException("GetReservationMemberDate - Unexpected error occurred", ex);
             }
         }
+
         public Reservation AddReservation(Reservation reservation) {
             try {
-                // Controleer of de reservatie al bestaat
                 if (repo.IsReservation(reservation.ReservationId)) {
                     throw new ReservationException("AddReservation - Reservation already exists");
                 }
 
-                // Haal alle bestaande reservaties van de gebruiker op voor dezelfde datum
-                var existingReservations = GetReservationMemberDate(reservation.Member.MemberId, reservation.Date);
+                var existingReservations = GetReservationMemberDate(reservation.Member.MemberId, reservation.Date) ?? new List<Reservation>();
 
-                // Tel het totaal aantal tijdsloten uit alle bestaande reservaties
-                int totalTimeSlots = existingReservations.Sum(r => r.TimeSLotEquipment.Count) + reservation.TimeSLotEquipment.Count;
+                int totalTimeSlots = existingReservations.Sum(r => r.TimeSLotEquipment?.Count ?? 0)
+                                    + (reservation.TimeSLotEquipment?.Count ?? 0);
 
-                // Controleer of het totaal aantal tijdsloten de limiet van 4 overschrijdt
                 if (totalTimeSlots > 4) {
                     throw new ReservationException("AddReservation - Maximum of 4 time slots per day is reached");
                 }
-                if (reservation.TimeSLotEquipment.Count == 2) {
-                    var TimeSlots = reservation.TimeSLotEquipment.Keys.ToList();
-                    if (Math.Abs(TimeSlots[0] - TimeSlots[1]) != 1) {
-                        throw new ReservationException("Reservation TimeSlots must be consecutive");
+
+                if (reservation.TimeSLotEquipment?.Count == 2) {
+                    var timeSlots = reservation.TimeSLotEquipment.Keys.ToList();
+                    if (Math.Abs(timeSlots[0] - timeSlots[1]) != 1) {
+                        throw new ReservationException("AddReservation - TimeSlots must be consecutive");
                     }
                 }
-                // Controleer op conflicten tussen tijdsloten
-                foreach (var tijdslot in reservation.TimeSLotEquipment.Keys) {
+
+                foreach (var tijdslot in reservation.TimeSLotEquipment?.Keys ?? Enumerable.Empty<int>()) {
                     foreach (var existingReservation in existingReservations) {
-                        foreach (var existingTijdslot in existingReservation.TimeSLotEquipment.Keys) {
-                            // Controleer op exacte overlap
+                        foreach (var existingTijdslot in existingReservation.TimeSLotEquipment?.Keys ?? Enumerable.Empty<int>()) {
                             if (tijdslot == existingTijdslot) {
                                 throw new ReservationException("AddReservation - Overlapping time slots are not allowed.");
                             }
-
-                          
-                            
                         }
                     }
                 }
 
-
-
-                // Controleer of de nieuwe tijdsloten beschikbaar zijn
                 if (!IsTimeSlotAvailable(reservation)) {
                     throw new ReservationException("AddReservation - Timeslot is not available");
                 }
 
-                // Voeg de reservatie toe via de repository
                 reservation.ReservationId = repo.GetReservationId();
                 reservation.GroupsId = reservation.ReservationId;
                 repo.AddReservation(reservation);
                 return reservation;
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-                throw new ReservationException("AddReservation", ex);
+                throw new ReservationException("AddReservation - Unexpected error occurred", ex);
             }
         }
+
         public void DeleteReservation(int groupId) {
             try {
-                if (!repo.IsReservation(groupId))
-                    throw new ReservationException("UpdateReservation - Reservation Doesn't excist");
+                if (!repo.IsReservation(groupId)) {
+                    throw new ReservationException("DeleteReservation - Reservation does not exist");
+                }
                 repo.DeleteReservation(groupId);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-
-                throw new ReservationException("AddReservation", ex);
+                throw new ReservationException("DeleteReservation - Unexpected error occurred", ex);
             }
         }
 
         public void UpdateReservation(Reservation reservation) {
             try {
-                if (!repo.IsReservation(reservation.ReservationId))
-                    throw new ReservationException("UpdateReservation - Reservatie bestaat niet");
-                var existingReservations = GetReservationMemberDate(reservation.Member.MemberId, reservation.Date);
-
-                // Tel het totaal aantal tijdsloten uit alle bestaande reservaties
-                int totalTimeSlots = existingReservations.Sum(r => r.TimeSLotEquipment.Count) + reservation.TimeSLotEquipment.Count;
-
-                // Controleer of het totaal aantal tijdsloten de limiet van 4 overschrijdt
-                if (totalTimeSlots > 4) {
-                    throw new ReservationException("AddReservation - Maximum of 4 time slots per day is reached");
+                if (!repo.IsReservation(reservation.ReservationId)) {
+                    throw new ReservationException("UpdateReservation - Reservation does not exist");
                 }
 
-                // Controleer op conflicten tussen tijdsloten
-                foreach (var tijdslot in reservation.TimeSLotEquipment.Keys) {
+                var existingReservations = GetReservationMemberDate(reservation.Member.MemberId, reservation.Date) ?? new List<Reservation>();
+
+                int totalTimeSlots = (existingReservations?.Sum(r => r.TimeSLotEquipment?.Count ?? 0) ?? 0)
+                                    + (reservation.TimeSLotEquipment?.Count ?? 0);
+
+                if (totalTimeSlots > 4) {
+                    throw new ReservationException("UpdateReservation - Maximum of 4 time slots per day is reached");
+                }
+
+                foreach (var tijdslot in reservation.TimeSLotEquipment?.Keys ?? Enumerable.Empty<int>()) {
                     foreach (var existingReservation in existingReservations) {
-                        foreach (var existingTijdslot in existingReservation.TimeSLotEquipment.Keys) {
-                            // Controleer of de tijdsloten exact overlappen
+                        foreach (var existingTijdslot in existingReservation.TimeSLotEquipment?.Keys ?? Enumerable.Empty<int>()) {
                             if (tijdslot == existingTijdslot) {
-                                throw new ReservationException("AddReservation - Overlapping time slots are not allowed");
+                                throw new ReservationException("UpdateReservation - Overlapping time slots are not allowed.");
                             }
                         }
                     }
                 }
 
                 if (!IsTimeSlotAvailable(reservation)) {
-                    throw new ReservationException("AddReservation - Timeslot is not available");
+                    throw new ReservationException("UpdateReservation - Timeslot is not available");
                 }
+
                 repo.UpdateReservation(reservation);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-                throw new ReservationException("UpdateReservation", ex);
+                throw new ReservationException("UpdateReservation - Unexpected error occurred", ex);
             }
         }
+
         public Dictionary<int, List<Equipment>> AvailableTimeSlotDate(DateOnly date) {
             try {
-               return repo.AvailableTimeSlotDate(date);
+                return repo.AvailableTimeSlotDate(date);
+            } catch (ReservationException) {
+                throw;
             } catch (Exception ex) {
-
-                throw new ReservationException("AvailableTimeSlotDate", ex);
+                throw new ReservationException("AvailableTimeSlotDate - Unexpected error occurred", ex);
             }
         }
-
-
-
     }
 }
